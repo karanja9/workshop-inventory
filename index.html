@@ -3,176 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workshop Inventory | Management System</title>
+    <title>Workshop IMS Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .odoo-purple { background-color: #714B67; }
-        .odoo-purple-hover:hover { background-color: #5a3c52; }
+        .sidebar-item:hover { background-color: #4a5568; }
+        .low-stock { background-color: #fee2e2; color: #991b1b; }
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
 
-    <header class="odoo-purple text-white p-4 shadow-md flex justify-between items-center">
-        <h1 class="text-xl font-bold"><i class="fas fa-tools mr-2"></i>Workshop IMS</h1>
-        <div class="text-sm flex items-center gap-4">
-            <span id="sync-status" class="hidden"><i class="fas fa-sync fa-spin mr-1"></i> Syncing to GitHub...</span>
-            <span id="last-updated"></span>
-        </div>
-    </header>
-
-    <div class="container mx-auto p-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-center">
-            <div class="bg-white p-6 rounded-lg shadow border-l-4 border-blue-500">
-                <div class="text-gray-500 text-xs font-bold uppercase">Total SKUs</div>
-                <div class="text-3xl font-bold" id="total-items">0</div>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow border-l-4 border-red-500">
-                <div class="text-gray-500 text-xs font-bold uppercase">Low Stock</div>
-                <div class="text-3xl font-bold text-red-600" id="low-stock-count">0</div>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow border-l-4 border-green-500">
-                <div class="text-gray-500 text-xs font-bold uppercase">Stock Value</div>
-                <div class="text-3xl font-bold" id="total-value">0</div>
-            </div>
+    <div class="flex h-screen overflow-hidden">
+        <!-- SIDEBAR -->
+        <div class="w-64 bg-slate-800 text-white flex-shrink-0 hidden md:flex flex-col">
+            <div class="p-6 text-2xl font-bold border-b border-slate-700">Workshop IMS</div>
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="#" class="sidebar-item flex items-center p-3 rounded-lg bg-slate-700">
+                    <i class="fas fa-boxes mr-3"></i> Inventory
+                </a>
+                <a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-400">
+                    <i class="fas fa-shopping-cart mr-3"></i> Sales Log
+                </a>
+                <a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-400">
+                    <i class="fas fa-chart-line mr-3"></i> Analytics
+                </a>
+            </nav>
         </div>
 
-        <div class="bg-white p-4 rounded-lg shadow mb-6 flex flex-wrap gap-4 items-center">
-            <input type="text" id="search-input" placeholder="Search by name or SKU..." class="flex-1 border rounded px-4 py-2 outline-none focus:ring-2 focus:ring-purple-400">
-            <select id="category-filter" class="border rounded px-4 py-2"><option value="all">All Categories</option></select>
-        </div>
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex flex-col overflow-y-auto">
+            <!-- Header -->
+            <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+                <input type="text" id="searchInput" placeholder="Search by name or SKU..." 
+                       class="w-1/3 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <button onclick="openAddModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-plus mr-2"></i>Add New Item
+                </button>
+            </header>
 
-        <div class="bg-white rounded-lg shadow overflow-x-auto">
-            <table class="min-w-full">
-                <thead>
-                    <tr class="bg-gray-200 text-gray-700 text-left text-xs font-bold uppercase">
-                        <th class="px-5 py-3 border-b">SKU</th>
-                        <th class="px-5 py-3 border-b">Product</th>
-                        <th class="px-5 py-3 border-b text-right">Price (KSh)</th>
-                        <th class="px-5 py-3 border-b text-right">Stock</th>
-                        <th class="px-5 py-3 border-b text-center">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="inventory-body" class="text-gray-700 text-sm"></tbody>
-            </table>
-        </div>
-    </div>
+            <main class="p-6">
+                <!-- Dashboard Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-blue-500">
+                        <p class="text-gray-500 text-sm font-semibold uppercase">Total SKUs</p>
+                        <h2 id="totalSkus" class="text-3xl font-bold text-gray-800">0</h2>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-red-500">
+                        <p class="text-gray-500 text-sm font-semibold uppercase">Low Stock</p>
+                        <h2 id="lowStockCount" class="text-3xl font-bold text-red-600">0</h2>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-green-500">
+                        <p class="text-gray-500 text-sm font-semibold uppercase">Stock Value (KSH)</p>
+                        <h2 id="totalValue" class="text-3xl font-bold text-gray-800">0</h2>
+                    </div>
+                </div>
 
-    <div id="editModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-lg shadow-xl w-80">
-            <h3 class="font-bold mb-4 border-b pb-2">Update Inventory</h3>
-            <input type="hidden" id="edit-sku">
-            <div class="mb-4">
-                <label class="block text-xs font-bold text-gray-400 mb-1">Price</label>
-                <input type="number" id="edit-price" class="w-full border rounded p-2">
-            </div>
-            <div class="mb-4">
-                <label class="block text-xs font-bold text-gray-400 mb-1">Stock</label>
-                <input type="number" id="edit-stock" class="w-full border rounded p-2">
-            </div>
-            <div class="flex justify-end gap-2">
-                <button onclick="closeModal()" class="px-3 py-1 bg-gray-200 rounded text-sm">Cancel</button>
-                <button id="save-btn" onclick="saveChanges()" class="px-3 py-1 odoo-purple text-white rounded text-sm">Save</button>
-            </div>
+                <!-- Table Container -->
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 border-b">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">Product</th>
+                                <th class="p-4 font-semibold text-gray-600 text-center">Category</th>
+                                <th class="p-4 font-semibold text-gray-600">Price (KSH)</th>
+                                <th class="p-4 font-semibold text-gray-600">Stock</th>
+                                <th class="p-4 font-semibold text-gray-600">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTable" class="divide-y">
+                            <!-- Rows will be injected here by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </main>
         </div>
     </div>
 
     <script>
-        const GITHUB_TOKEN = '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';
-        const REPO_PATH = 'hassann6/workshop-inventory';
-
-        let inventoryData = [];
+        // Placeholder for data - will be fetched from inventory_data.json
+        let inventory = [];
 
         async function loadData() {
-            try {
-                const res = await fetch('inventory_data.json');
-                inventoryData = await res.json();
-                populateCategories();
-                renderAll();
-            } catch (e) { console.error("Could not load data. Ensure inventory_data.json exists."); }
+            // Replace with your real fetch URL
+            const response = await fetch('inventory_data.json');
+            inventory = await response.json();
+            renderTable(inventory);
         }
 
-        function renderAll() {
-            const searchTerm = document.getElementById('search-input').value.toLowerCase();
-            const category = document.getElementById('category-filter').value;
-            const tbody = document.getElementById('inventory-body');
-            tbody.innerHTML = '';
+        function renderTable(data) {
+            const table = document.getElementById('inventoryTable');
+            table.innerHTML = '';
 
-            let lowStock = 0;
-            let totalVal = 0;
+            data.forEach(item => {
+                // Logic for Optional Pictures
+                // Show image if category is NOT 'Bolts' AND item has a URL
+                const showImage = item.category !== 'Bolts' && item.image_url;
+                const imgHtml = showImage ? 
+                    `<img src="${item.image_url}" class="w-12 h-12 rounded object-cover mr-3 border">` : '';
 
-            const filtered = inventoryData.filter(item => {
-                const matches = (item.name.toLowerCase().includes(searchTerm) || item.sku.toString().includes(searchTerm)) &&
-                                (category === 'all' || item.category === category);
-                if (matches) {
-                    if (item.stock <= (item.low_stock_threshold || 5)) lowStock++;
-                    totalVal += (item.price * item.stock);
-                }
-                return matches;
-            });
-
-            filtered.forEach(item => {
-                const isLow = item.stock <= (item.low_stock_threshold || 5);
-                tbody.innerHTML += `
-                    <tr class="border-b hover:bg-gray-50">
-                        <td class="px-5 py-3 font-mono text-gray-400">${item.sku}</td>
-                        <td class="px-5 py-3"><b>${item.name}</b><br><span class="text-xs text-gray-400">${item.category}</span></td>
-                        <td class="px-5 py-3 text-right font-bold">${item.price.toLocaleString()}</td>
-                        <td class="px-5 py-3 text-right ${isLow ? 'text-red-600 font-bold' : ''}">${item.stock}</td>
-                        <td class="px-5 py-3 text-center">
-                            <button onclick="openEditModal(${item.sku}, ${item.price}, ${item.stock})" class="text-purple-600 border border-purple-200 px-2 py-1 rounded text-xs hover:bg-purple-50">Edit</button>
+                const row = `
+                    <tr class="${item.stock < 5 ? 'low-stock' : ''} hover:bg-gray-50">
+                        <td class="p-4 flex items-center">
+                            ${imgHtml}
+                            <div>
+                                <div class="font-bold text-gray-800">${item.product}</div>
+                                <div class="text-xs text-gray-500">${item.sku}</div>
+                            </div>
+                        </td>
+                        <td class="p-4 text-center">
+                            <span class="px-2 py-1 bg-gray-100 rounded text-xs text-gray-600 uppercase font-bold">
+                                ${item.category}
+                            </span>
+                        </td>
+                        <td class="p-4 font-medium text-gray-700">${item.price.toLocaleString()}</td>
+                        <td class="p-4">
+                            <span class="font-bold">${item.stock}</span>
+                        </td>
+                        <td class="p-4 space-x-2">
+                            <button onclick="recordSale('${item.sku}')" class="text-green-600 hover:text-green-800 font-medium">Sell</button>
+                            <button class="text-blue-600 hover:text-blue-800 font-medium">Edit</button>
                         </td>
                     </tr>
                 `;
+                table.innerHTML += row;
             });
-
-            document.getElementById('total-items').innerText = filtered.length;
-            document.getElementById('low-stock-count').innerText = lowStock;
-            document.getElementById('total-value').innerText = totalVal.toLocaleString();
+            updateStats(data);
         }
 
-        function populateCategories() {
-            const cats = [...new Set(inventoryData.map(i => i.category))].sort();
-            const filter = document.getElementById('category-filter');
-            cats.forEach(c => filter.innerHTML += `<option value="${c}">${c}</option>`);
+        function updateStats(data) {
+            document.getElementById('totalSkus').innerText = data.length;
+            document.getElementById('lowStockCount').innerText = data.filter(i => i.stock < 5).length;
+            const value = data.reduce((acc, curr) => acc + (curr.price * curr.stock), 0);
+            document.getElementById('totalValue').innerText = value.toLocaleString();
         }
 
-        function openEditModal(sku, price, stock) {
-            document.getElementById('edit-sku').value = sku;
-            document.getElementById('edit-price').value = price;
-            document.getElementById('edit-stock').value = stock;
-            document.getElementById('editModal').classList.remove('hidden');
+        function recordSale(sku) {
+            const amount = prompt("How many sold?");
+            if (amount && !isNaN(amount)) {
+                alert(`Selling ${amount} of SKU: ${sku}. (This will trigger your GitHub Action to update the JSON)`);
+                // Here we would call the function to push the update to GitHub
+            }
         }
 
-        function closeModal() { document.getElementById('editModal').classList.add('hidden'); }
-
-        async function saveChanges() {
-            const sku = document.getElementById('edit-sku').value;
-            const price = document.getElementById('edit-price').value;
-            const stock = document.getElementById('edit-stock').value;
-            const btn = document.getElementById('save-btn');
-
-            btn.disabled = true; btn.innerText = "Syncing...";
-            document.getElementById('sync-status').classList.remove('hidden');
-
-            const response = await fetch(`https://api.github.com/repos/${REPO_PATH}/dispatches`, {
-                method: 'POST',
-                headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' },
-                body: JSON.stringify({ event_type: 'update_inventory', client_payload: { sku, price, stock } })
-            });
-
-            if (response.ok) {
-                alert("Update sent to GitHub! It will take about 60 seconds to process. Refresh then.");
-                closeModal();
-            } else { alert("Error connecting to GitHub."); }
-            
-            btn.disabled = false; btn.innerText = "Save";
-            document.getElementById('sync-status').classList.add('hidden');
-        }
-
-        document.getElementById('search-input').addEventListener('input', renderAll);
-        document.getElementById('category-filter').addEventListener('change', renderAll);
-        window.onload = loadData;
+        loadData();
     </script>
 </body>
 </html>
