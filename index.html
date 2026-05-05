@@ -59,9 +59,7 @@
                         <th class="px-5 py-3 border-b text-center">Action</th>
                     </tr>
                 </thead>
-                <tbody id="inventory-body" class="text-gray-700 text-sm">
-                    <!-- Data will be injected here -->
-                </tbody>
+                <tbody id="inventory-body" class="text-gray-700 text-sm"></tbody>
             </table>
         </div>
     </div>
@@ -71,14 +69,23 @@
         <div class="bg-white p-6 rounded-lg shadow-xl w-80">
             <h3 class="font-bold mb-4 border-b pb-2">Update Inventory</h3>
             <input type="hidden" id="edit-sku">
+            
             <div class="mb-4">
-                <label class="block text-xs font-bold text-gray-400 mb-1">Price</label>
-                <input type="number" id="edit-price" class="w-full border rounded p-2">
+                <label class="block text-xs font-bold text-gray-400 mb-1">Description</label>
+                <textarea id="edit-description" class="w-full border rounded p-2 text-sm" rows="2"></textarea>
             </div>
-            <div class="mb-4">
-                <label class="block text-xs font-bold text-gray-400 mb-1">Stock</label>
-                <input type="number" id="edit-stock" class="w-full border rounded p-2">
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Price</label>
+                    <input type="number" id="edit-price" class="w-full border rounded p-2 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Stock</label>
+                    <input type="number" id="edit-stock" class="w-full border rounded p-2 text-sm">
+                </div>
             </div>
+            
             <div class="flex justify-end gap-2">
                 <button onclick="closeModal()" class="px-3 py-1 bg-gray-200 rounded text-sm">Cancel</button>
                 <button id="save-btn" onclick="saveChanges()" class="px-3 py-1 odoo-purple text-white rounded text-sm">Save</button>
@@ -99,7 +106,7 @@
                 populateCategories();
                 renderAll();
             } catch (e) { 
-                console.error("Could not load data. Ensure inventory_data.json exists."); 
+                console.error("Load error. Ensure inventory_data.json is present."); 
             }
         }
 
@@ -113,7 +120,6 @@
             let totalValueSum = 0;
 
             const filtered = inventoryData.filter(item => {
-                // Ensure fields aren't undefined before calling toLowerCase()
                 const name = (item.name || "").toLowerCase();
                 const sku = (item.sku || "").toString().toLowerCase();
                 const desc = (item.description || "").toLowerCase();
@@ -132,17 +138,17 @@
                 if (isLow) lowStockCount++;
                 totalValueSum += (item.price * item.stock);
 
-                // Build the description display
-                const descriptionHtml = item.description 
+                // Show "None" in light gray if description is missing
+                const descriptionDisplay = item.description 
                     ? `<div class="text-xs text-blue-600 italic mt-0.5">${item.description}</div>` 
-                    : '';
+                    : `<div class="text-xs text-gray-300 italic mt-0.5">None</div>`;
 
                 tbody.innerHTML += `
                     <tr class="border-b hover:bg-gray-50">
                         <td class="px-5 py-3 font-mono text-gray-400">${item.sku || '-'}</td>
                         <td class="px-5 py-3">
                             <div class="font-bold text-gray-800">${item.name || 'Unnamed Product'}</div>
-                            ${descriptionHtml}
+                            ${descriptionDisplay}
                         </td>
                         <td class="px-5 py-3">
                             <span class="text-[10px] bg-gray-100 px-2 py-1 rounded text-gray-500 uppercase font-bold">
@@ -152,7 +158,7 @@
                         <td class="px-5 py-3 text-right font-bold text-slate-700">${(item.price || 0).toLocaleString()}</td>
                         <td class="px-5 py-3 text-right ${isLow ? 'text-red-600 font-bold' : ''}">${item.stock || 0}</td>
                         <td class="px-5 py-3 text-center">
-                            <button onclick="openEditModal(${item.sku}, ${item.price}, ${item.stock})" 
+                            <button onclick="openEditModal(${item.sku}, ${item.price}, ${item.stock}, '${(item.description || "").replace(/'/g, "\\'")}')" 
                                     class="text-purple-600 border border-purple-200 px-2 py-1 rounded text-xs hover:bg-purple-50 transition">
                                 Edit
                             </button>
@@ -169,15 +175,15 @@
         function populateCategories() {
             const cats = [...new Set(inventoryData.map(i => i.category || "General"))].sort();
             const filter = document.getElementById('category-filter');
-            // Reset to keep the "All Categories" option
             filter.innerHTML = '<option value="all">All Categories</option>';
             cats.forEach(c => filter.innerHTML += `<option value="${c}">${c}</option>`);
         }
 
-        function openEditModal(sku, price, stock) {
+        function openEditModal(sku, price, stock, description) {
             document.getElementById('edit-sku').value = sku;
             document.getElementById('edit-price').value = price;
             document.getElementById('edit-stock').value = stock;
+            document.getElementById('edit-description').value = description;
             document.getElementById('editModal').classList.remove('hidden');
         }
 
@@ -189,6 +195,7 @@
             const sku = document.getElementById('edit-sku').value;
             const price = document.getElementById('edit-price').value;
             const stock = document.getElementById('edit-stock').value;
+            const description = document.getElementById('edit-description').value;
             const btn = document.getElementById('save-btn');
 
             btn.disabled = true; 
@@ -204,18 +211,18 @@
                     },
                     body: JSON.stringify({ 
                         event_type: 'update_inventory', 
-                        client_payload: { sku, price, stock } 
+                        client_payload: { sku, price, stock, description } 
                     })
                 });
 
                 if (response.ok) {
-                    alert("Update sent to GitHub! Processing takes ~60 seconds. Refresh the page then.");
+                    alert("Sent to GitHub! Wait ~60s then refresh.");
                     closeModal();
                 } else { 
-                    alert("Error connecting to GitHub. Check your token or repo path."); 
+                    alert("GitHub connection failed."); 
                 }
             } catch (err) {
-                alert("Network error occurred.");
+                alert("Network error.");
             } finally {
                 btn.disabled = false; 
                 btn.innerText = "Save";
@@ -223,7 +230,6 @@
             }
         }
 
-        // Event Listeners
         document.getElementById('search-input').addEventListener('input', renderAll);
         document.getElementById('category-filter').addEventListener('change', renderAll);
         window.onload = loadData;
