@@ -1,187 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workshop IMS Pro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .sidebar-item:hover { background-color: #4a5568; }
-        .active-link { background-color: #334155; border-left: 4px solid #3b82f6; }
-        .low-stock { background-color: #fff1f2; }
-    </style>
-</head>
-<body class="bg-gray-100 font-sans">
+name: Update Inventory Data
+on:
+  repository_dispatch:
+    types: [update_inventory]
 
-    <div class="flex h-screen overflow-hidden">
-        <!-- SIDEBAR -->
-        <div class="w-64 bg-slate-800 text-white flex-shrink-0 hidden md:flex flex-col">
-            <div class="p-6 text-xl font-bold border-b border-slate-700 tracking-wide">
-                <i class="fas fa-tools mr-2 text-blue-400"></i> Workshop IMS
-            </div>
-            <nav class="flex-1 p-4 space-y-2">
-                <p class="text-xs font-semibold text-slate-500 uppercase px-3 pb-2">Main Menu</p>
-                <button onclick="filterByCategory('all')" class="sidebar-item w-full text-left flex items-center p-3 rounded-lg active-link">
-                    <i class="fas fa-th-large mr-3 w-5"></i> All Inventory
-                </button>
-                <button onclick="filterByCategory('General Spare Parts')" class="sidebar-item w-full text-left flex items-center p-3 rounded-lg text-slate-300">
-                    <i class="fas fa-cog mr-3 w-5"></i> Spare Parts
-                </button>
-                <button onclick="filterByCategory('Plough Parts')" class="sidebar-item w-full text-left flex items-center p-3 rounded-lg text-slate-300">
-                    <i class="fas fa-tractor mr-3 w-5"></i> Plough Parts
-                </button>
-                <button onclick="filterByCategory('Bolts')" class="sidebar-item w-full text-left flex items-center p-3 rounded-lg text-slate-300">
-                    <i class="fas fa-box-open mr-3 w-5"></i> Bolts
-                </button>
-            </nav>
-        </div>
-
-        <!-- MAIN CONTENT -->
-        <div class="flex-1 flex flex-col overflow-y-auto">
-            <header class="bg-white shadow-sm p-4 flex justify-between items-center sticky top-0 z-10">
-                <div class="relative w-1/3">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                        <i class="fas fa-search"></i>
-                    </span>
-                    <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search SKU or Name..." 
-                           class="w-full pl-10 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                </div>
-                <button class="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
-                    <i class="fas fa-plus mr-2"></i>New Item
-                </button>
-            </header>
-
-            <main class="p-6">
-                <!-- Dashboard Stats -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-b-4 border-blue-500">
-                        <p class="text-gray-500 text-xs font-bold uppercase tracking-wider">Total SKUs</p>
-                        <h2 id="totalSkus" class="text-3xl font-bold text-gray-800">0</h2>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-b-4 border-red-500">
-                        <p class="text-gray-500 text-xs font-bold uppercase tracking-wider">Low Stock</p>
-                        <h2 id="lowStockCount" class="text-3xl font-bold text-red-600">0</h2>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-b-4 border-green-500">
-                        <p class="text-gray-500 text-xs font-bold uppercase tracking-wider">Stock Value (KSH)</p>
-                        <h2 id="totalValue" class="text-3xl font-bold text-gray-800">0</h2>
-                    </div>
-                </div>
-
-                <!-- Table Container -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden border">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="bg-gray-50 border-b">
-                            <tr>
-                                <th class="p-4 font-bold text-gray-600 text-sm">Product Details</th>
-                                <th class="p-4 font-bold text-gray-600 text-sm">Category</th>
-                                <th class="p-4 font-bold text-gray-600 text-sm">Price (KSH)</th>
-                                <th class="p-4 font-bold text-gray-600 text-sm text-center">Stock</th>
-                                <th class="p-4 font-bold text-gray-600 text-sm text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="inventoryTable" class="divide-y divide-gray-100">
-                            <!-- JS Injection -->
-                        </tbody>
-                    </table>
-                </div>
-            </main>
-        </div>
-    </div>
-
-    <script>
-        let inventory = [];
-        let currentFilter = 'all';
-
-        async function loadData() {
-            try {
-                const response = await fetch('inventory_data.json');
-                inventory = await response.json();
-                renderTable(inventory);
-            } catch (e) {
-                console.error("Fetch Error:", e);
-            }
-        }
-
-        function renderTable(data) {
-            const table = document.getElementById('inventoryTable');
-            table.innerHTML = '';
-
-            // Filter data based on sidebar selection
-            const filteredData = currentFilter === 'all' 
-                ? data 
-                : data.filter(item => item.category === currentFilter);
-
-            filteredData.forEach(item => {
-                const isLow = item.stock < (item.min_stock || 5);
-                
-                // Image Logic: If not bolts, look for SKU.jpg
-                const showImg = item.category !== 'Bolts';
-                const imgSrc = `images/${item.sku}.jpg`;
-                const imgTag = showImg ? 
-                    `<img src="${imgSrc}" onerror="this.style.display='none'" class="w-10 h-10 rounded bg-gray-100 mr-3 object-cover border">` : '';
-
-                const row = `
-                    <tr class="${isLow ? 'low-stock' : ''} hover:bg-blue-50/30 transition">
-                        <td class="p-4 flex items-center">
-                            ${imgTag}
-                            <div>
-                                <div class="font-bold text-slate-800">${item.product || 'Unnamed Item'}</div>
-                                <div class="text-xs text-gray-400 font-mono">${item.sku || '-'}</div>
-                            </div>
-                        </td>
-                        <td class="p-4">
-                            <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-[10px] font-bold uppercase">
-                                ${item.category || 'General'}
-                            </span>
-                        </td>
-                        <td class="p-4 font-semibold text-slate-700">${Number(item.price || 0).toLocaleString()}</td>
-                        <td class="p-4 text-center">
-                            <span class="inline-block w-10 py-1 rounded font-bold ${isLow ? 'text-red-600' : 'text-slate-800'}">
-                                ${item.stock || 0}
-                            </span>
-                        </td>
-                        <td class="p-4 text-right space-x-3">
-                            <button class="text-green-600 hover:text-green-800 text-sm font-bold">Sell</button>
-                            <button class="text-blue-600 hover:text-blue-800 text-sm font-bold">Edit</button>
-                        </td>
-                    </tr>
-                `;
-                table.innerHTML += row;
-            });
-            updateStats(data);
-        }
-
-        function filterByCategory(cat) {
-            currentFilter = cat;
-            // Update UI Sidebar selection
-            document.querySelectorAll('.sidebar-item').forEach(btn => {
-                btn.classList.remove('active-link');
-                if(btn.innerText.includes(cat) || (cat === 'all' && btn.innerText.includes('All'))) {
-                    btn.classList.add('active-link');
-                }
-            });
-            renderTable(inventory);
-        }
-
-        function searchTable() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = inventory.filter(item => 
-                item.product.toLowerCase().includes(query) || 
-                item.sku.toLowerCase().includes(query)
-            );
-            renderTable(filtered);
-        }
-
-        function updateStats(data) {
-            document.getElementById('totalSkus').innerText = data.length;
-            document.getElementById('lowStockCount').innerText = data.filter(i => i.stock < (i.min_stock || 5)).length;
-            const total = data.reduce((sum, i) => sum + (Number(i.price) * Number(i.stock)), 0);
-            document.getElementById('totalValue').innerText = total.toLocaleString();
-        }
-
-        loadData();
-    </script>
-</body>
-</html>
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Update JSON
+        run: |
+          # Use jq to update the specific SKU in your inventory_data.json
+          jq --arg sku "${{ github.event.client_payload.sku }}" \
+             --arg price "${{ github.event.client_payload.price }}" \
+             --arg stock "${{ github.event.client_payload.stock }}" \
+             'map(if .sku == ($sku|tonumber) then . + {price: ($price|tonumber), stock: ($stock|tonumber)} else . end)' \
+             inventory_data.json > temp.json && mv temp.json inventory_data.json
+      - name: Commit changes
+        run: |
+          git config --global user.name "Inventory-Bot"
+          git config --global user.email "actions@github.com"
+          git add inventory_data.json
+          git commit -m "Web Update: SKU ${{ github.event.client_payload.sku }}"
+          git push
