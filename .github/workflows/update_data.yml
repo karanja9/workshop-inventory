@@ -10,16 +10,16 @@ jobs:
       - uses: actions/checkout@v3
       - name: Update JSON
         run: |
-          # Use jq to update the specific item in the json file
+          # Use jq to update the specific SKU in your inventory_data.json
           jq --arg sku "${{ github.event.client_payload.sku }}" \
              --arg price "${{ github.event.client_payload.price }}" \
              --arg stock "${{ github.event.client_payload.stock }}" \
-             'map(if .sku == $sku then . + {price: ($price|tonumber), stock: ($stock|tonumber)} else . end)' \
+             'map(if .sku == ($sku|tonumber) then . + {price: ($price|tonumber), stock: ($stock|tonumber)} else . end)' \
              inventory_data.json > temp.json && mv temp.json inventory_data.json
       - name: Commit changes
         run: |
           git config --global user.name "Inventory-Bot"
           git config --global user.email "actions@github.com"
           git add inventory_data.json
-          git commit -m "Update SKU ${{ github.event.client_payload.sku }} via Web UI"
+          git commit -m "Web Update: SKU ${{ github.event.client_payload.sku }}"
           git push
