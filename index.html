@@ -9,7 +9,6 @@
     <style>
         .odoo-purple { background-color: #714B67; }
         .odoo-purple-hover:hover { background-color: #5a3c52; }
-        .bg-card { background-color: #f8f9fa; }
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
@@ -23,244 +22,157 @@
     </header>
 
     <div class="container mx-auto p-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-center">
             <div class="bg-white p-6 rounded-lg shadow border-l-4 border-blue-500">
-                <div class="text-gray-500 text-sm font-semibold uppercase">Total SKUs</div>
+                <div class="text-gray-500 text-xs font-bold uppercase">Total SKUs</div>
                 <div class="text-3xl font-bold" id="total-items">0</div>
             </div>
             <div class="bg-white p-6 rounded-lg shadow border-l-4 border-red-500">
-                <div class="text-gray-500 text-sm font-semibold uppercase">Low Stock Alerts</div>
+                <div class="text-gray-500 text-xs font-bold uppercase">Low Stock</div>
                 <div class="text-3xl font-bold text-red-600" id="low-stock-count">0</div>
             </div>
             <div class="bg-white p-6 rounded-lg shadow border-l-4 border-green-500">
-                <div class="text-gray-500 text-sm font-semibold uppercase">Inventory Value</div>
+                <div class="text-gray-500 text-xs font-bold uppercase">Stock Value</div>
                 <div class="text-3xl font-bold" id="total-value">0</div>
             </div>
         </div>
 
         <div class="bg-white p-4 rounded-lg shadow mb-6 flex flex-wrap gap-4 items-center">
-            <div class="flex-1 min-w-[200px]">
-                <input type="text" id="search-input" placeholder="Search spares by name or SKU..." 
-                       class="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400">
-            </div>
-            <div class="w-48">
-                <select id="category-filter" class="w-full border rounded px-4 py-2">
-                    <option value="all">All Categories</option>
-                </select>
-            </div>
-            <button onclick="resetFilters()" class="text-gray-500 hover:text-purple-700 font-medium">Clear Filters</button>
+            <input type="text" id="search-input" placeholder="Search by name or SKU..." class="flex-1 border rounded px-4 py-2 outline-none focus:ring-2 focus:ring-purple-400">
+            <select id="category-filter" class="border rounded px-4 py-2"><option value="all">All Categories</option></select>
         </div>
 
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <table class="min-w-full leading-normal">
+        <div class="bg-white rounded-lg shadow overflow-x-auto">
+            <table class="min-w-full">
                 <thead>
-                    <tr class="bg-gray-200 text-gray-700 text-left text-xs font-semibold uppercase tracking-wider">
+                    <tr class="bg-gray-200 text-gray-700 text-left text-xs font-bold uppercase">
                         <th class="px-5 py-3 border-b">SKU</th>
-                        <th class="px-5 py-3 border-b">Product Name</th>
+                        <th class="px-5 py-3 border-b">Product</th>
                         <th class="px-5 py-3 border-b text-right">Price (KSh)</th>
                         <th class="px-5 py-3 border-b text-right">Stock</th>
-                        <th class="px-5 py-3 border-b">Status</th>
                         <th class="px-5 py-3 border-b text-center">Action</th>
                     </tr>
                 </thead>
-                <tbody id="inventory-body" class="text-gray-700">
-                    </tbody>
+                <tbody id="inventory-body" class="text-gray-700 text-sm"></tbody>
             </table>
-            <div id="no-results" class="hidden p-10 text-center text-gray-500">No items found.</div>
         </div>
     </div>
 
     <div id="editModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-lg shadow-xl w-96">
-            <h3 class="text-lg font-bold mb-4 border-b pb-2"><i class="fas fa-edit mr-2"></i>Update Item</h3>
+        <div class="bg-white p-6 rounded-lg shadow-xl w-80">
+            <h3 class="font-bold mb-4 border-b pb-2">Update Inventory</h3>
             <input type="hidden" id="edit-sku">
-            
             <div class="mb-4">
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Product Name</label>
-                <div id="display-name" class="p-2 bg-gray-100 rounded text-sm text-gray-700"></div>
+                <label class="block text-xs font-bold text-gray-400 mb-1">Price</label>
+                <input type="number" id="edit-price" class="w-full border rounded p-2">
             </div>
-
             <div class="mb-4">
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Price (KSh)</label>
-                <input type="number" id="edit-price" class="w-full border rounded p-2 focus:ring-2 focus:ring-purple-500 outline-none">
+                <label class="block text-xs font-bold text-gray-400 mb-1">Stock</label>
+                <input type="number" id="edit-stock" class="w-full border rounded p-2">
             </div>
-
-            <div class="mb-6">
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Current Stock Level</label>
-                <input type="number" id="edit-stock" class="w-full border rounded p-2 focus:ring-2 focus:ring-purple-500 outline-none">
-            </div>
-
-            <div class="flex justify-end gap-3">
-                <button onclick="closeModal()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition text-sm">Cancel</button>
-                <button id="save-btn" onclick="saveChanges()" class="px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800 transition text-sm">Save to GitHub</button>
+            <div class="flex justify-end gap-2">
+                <button onclick="closeModal()" class="px-3 py-1 bg-gray-200 rounded text-sm">Cancel</button>
+                <button id="save-btn" onclick="saveChanges()" class="px-3 py-1 odoo-purple text-white rounded text-sm">Save</button>
             </div>
         </div>
     </div>
 
     <script>
-        // CONFIGURATION
-        const GITHUB_TOKEN = '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'; 
+        const GITHUB_TOKEN = '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';
         const REPO_PATH = 'hassann6/workshop-inventory';
 
-        // RAW DATA
-        const inventoryData = [
-            {sku: 10000, name: "12649", category: "Bearings", description: "135, ford front small/ L200(out), probox,", price: 400, stock: 71, low_stock_threshold: 15},
-            {sku: 10001, name: "11162/11300", category: "Bearings", description: "arrow", price: 750, stock: 91, low_stock_threshold: 9},
-            {sku: 10002, name: "359S/354X", category: "Bearings", description: "arrow", price: 850, stock: 94, low_stock_threshold: 15},
-            {sku: 10106, name: "clutch kit down 30054", category: "General Spare Parts", description: "nissan", price: 4500, stock: 12, low_stock_threshold: 5},
-            {sku: 10115, name: "75*107*8", category: "General Spare Parts", description: "probox crankshaft seal", price: 450, stock: 20, low_stock_threshold: 10},
-            {sku: 10207, name: "Bolt 22 1.0", category: "Bolts", description: "", price: 50, stock: 150, low_stock_threshold: 20}
-            // ... (Rest of your 200+ items would be here)
-        ];
+        let inventoryData = [];
 
-        let filteredData = [...inventoryData];
+        async function loadData() {
+            try {
+                const res = await fetch('inventory_data.json');
+                inventoryData = await res.json();
+                populateCategories();
+                renderAll();
+            } catch (e) { console.error("Could not load data. Ensure inventory_data.json exists."); }
+        }
 
-        // Initialize UI
-        function init() {
-            document.getElementById('last-updated').innerText = new Date().toLocaleDateString();
-            populateCategories();
-            renderSummary();
-            renderTable();
-            
-            document.getElementById('search-input').addEventListener('input', applyFilters);
-            document.getElementById('category-filter').addEventListener('change', applyFilters);
+        function renderAll() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const category = document.getElementById('category-filter').value;
+            const tbody = document.getElementById('inventory-body');
+            tbody.innerHTML = '';
+
+            let lowStock = 0;
+            let totalVal = 0;
+
+            const filtered = inventoryData.filter(item => {
+                const matches = (item.name.toLowerCase().includes(searchTerm) || item.sku.toString().includes(searchTerm)) &&
+                                (category === 'all' || item.category === category);
+                if (matches) {
+                    if (item.stock <= (item.low_stock_threshold || 5)) lowStock++;
+                    totalVal += (item.price * item.stock);
+                }
+                return matches;
+            });
+
+            filtered.forEach(item => {
+                const isLow = item.stock <= (item.low_stock_threshold || 5);
+                tbody.innerHTML += `
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="px-5 py-3 font-mono text-gray-400">${item.sku}</td>
+                        <td class="px-5 py-3"><b>${item.name}</b><br><span class="text-xs text-gray-400">${item.category}</span></td>
+                        <td class="px-5 py-3 text-right font-bold">${item.price.toLocaleString()}</td>
+                        <td class="px-5 py-3 text-right ${isLow ? 'text-red-600 font-bold' : ''}">${item.stock}</td>
+                        <td class="px-5 py-3 text-center">
+                            <button onclick="openEditModal(${item.sku}, ${item.price}, ${item.stock})" class="text-purple-600 border border-purple-200 px-2 py-1 rounded text-xs hover:bg-purple-50">Edit</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('total-items').innerText = filtered.length;
+            document.getElementById('low-stock-count').innerText = lowStock;
+            document.getElementById('total-value').innerText = totalVal.toLocaleString();
         }
 
         function populateCategories() {
-            const categories = [...new Set(inventoryData.map(item => item.category))].sort();
-            const select = document.getElementById('category-filter');
-            categories.forEach(cat => {
-                const opt = document.createElement('option');
-                opt.value = cat;
-                opt.innerText = cat;
-                select.appendChild(opt);
-            });
+            const cats = [...new Set(inventoryData.map(i => i.category))].sort();
+            const filter = document.getElementById('category-filter');
+            cats.forEach(c => filter.innerHTML += `<option value="${c}">${c}</option>`);
         }
 
-        function renderSummary() {
-            const lowStock = inventoryData.filter(item => item.stock <= item.low_stock_threshold).length;
-            const totalVal = inventoryData.reduce((sum, item) => sum + (item.price * item.stock), 0);
-            
-            document.getElementById('total-items').innerText = inventoryData.length;
-            document.getElementById('low-stock-count').innerText = lowStock;
-            document.getElementById('total-value').innerText = 'KSh ' + totalVal.toLocaleString();
-        }
-
-        function renderTable() {
-            const tbody = document.getElementById('inventory-body');
-            const noResults = document.getElementById('no-results');
-            tbody.innerHTML = '';
-            
-            if (filteredData.length === 0) {
-                noResults.classList.remove('hidden');
-            } else {
-                noResults.classList.add('hidden');
-                filteredData.forEach(item => {
-                    const isLow = item.stock <= item.low_stock_threshold;
-                    const statusClass = isLow ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800';
-                    const statusText = isLow ? 'Low' : 'OK';
-
-                    const row = `
-                        <tr class="hover:bg-gray-50 border-b">
-                            <td class="px-5 py-4 text-sm font-mono text-gray-500">${item.sku}</td>
-                            <td class="px-5 py-4">
-                                <div class="font-medium text-gray-900">${item.name}</div>
-                                <div class="text-xs text-gray-400 italic">${item.category}</div>
-                            </td>
-                            <td class="px-5 py-4 text-sm text-right font-semibold">KSh ${item.price.toLocaleString()}</td>
-                            <td class="px-5 py-4 text-sm text-right">${item.stock}</td>
-                            <td class="px-5 py-4 text-sm text-center">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
-                                    ${statusText}
-                                </span>
-                            </td>
-                            <td class="px-5 py-4 text-center">
-                                <button onclick="openEditModal(${item.sku}, '${item.name}', ${item.price}, ${item.stock})" 
-                                        class="text-purple-600 hover:text-purple-900 bg-purple-50 px-3 py-1 rounded border border-purple-200 text-xs transition">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                    tbody.innerHTML += row;
-                });
-            }
-        }
-
-        function applyFilters() {
-            const searchTerm = document.getElementById('search-input').value.toLowerCase();
-            const category = document.getElementById('category-filter').value;
-
-            filteredData = inventoryData.filter(item => {
-                const matchesSearch = item.name.toLowerCase().includes(searchTerm) || 
-                                     item.sku.toString().includes(searchTerm);
-                const matchesCategory = category === 'all' || item.category === category;
-                return matchesSearch && matchesCategory;
-            });
-            renderTable();
-        }
-
-        function resetFilters() {
-            document.getElementById('search-input').value = '';
-            document.getElementById('category-filter').value = 'all';
-            applyFilters();
-        }
-
-        // Modal Controls
-        function openEditModal(sku, name, price, stock) {
+        function openEditModal(sku, price, stock) {
             document.getElementById('edit-sku').value = sku;
-            document.getElementById('display-name').innerText = name;
             document.getElementById('edit-price').value = price;
             document.getElementById('edit-stock').value = stock;
             document.getElementById('editModal').classList.remove('hidden');
         }
 
-        function closeModal() {
-            document.getElementById('editModal').classList.add('hidden');
-        }
+        function closeModal() { document.getElementById('editModal').classList.add('hidden'); }
 
         async function saveChanges() {
             const sku = document.getElementById('edit-sku').value;
             const price = document.getElementById('edit-price').value;
             const stock = document.getElementById('edit-stock').value;
             const btn = document.getElementById('save-btn');
-            const syncStatus = document.getElementById('sync-status');
 
-            btn.disabled = true;
-            btn.innerText = "Processing...";
-            syncStatus.classList.remove('hidden');
+            btn.disabled = true; btn.innerText = "Syncing...";
+            document.getElementById('sync-status').classList.remove('hidden');
 
-            try {
-                const response = await fetch(`https://api.github.com/repos/${REPO_PATH}/dispatches`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        event_type: 'update_inventory',
-                        client_payload: { sku, price, stock }
-                    })
-                });
+            const response = await fetch(`https://api.github.com/repos/${REPO_PATH}/dispatches`, {
+                method: 'POST',
+                headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' },
+                body: JSON.stringify({ event_type: 'update_inventory', client_payload: { sku, price, stock } })
+            });
 
-                if (response.ok) {
-                    alert("Success! GitHub is updating the records. Please refresh the page in 60 seconds.");
-                    closeModal();
-                } else {
-                    const err = await response.json();
-                    alert("GitHub Error: " + (err.message || "Failed to trigger update"));
-                }
-            } catch (e) {
-                alert("Network error: Check your internet connection.");
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "Save Changes";
-                syncStatus.classList.add('hidden');
-            }
+            if (response.ok) {
+                alert("Update sent to GitHub! It will take about 60 seconds to process. Refresh then.");
+                closeModal();
+            } else { alert("Error connecting to GitHub."); }
+            
+            btn.disabled = false; btn.innerText = "Save";
+            document.getElementById('sync-status').classList.add('hidden');
         }
 
-        init();
+        document.getElementById('search-input').addEventListener('input', renderAll);
+        document.getElementById('category-filter').addEventListener('change', renderAll);
+        window.onload = loadData;
     </script>
 </body>
 </html>
