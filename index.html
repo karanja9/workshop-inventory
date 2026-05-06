@@ -68,20 +68,21 @@
                 margin-left: 0 !important;
             }
             
-            /* Ensure main content is full width when sidebar is hidden */
             body > div.flex > main {
                 width: 100% !important;
             }
             
-            /* Reduce padding on mobile */
             main .flex-1.p-6 {
                 padding: 1rem !important;
             }
             
-            /* Make header more compact on mobile */
             header {
                 padding-left: 1rem !important;
                 padding-right: 1rem !important;
+            }
+            
+            .grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
         
@@ -94,24 +95,53 @@
                 min-width: 800px;
             }
             
-            /* Adjust grid layouts for mobile */
-            .grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            /* Make modals full screen on mobile */
             #item-modal .max-w-lg {
                 max-width: 100%;
                 margin: 0.5rem;
             }
         }
         
-        /* Fix for when sidebar is hidden on desktop */
         @media (min-width: 1024px) {
             #sidebar.-translate-x-full ~ main,
             #sidebar.-translate-x-full + main {
                 width: 100% !important;
                 margin-left: 0 !important;
+            }
+        }
+        
+        /* Category combo box styles */
+        #form-category-input::-webkit-calendar-picker-indicator {
+            opacity: 0;
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+        }
+        
+        #form-category-input {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 30px;
+        }
+        
+        .dark #form-category-input {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        }
+        
+        /* Highlight animation for updated rows */
+        .row-updated {
+            animation: highlightRow 1.5s ease-out;
+        }
+        
+        @keyframes highlightRow {
+            0% { background-color: rgba(113, 75, 103, 0.2); }
+            100% { background-color: transparent; }
+        }
+        
+        /* Action buttons always visible on touch devices */
+        @media (hover: none) {
+            .touch-actions {
+                opacity: 1 !important;
             }
         }
     </style>
@@ -403,6 +433,9 @@
                             <div id="categories-list" class="flex flex-wrap gap-2">
                                 <!-- Populated by JS -->
                             </div>
+                            <p class="text-xs text-gray-400 mt-4">
+                                <i class="fas fa-info-circle"></i> You can also add new categories directly when creating or editing an item by typing a new category name in the form.
+                            </p>
                         </div>
                     </div>
 
@@ -480,9 +513,13 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Category</label>
-                        <select id="form-category" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
+                        <input type="text" id="form-category-input" list="category-list" 
+                            class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" 
+                            placeholder="Type or select" autocomplete="off">
+                        <datalist id="category-list">
                             <!-- Populated by JS -->
-                        </select>
+                        </datalist>
+                        <input type="hidden" id="form-category" value="">
                     </div>
                 </div>
                 <div>
@@ -541,6 +578,7 @@
         let valueChart = null;
         let dataLoaded = false;
         let sidebarVisible = false;
+        let lastAction = null; // For undo functionality
 
         // ===================== INIT =====================
         async function init() {
@@ -553,9 +591,6 @@
                 else document.documentElement.classList.remove('dark');
                 updateCharts();
             });
-
-            // Check initial screen size
-            handleResize();
 
             // Try to load from inventory_data.json (same origin for GitHub Pages)
             try {
@@ -586,6 +621,9 @@
             populateCategoryFilters();
             updateAllViews();
             
+            // Setup category input sync
+            setupCategoryInputSync();
+            
             // Hide sidebar on mobile by default
             if (window.innerWidth < 1024) {
                 hideSidebar();
@@ -600,6 +638,19 @@
                     hideSidebar();
                 }
             });
+        }
+
+        function setupCategoryInputSync() {
+            const categoryInput = document.getElementById('form-category-input');
+            const categoryHidden = document.getElementById('form-category');
+            if (categoryInput && categoryHidden) {
+                categoryInput.addEventListener('input', function() {
+                    categoryHidden.value = this.value.trim();
+                });
+                categoryInput.addEventListener('change', function() {
+                    categoryHidden.value = this.value.trim();
+                });
+            }
         }
 
         function saveToStorage() {
@@ -631,7 +682,6 @@
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
             
             if (sidebar.classList.contains('-translate-x-full')) {
                 showSidebar();
@@ -643,48 +693,34 @@
         function showSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
-            const main = document.querySelector('main');
             
             sidebar.classList.remove('-translate-x-full');
             overlay.classList.remove('hidden');
             sidebarVisible = true;
-            
-            if (window.innerWidth < 1024) {
-                main.style.marginLeft = '0';
-            }
         }
 
         function hideSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
-            const main = document.querySelector('main');
             
             sidebar.classList.add('-translate-x-full');
             overlay.classList.add('hidden');
             sidebarVisible = false;
-            
-            if (window.innerWidth < 1024) {
-                main.style.marginLeft = '0';
-                main.style.width = '100%';
-            }
         }
 
         function showSidebarDesktop() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
-            const main = document.querySelector('main');
             
             sidebar.classList.remove('-translate-x-full');
             overlay.classList.add('hidden');
             sidebarVisible = true;
-            main.style.marginLeft = '256px';
-            main.style.width = 'calc(100% - 256px)';
         }
 
         // ===================== DASHBOARD =====================
         function updateDashboard() {
             const totalItems = inventory.length;
-            const lowStock = inventory.filter(i => i.stock <= (i.low_stock_threshold || 5));
+            const lowStock = inventory.filter(i => (i.stock || 0) <= (i.low_stock_threshold || 5));
             const totalValue = inventory.reduce((sum, i) => sum + ((i.price || 0) * (i.stock || 0)), 0);
             const uniqueCats = [...new Set(inventory.map(i => i.category).filter(Boolean))].length;
 
@@ -700,7 +736,7 @@
             } else {
                 list.innerHTML = lowStock.slice(0, 5).map(item => {
                     const threshold = item.low_stock_threshold || 5;
-                    const pct = Math.min(100, (item.stock / threshold) * 100);
+                    const pct = Math.min(100, ((item.stock || 0) / threshold) * 100);
                     return `
                         <div class="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                             <div class="flex items-center gap-3">
@@ -796,17 +832,25 @@
 
         // ===================== INVENTORY =====================
         function populateCategoryFilters() {
-            const selects = ['inv-category', 'form-category'];
-            selects.forEach(id => {
-                const el = document.getElementById(id);
-                if (!el) return;
-                const current = el.value;
-                el.innerHTML = id === 'inv-category' ? '<option value="all">All Categories</option>' : '';
+            // For inventory filter dropdown
+            const invCatEl = document.getElementById('inv-category');
+            if (invCatEl) {
+                const current = invCatEl.value;
+                invCatEl.innerHTML = '<option value="all">All Categories</option>';
                 categories.forEach(c => {
-                    el.innerHTML += `<option value="${c}">${c}</option>`;
+                    invCatEl.innerHTML += `<option value="${c}">${c}</option>`;
                 });
-                if (current && [...el.options].some(o => o.value === current)) el.value = current;
-            });
+                if (current && [...invCatEl.options].some(o => o.value === current)) invCatEl.value = current;
+            }
+            
+            // For the modal datalist
+            const datalist = document.getElementById('category-list');
+            if (datalist) {
+                datalist.innerHTML = '';
+                categories.forEach(c => {
+                    datalist.innerHTML += `<option value="${c}">${c}</option>`;
+                });
+            }
         }
 
         function renderInventory() {
@@ -866,7 +910,7 @@
                             <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium ${statusClass}">${statusText}</span>
                         </td>
                         <td class="px-5 py-3 text-right">
-                            <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity touch-actions">
                                 <button onclick="openEditModal(${item.sku})" class="w-8 h-8 rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-500 hover:bg-primary-100 dark:hover:bg-primary-900/40 flex items-center justify-center transition-colors" title="Edit">
                                     <i class="fas fa-pen text-xs"></i>
                                 </button>
@@ -915,24 +959,31 @@
         // ===================== SETTINGS =====================
         function renderSettings() {
             const list = document.getElementById('categories-list');
-            list.innerHTML = categories.map((cat, idx) => `
-                <div class="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm">
-                    <span>${cat}</span>
-                    <button onclick="removeCategory(${idx})" class="w-5 h-5 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-500 flex items-center justify-center transition-colors">
-                        <i class="fas fa-times text-xs"></i>
-                    </button>
-                </div>
-            `).join('');
+            if (categories.length === 0) {
+                list.innerHTML = '<span class="text-gray-400 text-sm">No categories yet. Add your first category or create items to auto-generate categories.</span>';
+            } else {
+                list.innerHTML = categories.map((cat, idx) => `
+                    <div class="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm">
+                        <span>${cat}</span>
+                        <button onclick="removeCategory(${idx})" class="w-5 h-5 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-500 flex items-center justify-center transition-colors" title="Remove category">
+                            <i class="fas fa-times text-xs"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
         }
 
         function addCategory() {
             const name = prompt('Enter new category name:');
             if (name && name.trim() && !categories.includes(name.trim())) {
                 categories.push(name.trim());
+                categories.sort();
                 saveToStorage();
                 renderSettings();
                 populateCategoryFilters();
                 showToast('Category added', 'success');
+            } else if (name && categories.includes(name.trim())) {
+                showToast('Category already exists', 'info');
             }
         }
 
@@ -956,9 +1007,18 @@
             document.getElementById('form-price').value = '';
             document.getElementById('form-stock').value = '';
             document.getElementById('form-threshold').value = '5';
-            document.getElementById('form-category').value = categories[0] || 'General';
+            
+            // Clear category input fields
+            const categoryInput = document.getElementById('form-category-input');
+            const categoryHidden = document.getElementById('form-category');
+            if (categoryInput) categoryInput.value = '';
+            if (categoryHidden) categoryHidden.value = categories[0] || 'General';
+            
             document.getElementById('form-sku').disabled = false;
             document.getElementById('item-modal').classList.remove('hidden');
+            
+            // Focus on SKU field
+            setTimeout(() => document.getElementById('form-sku').focus(), 100);
         }
 
         function openEditModal(sku) {
@@ -973,8 +1033,18 @@
             document.getElementById('form-price').value = item.price || 0;
             document.getElementById('form-stock').value = item.stock || 0;
             document.getElementById('form-threshold').value = item.low_stock_threshold || 5;
-            document.getElementById('form-category').value = item.category || categories[0] || 'General';
+            
+            // Set category
+            const categoryInput = document.getElementById('form-category-input');
+            const categoryHidden = document.getElementById('form-category');
+            const itemCategory = item.category || categories[0] || 'General';
+            if (categoryInput) categoryInput.value = itemCategory;
+            if (categoryHidden) categoryHidden.value = itemCategory;
+            
             document.getElementById('item-modal').classList.remove('hidden');
+            
+            // Focus on name field
+            setTimeout(() => document.getElementById('form-name').focus(), 100);
         }
 
         function closeModal() {
@@ -989,23 +1059,45 @@
             const price = parseFloat(document.getElementById('form-price').value) || 0;
             const stock = parseInt(document.getElementById('form-stock').value) || 0;
             const threshold = parseInt(document.getElementById('form-threshold').value) || 5;
-            const category = document.getElementById('form-category').value;
+            
+            // Get category from the input field
+            const categoryInput = document.getElementById('form-category-input');
+            let category = categoryInput ? categoryInput.value.trim() : '';
+            if (!category) {
+                category = categories[0] || 'General';
+            }
+            // Update hidden field
+            const categoryHidden = document.getElementById('form-category');
+            if (categoryHidden) categoryHidden.value = category;
 
             if (!sku || !name) {
                 showToast('SKU and Name are required', 'error');
                 return;
             }
+            
+            if (stock < 0) {
+                showToast('Stock cannot be negative', 'error');
+                return;
+            }
+            
+            if (price < 0) {
+                showToast('Price cannot be negative', 'error');
+                return;
+            }
 
+            // Store last action for undo
             if (!editSku) {
                 if (inventory.some(i => i.sku === sku)) {
                     showToast('SKU already exists', 'error');
                     return;
                 }
+                lastAction = { type: 'add', item: { sku, name, description, category, price, stock, low_stock_threshold: threshold } };
                 inventory.push({ sku, name, description, category, price, stock, low_stock_threshold: threshold });
                 showToast('Item added successfully', 'success');
             } else {
                 const idx = inventory.findIndex(i => i.sku === parseInt(editSku));
                 if (idx !== -1) {
+                    lastAction = { type: 'edit', sku: parseInt(editSku), oldItem: {...inventory[idx]} };
                     inventory[idx] = { sku: parseInt(editSku), name, description, category, price, stock, low_stock_threshold: threshold };
                     showToast('Item updated successfully', 'success');
                 }
@@ -1016,11 +1108,17 @@
                 categories.push(category);
                 categories.sort();
                 populateCategoryFilters();
+                if (currentView === 'settings') renderSettings();
             }
 
             saveToStorage();
             closeModal();
             updateAllViews();
+            
+            // Show undo toast if available
+            if (lastAction) {
+                showUndoToast();
+            }
         }
 
         function openDeleteModal(sku) {
@@ -1038,17 +1136,65 @@
 
         function confirmDelete() {
             if (deleteTargetSku !== null) {
+                const item = inventory.find(i => i.sku === deleteTargetSku);
+                if (item) {
+                    lastAction = { type: 'delete', item: {...item} };
+                }
                 inventory = inventory.filter(i => i.sku !== deleteTargetSku);
                 saveToStorage();
                 showToast('Item deleted', 'success');
                 updateAllViews();
+                
+                // Show undo toast
+                if (lastAction) {
+                    showUndoToast();
+                }
             }
             closeDeleteModal();
         }
 
+        function undoLastAction() {
+            if (!lastAction) return;
+            
+            if (lastAction.type === 'add') {
+                inventory = inventory.filter(i => i.sku !== lastAction.item.sku);
+                showToast('Item addition undone', 'info');
+            } else if (lastAction.type === 'delete') {
+                inventory.push(lastAction.item);
+                showToast('Item deletion undone', 'info');
+            } else if (lastAction.type === 'edit') {
+                const idx = inventory.findIndex(i => i.sku === lastAction.sku);
+                if (idx !== -1) {
+                    inventory[idx] = lastAction.oldItem;
+                    showToast('Item edit undone', 'info');
+                }
+            }
+            
+            lastAction = null;
+            saveToStorage();
+            updateAllViews();
+        }
+
+        function showUndoToast() {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast flex items-center gap-3 px-5 py-3 bg-blue-500 text-white rounded-xl shadow-lg min-w-[280px]';
+            toast.innerHTML = `
+                <i class="fas fa-undo"></i>
+                <span class="text-sm font-medium flex-1">Action performed</span>
+                <button onclick="undoLastAction(); this.parentElement.remove();" class="text-xs font-bold underline hover:no-underline">UNDO</button>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 8000);
+        }
+
         // ===================== DATA IMPORT/EXPORT =====================
         function exportData() {
-            // Export in the exact same format as the original JSON (array of objects)
             const blob = new Blob([JSON.stringify(inventory, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1067,6 +1213,9 @@
                 try {
                     const data = JSON.parse(e.target.result);
                     if (Array.isArray(data)) {
+                        // Backup current data before import
+                        lastAction = { type: 'import', oldInventory: [...inventory], oldCategories: [...categories] };
+                        
                         inventory = data;
                         categories = [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
                         saveToStorage();
@@ -1074,7 +1223,10 @@
                         updateAllViews();
                         document.getElementById('last-sync').textContent = inventory.length + ' items imported';
                         showToast('Data imported successfully', 'success');
+                        showUndoToast();
                     } else if (data.inventory && Array.isArray(data.inventory)) {
+                        lastAction = { type: 'import', oldInventory: [...inventory], oldCategories: [...categories] };
+                        
                         inventory = data.inventory;
                         if (data.categories && Array.isArray(data.categories)) categories = data.categories;
                         else categories = [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
@@ -1083,6 +1235,7 @@
                         updateAllViews();
                         document.getElementById('last-sync').textContent = inventory.length + ' items imported';
                         showToast('Data imported successfully', 'success');
+                        showUndoToast();
                     } else {
                         showToast('Invalid file format — expected JSON array', 'error');
                     }
@@ -1095,7 +1248,8 @@
         }
 
         function resetData() {
-            if (confirm('WARNING: This will delete ALL inventory data. Are you sure?')) {
+            if (confirm('WARNING: This will delete ALL inventory data. Are you sure?\n\nThis action can be undone if you exported your data first.')) {
+                lastAction = { type: 'reset', oldInventory: [...inventory], oldCategories: [...categories] };
                 inventory = [];
                 categories = [];
                 saveToStorage();
@@ -1103,6 +1257,7 @@
                 updateAllViews();
                 document.getElementById('last-sync').textContent = 'No data loaded';
                 showToast('All data cleared', 'success');
+                showUndoToast();
             }
         }
 
@@ -1128,6 +1283,18 @@
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
             updateCharts();
+            
+            // Update dark mode toggle knob
+            const knob = document.getElementById('dark-toggle-knob');
+            if (knob) {
+                if (document.documentElement.classList.contains('dark')) {
+                    knob.classList.add('dark:translate-x-6');
+                    knob.classList.remove('translate-x-1');
+                } else {
+                    knob.classList.remove('dark:translate-x-6');
+                    knob.classList.add('translate-x-1');
+                }
+            }
         }
 
         function showToast(message, type = 'success') {
@@ -1163,6 +1330,14 @@
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                 e.preventDefault();
                 if (currentView === 'inventory') document.getElementById('inv-search').focus();
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+                e.preventDefault();
+                undoLastAction();
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                openAddModal();
             }
         });
 
