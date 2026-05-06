@@ -1271,18 +1271,18 @@
   {
     "sku": 10141,
     "name": "lotus 2764 newProb.",
+    "description": "",
     "category": "Brake Parts",
-    "description": null,
-    "price": 2200,
+    "price": 1000,
     "stock": 10,
     "low_stock_threshold": 3
   },
   {
     "sku": 10142,
     "name": "KD2764",
-    "category": "Brake Parts",
     "description": "new probox",
-    "price": 2000,
+    "category": "Brake Parts",
+    "price": 1200,
     "stock": 12,
     "low_stock_threshold": 4
   },
@@ -1298,9 +1298,9 @@
   {
     "sku": 10144,
     "name": "394wk",
-    "category": "Brake Parts",
     "description": "old caldina",
-    "price": 1800,
+    "category": "Brake Parts",
+    "price": 1500,
     "stock": 15,
     "low_stock_threshold": 5
   },
