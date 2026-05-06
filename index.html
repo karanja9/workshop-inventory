@@ -46,7 +46,6 @@
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid #714B67; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* Fix for sidebar and full-screen layout */
         #sidebar {
             transition: transform 0.3s ease;
         }
@@ -55,7 +54,6 @@
             transform: translateX(-100%);
         }
         
-        /* Mobile responsive fixes */
         @media (max-width: 1023px) {
             main {
                 width: 100% !important;
@@ -109,7 +107,6 @@
             }
         }
         
-        /* Category combo box styles */
         #form-category-input::-webkit-calendar-picker-indicator {
             opacity: 0;
             position: absolute;
@@ -128,7 +125,6 @@
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
         }
         
-        /* Highlight animation for updated rows */
         .row-updated {
             animation: highlightRow 1.5s ease-out;
         }
@@ -138,18 +134,35 @@
             100% { background-color: transparent; }
         }
         
-        /* Action buttons always visible on touch devices */
         @media (hover: none) {
             .touch-actions {
                 opacity: 1 !important;
             }
         }
+        
+        .sync-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .sync-dot.local { background-color: #f59e0b; }
+        .sync-dot.github { background-color: #22c55e; }
+        .sync-dot.none { background-color: #9ca3af; }
+        .sync-dot.synced { background-color: #3b82f6; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
 
     <!-- Toast Container -->
     <div id="toast-container" class="fixed top-4 right-4 z-[60] space-y-2"></div>
+
+    <!-- Sync Status Bar -->
+    <div id="sync-status" class="hidden fixed top-0 left-0 right-0 bg-yellow-500 text-white text-xs text-center py-1 z-[70] font-medium">
+        <i class="fas fa-exclamation-circle"></i> You have unsaved local changes. 
+        <button onclick="autoSyncToGitHub()" class="underline font-bold ml-2">Sync to GitHub Now</button>
+    </div>
 
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
@@ -188,7 +201,8 @@
                         <div class="w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center text-white text-xs font-bold">WK</div>
                         <div class="text-sm font-medium">Workshop</div>
                     </div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400" id="last-sync">Loading data...</div>
+                    <div class="text-xs" id="last-sync">Loading data...</div>
+                    <div class="text-xs mt-1" id="sync-source"></div>
                 </div>
             </div>
         </aside>
@@ -211,8 +225,11 @@
                         <i class="fas fa-moon dark:hidden"></i>
                         <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
                     </button>
-                    <button onclick="exportData()" class="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm">
+                    <button onclick="exportData()" class="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm" title="Download JSON backup">
                         <i class="fas fa-download"></i> Export
+                    </button>
+                    <button onclick="autoSyncToGitHub()" id="sync-btn" class="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-xl text-sm font-medium transition-colors shadow-sm" title="Auto-sync to GitHub">
+                        <i class="fas fa-cloud-upload-alt"></i> Sync to GitHub
                     </button>
                     <button onclick="document.getElementById('import-file').click()" class="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm">
                         <i class="fas fa-upload"></i> Import
@@ -302,14 +319,12 @@
                             <button onclick="switchView('lowstock')" class="text-sm text-primary-500 hover:text-primary-600 font-medium">View All</button>
                         </div>
                         <div id="dash-lowstock-list" class="divide-y divide-gray-100 dark:divide-gray-700">
-                            <!-- Populated by JS -->
                         </div>
                     </div>
                 </div>
 
                 <!-- INVENTORY VIEW -->
                 <div id="view-inventory" class="hidden fade-in space-y-5">
-                    <!-- Filters -->
                     <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 flex flex-wrap gap-3 items-center">
                         <div class="relative flex-1 min-w-[200px]">
                             <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
@@ -333,7 +348,6 @@
                         </button>
                     </div>
 
-                    <!-- Table -->
                     <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
@@ -349,7 +363,6 @@
                                     </tr>
                                 </thead>
                                 <tbody id="inventory-table-body" class="divide-y divide-gray-100 dark:divide-gray-700 text-sm">
-                                    <!-- Populated by JS -->
                                 </tbody>
                             </table>
                         </div>
@@ -389,7 +402,6 @@
                                     </tr>
                                 </thead>
                                 <tbody id="lowstock-table-body" class="divide-y divide-gray-100 dark:divide-gray-700 text-sm">
-                                    <!-- Populated by JS -->
                                 </tbody>
                             </table>
                         </div>
@@ -405,6 +417,55 @@
 
                 <!-- SETTINGS VIEW -->
                 <div id="view-settings" class="hidden fade-in space-y-6 max-w-4xl">
+                    <!-- Data Source Info -->
+                    <div class="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-2xl p-6">
+                        <h3 class="font-bold flex items-center gap-2 text-blue-700 dark:text-blue-400 mb-2">
+                            <i class="fas fa-info-circle"></i> Data Storage Info
+                        </h3>
+                        <p class="text-sm text-blue-600 dark:text-blue-300 mb-3">
+                            Your changes are saved to your browser's local storage. Click "Sync to GitHub" to push changes directly to your repository.
+                        </p>
+                        <div class="flex gap-3">
+                            <button onclick="autoSyncToGitHub()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors">
+                                <i class="fas fa-cloud-upload-alt"></i> Sync to GitHub Now
+                            </button>
+                            <button onclick="exportData()" class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+                                <i class="fas fa-download"></i> Backup JSON
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- GitHub Auto-Sync -->
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="font-bold flex items-center gap-2"><i class="fab fa-github text-primary-500"></i> GitHub Auto-Sync</h3>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-key text-purple-500"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">GitHub Token</div>
+                                        <div class="text-sm text-gray-400" id="token-status">Not configured</div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button onclick="setupGitHubToken()" class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+                                        Configure
+                                    </button>
+                                    <button onclick="clearGitHubToken()" class="px-4 py-2 bg-red-100 dark:bg-red-900/20 text-red-500 rounded-lg text-sm font-medium hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors">
+                                        Clear
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">
+                                <i class="fas fa-info-circle"></i> Auto-sync pushes changes directly to your GitHub repository. Token is stored locally in your browser.
+                            </p>
+                        </div>
+                    </div>
+
                     <!-- Appearance -->
                     <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
                         <div class="p-6 border-b border-gray-100 dark:border-gray-700">
@@ -431,7 +492,6 @@
                         </div>
                         <div class="p-6">
                             <div id="categories-list" class="flex flex-wrap gap-2">
-                                <!-- Populated by JS -->
                             </div>
                             <p class="text-xs text-gray-400 mt-4">
                                 <i class="fas fa-info-circle"></i> You can also add new categories directly when creating or editing an item by typing a new category name in the form.
@@ -447,12 +507,26 @@
                         <div class="p-6 space-y-4">
                             <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
                                 <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-cloud-upload-alt text-green-500"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">Sync to GitHub</div>
+                                        <div class="text-sm text-gray-400">Push changes directly to your repository</div>
+                                    </div>
+                                </div>
+                                <button onclick="autoSyncToGitHub()" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors">
+                                    Sync Now
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
+                                <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
                                         <i class="fas fa-download text-blue-500"></i>
                                     </div>
                                     <div>
-                                        <div class="font-medium">Export Data</div>
-                                        <div class="text-sm text-gray-400">Download inventory as JSON file (ready for GitHub commit)</div>
+                                        <div class="font-medium">Export Backup</div>
+                                        <div class="text-sm text-gray-400">Download inventory as JSON backup file</div>
                                     </div>
                                 </div>
                                 <button onclick="exportData()" class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
@@ -517,7 +591,6 @@
                             class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" 
                             placeholder="Type or select" autocomplete="off">
                         <datalist id="category-list">
-                            <!-- Populated by JS -->
                         </datalist>
                         <input type="hidden" id="form-category" value="">
                     </div>
@@ -578,11 +651,17 @@
         let valueChart = null;
         let dataLoaded = false;
         let sidebarVisible = false;
-        let lastAction = null; // For undo functionality
+        let lastAction = null;
+        let dataSource = 'none';
+        
+        // GitHub configuration - token is stored in localStorage for security
+        const GITHUB_OWNER = 'karanja9';
+        const GITHUB_REPO = 'workshop-inventory';
+        const GITHUB_PATH = 'inventory_data.json';
+        const GITHUB_BRANCH = 'main';
 
         // ===================== INIT =====================
         async function init() {
-            // Check system dark mode
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 document.documentElement.classList.add('dark');
             }
@@ -592,41 +671,62 @@
                 updateCharts();
             });
 
-            // Try to load from inventory_data.json (same origin for GitHub Pages)
-            try {
-                const res = await fetch('inventory_data.json');
-                if (res.ok) {
-                    inventory = await res.json();
-                    // Extract unique categories from inventory
-                    categories = [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
-                    document.getElementById('last-sync').textContent = inventory.length + ' items loaded from JSON';
-                    dataLoaded = true;
-                } else {
-                    throw new Error('JSON not found');
-                }
-            } catch (e) {
-                // Fallback to localStorage or empty
-                const saved = localStorage.getItem('workshop_inventory');
-                if (saved) {
-                    inventory = JSON.parse(saved);
-                    categories = [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
-                    document.getElementById('last-sync').textContent = inventory.length + ' items from localStorage';
-                } else {
-                    inventory = [];
-                    categories = [];
-                    document.getElementById('last-sync').textContent = 'No data loaded';
-                }
-            }
-
+            await loadData();
             populateCategoryFilters();
             updateAllViews();
-            
-            // Setup category input sync
             setupCategoryInputSync();
             
-            // Hide sidebar on mobile by default
             if (window.innerWidth < 1024) {
                 hideSidebar();
+            }
+            
+            updateSyncSourceDisplay();
+            updateSyncButton();
+            updateTokenStatus();
+        }
+
+        async function loadData() {
+            const saved = localStorage.getItem('workshop_inventory');
+            const hasLocalChanges = localStorage.getItem('workshop_has_changes') === 'true';
+            
+            if (hasLocalChanges && saved) {
+                inventory = JSON.parse(saved);
+                const savedCats = localStorage.getItem('workshop_categories');
+                categories = savedCats ? JSON.parse(savedCats) : [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
+                document.getElementById('last-sync').textContent = inventory.length + ' items (local changes)';
+                dataSource = 'local';
+                dataLoaded = true;
+            } else {
+                try {
+                    const res = await fetch('inventory_data.json');
+                    if (res.ok) {
+                        inventory = await res.json();
+                        categories = [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
+                        
+                        if (saved) {
+                            document.getElementById('last-sync').textContent = inventory.length + ' items from JSON';
+                        } else {
+                            document.getElementById('last-sync').textContent = inventory.length + ' items loaded from JSON';
+                        }
+                        dataSource = 'github';
+                        dataLoaded = true;
+                    } else {
+                        throw new Error('JSON not found');
+                    }
+                } catch (e) {
+                    if (saved) {
+                        inventory = JSON.parse(saved);
+                        const savedCats = localStorage.getItem('workshop_categories');
+                        categories = savedCats ? JSON.parse(savedCats) : [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
+                        document.getElementById('last-sync').textContent = inventory.length + ' items from localStorage';
+                        dataSource = 'local';
+                    } else {
+                        inventory = [];
+                        categories = [];
+                        document.getElementById('last-sync').textContent = 'No data loaded';
+                        dataSource = 'none';
+                    }
+                }
             }
         }
 
@@ -656,6 +756,200 @@
         function saveToStorage() {
             localStorage.setItem('workshop_inventory', JSON.stringify(inventory));
             localStorage.setItem('workshop_categories', JSON.stringify(categories));
+            localStorage.setItem('workshop_has_changes', 'true');
+            localStorage.setItem('workshop_last_saved', new Date().toISOString());
+            
+            updateSyncSourceDisplay();
+            updateSyncButton();
+            showSyncStatus();
+            
+            // Auto-sync if token is configured
+            const token = localStorage.getItem('github_token');
+            if (token) {
+                autoSyncToGitHub(true);
+            }
+        }
+
+        function updateSyncSourceDisplay() {
+            const sourceEl = document.getElementById('sync-source');
+            if (!sourceEl) return;
+            
+            const hasChanges = localStorage.getItem('workshop_has_changes') === 'true';
+            const lastSaved = localStorage.getItem('workshop_last_saved');
+            const token = localStorage.getItem('github_token');
+            
+            let html = '';
+            if (token && !hasChanges) {
+                html += '<span class="sync-dot synced"></span> Synced with GitHub';
+            } else if (hasChanges) {
+                html += '<span class="sync-dot local"></span> Local changes pending';
+                if (lastSaved) {
+                    const date = new Date(lastSaved);
+                    html += ` · ${date.toLocaleTimeString()}`;
+                }
+            } else if (dataSource === 'github') {
+                html += '<span class="sync-dot github"></span> From GitHub (read-only)';
+            } else {
+                html += '<span class="sync-dot none"></span> No data source';
+            }
+            
+            sourceEl.innerHTML = html;
+        }
+
+        function updateSyncButton() {
+            const btn = document.getElementById('sync-btn');
+            if (!btn) return;
+            
+            const hasChanges = localStorage.getItem('workshop_has_changes') === 'true';
+            const token = localStorage.getItem('github_token');
+            
+            if (!token) {
+                btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Setup Sync';
+                btn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                btn.classList.add('bg-yellow-500', 'hover:bg-yellow-600');
+            } else if (hasChanges) {
+                btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Sync to GitHub *';
+                btn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                btn.classList.add('bg-yellow-500', 'hover:bg-yellow-600');
+            } else {
+                btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Sync to GitHub';
+                btn.classList.remove('bg-yellow-500', 'hover:bg-yellow-600');
+                btn.classList.add('bg-green-500', 'hover:bg-green-600');
+            }
+        }
+
+        function showSyncStatus() {
+            const status = document.getElementById('sync-status');
+            const hasChanges = localStorage.getItem('workshop_has_changes') === 'true';
+            
+            if (hasChanges) {
+                status.classList.remove('hidden');
+                setTimeout(() => status.classList.add('hidden'), 5000);
+            }
+        }
+
+        // ===================== GITHUB AUTO-SYNC =====================
+        async function autoSyncToGitHub(silent = false) {
+            let token = localStorage.getItem('github_token');
+            
+            if (!token) {
+                if (!silent) {
+                    setupGitHubToken();
+                }
+                return;
+            }
+            
+            const syncBtn = document.getElementById('sync-btn');
+            const originalText = syncBtn.innerHTML;
+            syncBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
+            syncBtn.disabled = true;
+            
+            try {
+                // Get current file SHA
+                const getResponse = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                if (!getResponse.ok) {
+                    if (getResponse.status === 401) {
+                        localStorage.removeItem('github_token');
+                        throw new Error('Invalid token. Please reconfigure.');
+                    }
+                    throw new Error('Failed to fetch file info');
+                }
+                
+                const fileData = await getResponse.json();
+                const sha = fileData.sha;
+                
+                // Prepare content
+                const jsonString = JSON.stringify(inventory, null, 2);
+                const content = btoa(unescape(encodeURIComponent(jsonString)));
+                
+                const commitMessage = `Auto-sync: Update inventory (${inventory.length} items) - ${new Date().toLocaleString()}`;
+                
+                const updateResponse = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: commitMessage,
+                        content: content,
+                        sha: sha,
+                        branch: GITHUB_BRANCH
+                    })
+                });
+                
+                if (!updateResponse.ok) {
+                    const error = await updateResponse.json();
+                    throw new Error(error.message || 'Failed to sync');
+                }
+                
+                // Success
+                localStorage.setItem('workshop_has_changes', 'false');
+                document.getElementById('sync-status').classList.add('hidden');
+                updateSyncSourceDisplay();
+                updateSyncButton();
+                
+                if (!silent) {
+                    showToast('✅ Synced to GitHub successfully!', 'success');
+                }
+                
+            } catch (error) {
+                console.error('Sync error:', error);
+                if (!silent) {
+                    showToast('Sync failed: ' + error.message, 'error');
+                }
+            } finally {
+                syncBtn.innerHTML = originalText;
+                syncBtn.disabled = false;
+            }
+        }
+
+        function setupGitHubToken() {
+            const existingToken = localStorage.getItem('github_token');
+            const token = prompt(
+                'Enter your GitHub Personal Access Token:\n\n' +
+                'Get one at: GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)\n' +
+                'Required scope: repo\n\n' +
+                'Token is stored securely in your browser only.',
+                existingToken || ''
+            );
+            
+            if (token && token.trim()) {
+                localStorage.setItem('github_token', token.trim());
+                updateTokenStatus();
+                updateSyncButton();
+                showToast('GitHub token saved! Click Sync to push changes.', 'success');
+            }
+        }
+
+        function clearGitHubToken() {
+            if (confirm('Remove your GitHub token? You will need to re-enter it to auto-sync.')) {
+                localStorage.removeItem('github_token');
+                updateTokenStatus();
+                updateSyncButton();
+                showToast('GitHub token removed', 'info');
+            }
+        }
+
+        function updateTokenStatus() {
+            const status = document.getElementById('token-status');
+            const token = localStorage.getItem('github_token');
+            if (status) {
+                if (token) {
+                    status.textContent = '✓ Configured (auto-sync enabled)';
+                    status.className = 'text-sm text-green-500';
+                } else {
+                    status.textContent = 'Not configured - click Configure';
+                    status.className = 'text-sm text-gray-400';
+                }
+            }
         }
 
         // ===================== NAVIGATION =====================
@@ -672,9 +966,8 @@
             if (view === 'dashboard') updateDashboard();
             if (view === 'inventory') renderInventory();
             if (view === 'lowstock') renderLowStock();
-            if (view === 'settings') renderSettings();
+            if (view === 'settings') { renderSettings(); updateTokenStatus(); }
 
-            // Auto-hide sidebar on mobile when navigating
             if (window.innerWidth < 1024) {
                 hideSidebar();
             }
@@ -729,7 +1022,6 @@
             document.getElementById('dash-total-value').textContent = totalValue.toLocaleString();
             document.getElementById('dash-categories').textContent = uniqueCats;
 
-            // Low stock list
             const list = document.getElementById('dash-lowstock-list');
             if (lowStock.length === 0) {
                 list.innerHTML = '<div class="p-8 text-center text-gray-400 text-sm">No low stock items</div>';
@@ -766,7 +1058,6 @@
             const textColor = isDark ? '#9ca3af' : '#6b7280';
             const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
 
-            // Category Chart
             const catData = {};
             inventory.forEach(i => { 
                 const cat = i.category || 'Uncategorized';
@@ -800,7 +1091,6 @@
                 }
             });
 
-            // Value Chart
             const valData = {};
             inventory.forEach(i => { 
                 const cat = i.category || 'Uncategorized';
@@ -832,7 +1122,6 @@
 
         // ===================== INVENTORY =====================
         function populateCategoryFilters() {
-            // For inventory filter dropdown
             const invCatEl = document.getElementById('inv-category');
             if (invCatEl) {
                 const current = invCatEl.value;
@@ -843,7 +1132,6 @@
                 if (current && [...invCatEl.options].some(o => o.value === current)) invCatEl.value = current;
             }
             
-            // For the modal datalist
             const datalist = document.getElementById('category-list');
             if (datalist) {
                 datalist.innerHTML = '';
@@ -869,7 +1157,6 @@
                 return matchSearch && matchCat;
             });
 
-            // Sort
             const sortMap = {
                 'sku': (a, b) => (a.sku || 0) - (b.sku || 0),
                 'name': (a, b) => (a.name || '').localeCompare(b.name || ''),
@@ -971,6 +1258,7 @@
                     </div>
                 `).join('');
             }
+            updateTokenStatus();
         }
 
         function addCategory() {
@@ -1008,7 +1296,6 @@
             document.getElementById('form-stock').value = '';
             document.getElementById('form-threshold').value = '5';
             
-            // Clear category input fields
             const categoryInput = document.getElementById('form-category-input');
             const categoryHidden = document.getElementById('form-category');
             if (categoryInput) categoryInput.value = '';
@@ -1017,7 +1304,6 @@
             document.getElementById('form-sku').disabled = false;
             document.getElementById('item-modal').classList.remove('hidden');
             
-            // Focus on SKU field
             setTimeout(() => document.getElementById('form-sku').focus(), 100);
         }
 
@@ -1034,7 +1320,6 @@
             document.getElementById('form-stock').value = item.stock || 0;
             document.getElementById('form-threshold').value = item.low_stock_threshold || 5;
             
-            // Set category
             const categoryInput = document.getElementById('form-category-input');
             const categoryHidden = document.getElementById('form-category');
             const itemCategory = item.category || categories[0] || 'General';
@@ -1043,7 +1328,6 @@
             
             document.getElementById('item-modal').classList.remove('hidden');
             
-            // Focus on name field
             setTimeout(() => document.getElementById('form-name').focus(), 100);
         }
 
@@ -1060,13 +1344,11 @@
             const stock = parseInt(document.getElementById('form-stock').value) || 0;
             const threshold = parseInt(document.getElementById('form-threshold').value) || 5;
             
-            // Get category from the input field
             const categoryInput = document.getElementById('form-category-input');
             let category = categoryInput ? categoryInput.value.trim() : '';
             if (!category) {
                 category = categories[0] || 'General';
             }
-            // Update hidden field
             const categoryHidden = document.getElementById('form-category');
             if (categoryHidden) categoryHidden.value = category;
 
@@ -1085,7 +1367,6 @@
                 return;
             }
 
-            // Store last action for undo
             if (!editSku) {
                 if (inventory.some(i => i.sku === sku)) {
                     showToast('SKU already exists', 'error');
@@ -1103,7 +1384,6 @@
                 }
             }
 
-            // Update categories list if new category added
             if (!categories.includes(category)) {
                 categories.push(category);
                 categories.sort();
@@ -1115,7 +1395,6 @@
             closeModal();
             updateAllViews();
             
-            // Show undo toast if available
             if (lastAction) {
                 showUndoToast();
             }
@@ -1145,7 +1424,6 @@
                 showToast('Item deleted', 'success');
                 updateAllViews();
                 
-                // Show undo toast
                 if (lastAction) {
                     showUndoToast();
                 }
@@ -1168,11 +1446,16 @@
                     inventory[idx] = lastAction.oldItem;
                     showToast('Item edit undone', 'info');
                 }
+            } else if (lastAction.type === 'import' || lastAction.type === 'reset') {
+                inventory = lastAction.oldInventory;
+                categories = lastAction.oldCategories;
+                showToast('Data restore undone', 'info');
             }
             
             lastAction = null;
             saveToStorage();
             updateAllViews();
+            populateCategoryFilters();
         }
 
         function showUndoToast() {
@@ -1199,21 +1482,26 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `inventory_data.json`;
+            a.download = `inventory_backup_${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            showToast('inventory_data.json exported — ready to commit to GitHub', 'success');
+            showToast('Backup exported successfully', 'success');
         }
 
         function importData(input) {
             const file = input.files[0];
             if (!file) return;
+            
+            if (!confirm('Importing will replace your current data. Continue?')) {
+                input.value = '';
+                return;
+            }
+            
             const reader = new FileReader();
             reader.onload = e => {
                 try {
                     const data = JSON.parse(e.target.result);
                     if (Array.isArray(data)) {
-                        // Backup current data before import
                         lastAction = { type: 'import', oldInventory: [...inventory], oldCategories: [...categories] };
                         
                         inventory = data;
@@ -1283,18 +1571,6 @@
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
             updateCharts();
-            
-            // Update dark mode toggle knob
-            const knob = document.getElementById('dark-toggle-knob');
-            if (knob) {
-                if (document.documentElement.classList.contains('dark')) {
-                    knob.classList.add('dark:translate-x-6');
-                    knob.classList.remove('translate-x-1');
-                } else {
-                    knob.classList.remove('dark:translate-x-6');
-                    knob.classList.add('translate-x-1');
-                }
-            }
         }
 
         function showToast(message, type = 'success') {
@@ -1338,6 +1614,10 @@
             if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
                 e.preventDefault();
                 openAddModal();
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                autoSyncToGitHub();
             }
         });
 
