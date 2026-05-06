@@ -39,60 +39,10 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
         .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #4b5563; }
         .stock-bar { transition: width 0.5s ease-out; }
-        input, select, textarea { transition: all 0.2s; }
-        input:focus, select:focus, textarea:focus { ring: 2px; ring-color: #714B67; }
         .toast { animation: toastSlide 0.3s ease-out; }
         @keyframes toastSlide { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #714B67; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        #sidebar { transition: transform 0.3s ease; }
-        #sidebar.-translate-x-full { transform: translateX(-100%); }
-        
-        @media (max-width: 1023px) {
-            main { width: 100% !important; margin-left: 0 !important; }
-            body > div.flex > main { width: 100% !important; }
-            main .flex-1.p-6 { padding: 1rem !important; }
-            header { padding-left: 1rem !important; padding-right: 1rem !important; }
-            .grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
-        }
-        
-        @media (max-width: 768px) {
-            .overflow-x-auto { -webkit-overflow-scrolling: touch; }
-            table { min-width: 800px; }
-            #item-modal .max-w-lg { max-width: 100%; margin: 0.5rem; }
-        }
-        
-        @media (min-width: 1024px) {
-            #sidebar.-translate-x-full ~ main { width: 100% !important; margin-left: 0 !important; }
-        }
-        
-        #form-category-input::-webkit-calendar-picker-indicator { opacity: 0; position: absolute; right: 10px; cursor: pointer; }
-        #form-category-input {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat; background-position: right 12px center; padding-right: 30px;
-        }
-        .dark #form-category-input {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-        }
-        
-        .row-updated { animation: highlightRow 1.5s ease-out; }
-        @keyframes highlightRow { 0% { background-color: rgba(113, 75, 103, 0.2); } 100% { background-color: transparent; } }
-        
-        @media (hover: none) { .touch-actions { opacity: 1 !important; } }
-        
-        .sync-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
-        .sync-dot.local { background-color: #f59e0b; }
-        .sync-dot.github { background-color: #22c55e; }
-        .sync-dot.none { background-color: #9ca3af; }
-        .sync-dot.synced { background-color: #3b82f6; }
-        
-        #diagnostic-output {
-            max-height: 300px;
-            overflow-y: auto;
-            font-family: monospace;
-            font-size: 11px;
-        }
+        .pulse-dot { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -100,15 +50,9 @@
     <!-- Toast Container -->
     <div id="toast-container" class="fixed top-4 right-4 z-[60] space-y-2"></div>
 
-    <!-- Sync Status Bar -->
-    <div id="sync-status" class="hidden fixed top-0 left-0 right-0 bg-yellow-500 text-white text-xs text-center py-1 z-[70] font-medium">
-        <i class="fas fa-exclamation-circle"></i> You have unsaved local changes. 
-        <button onclick="autoSyncToGitHub()" class="underline font-bold ml-2">Sync to GitHub Now</button>
-    </div>
-
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside id="sidebar" class="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col transition-all duration-300 z-40 fixed lg:relative h-full">
+        <aside id="sidebar" class="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col transition-all duration-300 z-40">
             <div class="p-6 border-b border-gray-200 dark:border-gray-700">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-primary-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary-500/30">
@@ -120,7 +64,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <nav class="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
                 <button onclick="switchView('dashboard')" id="nav-dashboard" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300">
                     <i class="fas fa-chart-pie w-5"></i> Dashboard
@@ -143,8 +87,10 @@
                         <div class="w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center text-white text-xs font-bold">WK</div>
                         <div class="text-sm font-medium">Workshop</div>
                     </div>
-                    <div class="text-xs" id="last-sync">Loading data...</div>
-                    <div class="text-xs mt-1" id="sync-source"></div>
+                    <div class="flex items-center gap-2">
+                        <span id="connection-status" class="w-2 h-2 rounded-full bg-green-500 pulse-dot"></span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400" id="last-sync">Loading...</span>
+                    </div>
                 </div>
             </div>
         </aside>
@@ -153,7 +99,7 @@
         <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
 
         <!-- Main Content -->
-        <main class="flex-1 flex flex-col overflow-hidden w-full lg:ml-64 transition-all duration-300">
+        <main class="flex-1 flex flex-col overflow-hidden">
             <!-- Top Header -->
             <header class="glass border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between z-20">
                 <div class="flex items-center gap-4">
@@ -167,11 +113,8 @@
                         <i class="fas fa-moon dark:hidden"></i>
                         <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
                     </button>
-                    <button onclick="exportData()" class="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm" title="Download JSON backup">
+                    <button onclick="exportData()" class="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm">
                         <i class="fas fa-download"></i> Export
-                    </button>
-                    <button onclick="autoSyncToGitHub()" id="sync-btn" class="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-xl text-sm font-medium transition-colors shadow-sm" title="Auto-sync to GitHub">
-                        <i class="fas fa-cloud-upload-alt"></i> Sync to GitHub
                     </button>
                     <button onclick="document.getElementById('import-file').click()" class="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm">
                         <i class="fas fa-upload"></i> Import
@@ -185,7 +128,7 @@
 
             <!-- Content Scroll Area -->
             <div class="flex-1 overflow-y-auto custom-scrollbar p-6">
-
+                
                 <!-- DASHBOARD VIEW -->
                 <div id="view-dashboard" class="fade-in space-y-6">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -249,7 +192,7 @@
                         <div class="relative flex-1 min-w-[200px]">
                             <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
                             <input type="text" id="inv-search" placeholder="Search SKU, name, description..." 
-                                class="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                class="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
                                 oninput="renderInventory()">
                         </div>
                         <select id="inv-category" onchange="renderInventory()" class="px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 min-w-[140px]">
@@ -263,11 +206,7 @@
                             <option value="price-low">Price: Low to High</option>
                             <option value="price-high">Price: High to Low</option>
                         </select>
-                        <button onclick="renderInventory()" class="p-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                            <i class="fas fa-sync-alt text-gray-500"></i>
-                        </button>
                     </div>
-
                     <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
@@ -286,9 +225,7 @@
                             </table>
                         </div>
                         <div id="inventory-empty" class="hidden p-12 text-center">
-                            <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-box-open text-2xl text-gray-400"></i>
-                            </div>
+                            <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-box-open text-2xl text-gray-400"></i></div>
                             <h3 class="font-semibold text-gray-600 dark:text-gray-300 mb-1">No items found</h3>
                             <p class="text-sm text-gray-400">Try adjusting your search or filters</p>
                         </div>
@@ -298,9 +235,7 @@
                 <!-- LOW STOCK VIEW -->
                 <div id="view-lowstock" class="hidden fade-in space-y-5">
                     <div class="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/30 rounded-2xl p-6 flex items-center gap-4">
-                        <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-exclamation-triangle text-red-500 text-xl"></i>
-                        </div>
+                        <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-exclamation-triangle text-red-500 text-xl"></i></div>
                         <div>
                             <h3 class="font-bold text-red-700 dark:text-red-400">Low Stock Alert</h3>
                             <p class="text-sm text-red-600 dark:text-red-300">The following items are below their minimum threshold and need restocking.</p>
@@ -324,9 +259,7 @@
                             </table>
                         </div>
                         <div id="lowstock-empty" class="hidden p-12 text-center">
-                            <div class="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-check text-2xl text-green-500"></i>
-                            </div>
+                            <div class="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-check text-2xl text-green-500"></i></div>
                             <h3 class="font-semibold text-gray-600 dark:text-gray-300 mb-1">All stocked up!</h3>
                             <p class="text-sm text-gray-400">No items are currently below their threshold</p>
                         </div>
@@ -335,66 +268,18 @@
 
                 <!-- SETTINGS VIEW -->
                 <div id="view-settings" class="hidden fade-in space-y-6 max-w-4xl">
-                    <div class="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-2xl p-6">
-                        <h3 class="font-bold flex items-center gap-2 text-blue-700 dark:text-blue-400 mb-2"><i class="fas fa-info-circle"></i> Data Storage Info</h3>
-                        <p class="text-sm text-blue-600 dark:text-blue-300 mb-3">Your changes are saved to your browser's local storage. Click "Sync to GitHub" to push changes directly to your repository.</p>
-                        <div class="flex gap-3">
-                            <button onclick="autoSyncToGitHub()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors"><i class="fas fa-cloud-upload-alt"></i> Sync to GitHub Now</button>
-                            <button onclick="exportData()" class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"><i class="fas fa-download"></i> Backup JSON</button>
-                        </div>
-                    </div>
-
-                    <!-- GitHub Auto-Sync -->
                     <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
                         <div class="p-6 border-b border-gray-100 dark:border-gray-700">
-                            <h3 class="font-bold flex items-center gap-2"><i class="fab fa-github text-primary-500"></i> GitHub Auto-Sync</h3>
+                            <h3 class="font-bold flex items-center gap-2"><i class="fas fa-palette text-primary-500"></i> Appearance</h3>
                         </div>
-                        <div class="p-6 space-y-4">
-                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center"><i class="fas fa-key text-purple-500"></i></div>
-                                    <div>
-                                        <div class="font-medium">GitHub Token</div>
-                                        <div class="text-sm text-gray-400" id="token-status">Not configured</div>
-                                    </div>
-                                </div>
-                                <div class="flex gap-2">
-                                    <button onclick="setupGitHubToken()" class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">Configure</button>
-                                    <button onclick="clearGitHubToken()" class="px-4 py-2 bg-red-100 dark:bg-red-900/20 text-red-500 rounded-lg text-sm font-medium hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors">Clear</button>
-                                </div>
-                            </div>
-                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center"><i class="fas fa-info-circle text-blue-500"></i></div>
-                                    <div>
-                                        <div class="font-medium">Repository</div>
-                                        <div class="text-sm text-gray-400">karanja9/workshop-inventory</div>
-                                    </div>
-                                </div>
-                                <button onclick="diagnoseRepoStructure()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors">
-                                    <i class="fas fa-stethoscope"></i> Diagnose
-                                </button>
-                            </div>
-                            <!-- Diagnostic Output -->
-                            <div id="diagnostic-panel" class="hidden p-4 bg-gray-900 rounded-xl">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-green-400 text-xs font-bold">Diagnostic Output</span>
-                                    <button onclick="document.getElementById('diagnostic-panel').classList.add('hidden')" class="text-gray-400 hover:text-white">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                                <div id="diagnostic-output" class="text-green-300"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700"><h3 class="font-bold flex items-center gap-2"><i class="fas fa-palette text-primary-500"></i> Appearance</h3></div>
                         <div class="p-6 space-y-4">
                             <div class="flex items-center justify-between">
-                                <div><div class="font-medium">Dark Mode</div><div class="text-sm text-gray-400">Toggle between light and dark theme</div></div>
+                                <div>
+                                    <div class="font-medium">Dark Mode</div>
+                                    <div class="text-sm text-gray-400">Toggle between light and dark theme</div>
+                                </div>
                                 <button onclick="toggleDarkMode()" class="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 dark:bg-primary-500 transition-colors">
-                                    <span id="dark-toggle-knob" class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform dark:translate-x-6 translate-x-1"></span>
+                                    <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform dark:translate-x-6 translate-x-1"></span>
                                 </button>
                             </div>
                         </div>
@@ -407,38 +292,41 @@
                         </div>
                         <div class="p-6">
                             <div id="categories-list" class="flex flex-wrap gap-2"></div>
-                            <p class="text-xs text-gray-400 mt-4"><i class="fas fa-info-circle"></i> You can also add new categories directly when creating or editing an item.</p>
                         </div>
                     </div>
 
                     <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700"><h3 class="font-bold flex items-center gap-2"><i class="fas fa-database text-primary-500"></i> Data Management</h3></div>
+                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="font-bold flex items-center gap-2"><i class="fas fa-database text-primary-500"></i> Data Management</h3>
+                        </div>
                         <div class="p-6 space-y-4">
                             <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center"><i class="fas fa-cloud-upload-alt text-green-500"></i></div>
-                                    <div><div class="font-medium">Sync to GitHub</div><div class="text-sm text-gray-400">Push changes directly to your repository</div></div>
-                                </div>
-                                <button onclick="autoSyncToGitHub()" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors">Sync Now</button>
-                            </div>
-                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
-                                <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center"><i class="fas fa-download text-blue-500"></i></div>
-                                    <div><div class="font-medium">Export Backup</div><div class="text-sm text-gray-400">Download inventory as JSON backup file</div></div>
+                                    <div>
+                                        <div class="font-medium">Export Data</div>
+                                        <div class="text-sm text-gray-400">Download inventory_data.json for GitHub commit</div>
+                                    </div>
                                 </div>
                                 <button onclick="exportData()" class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">Export JSON</button>
                             </div>
                             <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center"><i class="fas fa-upload text-green-500"></i></div>
-                                    <div><div class="font-medium">Import Data</div><div class="text-sm text-gray-400">Load inventory from JSON file</div></div>
+                                    <div>
+                                        <div class="font-medium">Import Data</div>
+                                        <div class="text-sm text-gray-400">Load inventory from JSON file</div>
+                                    </div>
                                 </div>
                                 <button onclick="document.getElementById('import-file').click()" class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">Import JSON</button>
                             </div>
                             <div class="flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/10 rounded-xl border border-red-100 dark:border-red-900/20">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center"><i class="fas fa-trash text-red-500"></i></div>
-                                    <div><div class="font-medium text-red-700 dark:text-red-400">Reset All Data</div><div class="text-sm text-red-500/70">Clear all inventory and start fresh</div></div>
+                                    <div>
+                                        <div class="font-medium text-red-700 dark:text-red-400">Reset All Data</div>
+                                        <div class="text-sm text-red-500/70">Clear all inventory and start fresh</div>
+                                    </div>
                                 </div>
                                 <button onclick="resetData()" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-colors">Reset</button>
                             </div>
@@ -466,11 +354,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Category</label>
-                        <input type="text" id="form-category-input" list="category-list" 
-                            class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" 
-                            placeholder="Type or select" autocomplete="off">
-                        <datalist id="category-list"></datalist>
-                        <input type="hidden" id="form-category" value="">
+                        <select id="form-category" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"></select>
                     </div>
                 </div>
                 <div>
@@ -482,9 +366,18 @@
                     <textarea id="form-description" rows="2" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none" placeholder="Optional details..."></textarea>
                 </div>
                 <div class="grid grid-cols-3 gap-4">
-                    <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Price (KSh)</label><input type="number" id="form-price" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="0"></div>
-                    <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Stock Qty</label><input type="number" id="form-stock" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="0"></div>
-                    <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Threshold</label><input type="number" id="form-threshold" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="5"></div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Price (KSh)</label>
+                        <input type="number" id="form-price" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="0">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Stock Qty</label>
+                        <input type="number" id="form-stock" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="0">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Threshold</label>
+                        <input type="number" id="form-threshold" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="5">
+                    </div>
                 </div>
             </div>
             <div class="p-6 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
@@ -516,18 +409,11 @@
         let deleteTargetSku = null;
         let categoryChart = null;
         let valueChart = null;
-        let dataLoaded = false;
-        let sidebarVisible = false;
-        let lastAction = null;
-        let dataSource = 'none';
-        
-        const GITHUB_OWNER = 'karanja9';
-        const GITHUB_REPO = 'workshop-inventory';
-        const GITHUB_BRANCH = 'main';
-        let githubFilePath = 'inventory_data.json'; // Will be updated by diagnostic
+        let isOnline = navigator.onLine;
 
         // ===================== INIT =====================
         async function init() {
+            // Dark mode
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 document.documentElement.classList.add('dark');
             }
@@ -537,397 +423,80 @@
                 updateCharts();
             });
 
+            // Network status
+            window.addEventListener('online', () => { isOnline = true; updateConnectionStatus(); showToast('Back online', 'success'); });
+            window.addEventListener('offline', () => { isOnline = false; updateConnectionStatus(); showToast('Offline mode — using cached data', 'info'); });
+
+            // Try multiple sources to load data
             await loadData();
+            
             populateCategoryFilters();
             updateAllViews();
-            setupCategoryInputSync();
-            
-            if (window.innerWidth < 1024) hideSidebar();
-            
-            updateSyncSourceDisplay();
-            updateSyncButton();
-            updateTokenStatus();
-            
-            // Check if token exists and run diagnostic silently
-            const token = localStorage.getItem('github_token');
-            if (token) {
-                setTimeout(() => diagnoseRepoStructure(true), 1000);
-            }
+            updateConnectionStatus();
         }
 
         async function loadData() {
-            const saved = localStorage.getItem('workshop_inventory');
-            const hasLocalChanges = localStorage.getItem('workshop_has_changes') === 'true';
+            const statusEl = document.getElementById('last-sync');
+            const connDot = document.getElementById('connection-status');
             
-            if (hasLocalChanges && saved) {
-                inventory = JSON.parse(saved);
-                const savedCats = localStorage.getItem('workshop_categories');
-                categories = savedCats ? JSON.parse(savedCats) : [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
-                document.getElementById('last-sync').textContent = inventory.length + ' items (local changes)';
-                dataSource = 'local';
-                dataLoaded = true;
-            } else {
-                try {
-                    const res = await fetch(githubFilePath);
-                    if (res.ok) {
-                        inventory = await res.json();
+            // Priority 1: Try fetching inventory_data.json from same origin
+            try {
+                const res = await fetch('inventory_data.json', { cache: 'no-store' });
+                if (res.ok) {
+                    inventory = await res.json();
+                    if (Array.isArray(inventory) && inventory.length > 0) {
                         categories = [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
-                        document.getElementById('last-sync').textContent = inventory.length + ' items loaded from JSON';
-                        dataSource = 'github';
-                        dataLoaded = true;
-                    } else {
-                        throw new Error('JSON not found');
-                    }
-                } catch (e) {
-                    if (saved) {
-                        inventory = JSON.parse(saved);
-                        const savedCats = localStorage.getItem('workshop_categories');
-                        categories = savedCats ? JSON.parse(savedCats) : [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
-                        document.getElementById('last-sync').textContent = inventory.length + ' items from localStorage';
-                        dataSource = 'local';
-                    } else {
-                        inventory = [];
-                        categories = [];
-                        document.getElementById('last-sync').textContent = 'No data loaded';
-                        dataSource = 'none';
+                        saveToStorage();
+                        statusEl.textContent = inventory.length + ' items from JSON';
+                        connDot.className = 'w-2 h-2 rounded-full bg-green-500';
+                        showToast('Loaded ' + inventory.length + ' items from server', 'success');
+                        return;
                     }
                 }
+            } catch (e) {
+                console.log('Fetch from JSON failed:', e);
             }
+
+            // Priority 2: Try localStorage (offline fallback)
+            const saved = localStorage.getItem('workshop_inventory');
+            if (saved) {
+                try {
+                    inventory = JSON.parse(saved);
+                    if (Array.isArray(inventory) && inventory.length > 0) {
+                        categories = [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
+                        statusEl.textContent = inventory.length + ' items (offline)';
+                        connDot.className = 'w-2 h-2 rounded-full bg-yellow-500';
+                        showToast('Loaded ' + inventory.length + ' items from offline cache', 'info');
+                        return;
+                    }
+                } catch (e) {
+                    console.log('localStorage parse failed:', e);
+                }
+            }
+
+            // Priority 3: Empty state
+            inventory = [];
+            categories = [];
+            statusEl.textContent = 'No data loaded';
+            connDot.className = 'w-2 h-2 rounded-full bg-red-500';
+            showToast('No data found — import a JSON file or add items manually', 'error');
         }
 
-        function handleResize() {
-            window.addEventListener('resize', () => {
-                if (window.innerWidth >= 1024) showSidebarDesktop();
-                else hideSidebar();
-            });
-        }
-
-        function setupCategoryInputSync() {
-            const categoryInput = document.getElementById('form-category-input');
-            const categoryHidden = document.getElementById('form-category');
-            if (categoryInput && categoryHidden) {
-                categoryInput.addEventListener('input', function() { categoryHidden.value = this.value.trim(); });
-                categoryInput.addEventListener('change', function() { categoryHidden.value = this.value.trim(); });
+        function updateConnectionStatus() {
+            const dot = document.getElementById('connection-status');
+            const status = document.getElementById('last-sync');
+            if (isOnline) {
+                dot.className = 'w-2 h-2 rounded-full bg-green-500';
+                status.textContent = inventory.length + ' items (online)';
+            } else {
+                dot.className = 'w-2 h-2 rounded-full bg-yellow-500';
+                status.textContent = inventory.length + ' items (offline)';
             }
         }
 
         function saveToStorage() {
             localStorage.setItem('workshop_inventory', JSON.stringify(inventory));
             localStorage.setItem('workshop_categories', JSON.stringify(categories));
-            localStorage.setItem('workshop_has_changes', 'true');
-            localStorage.setItem('workshop_last_saved', new Date().toISOString());
-            updateSyncSourceDisplay();
-            updateSyncButton();
-            showSyncStatus();
-            
-            const token = localStorage.getItem('github_token');
-            if (token && githubFilePath) {
-                autoSyncToGitHub(true);
-            }
-        }
-
-        function updateSyncSourceDisplay() {
-            const sourceEl = document.getElementById('sync-source');
-            if (!sourceEl) return;
-            const hasChanges = localStorage.getItem('workshop_has_changes') === 'true';
-            const lastSaved = localStorage.getItem('workshop_last_saved');
-            const token = localStorage.getItem('github_token');
-            
-            let html = '';
-            if (token && !hasChanges) {
-                html += '<span class="sync-dot synced"></span> Synced with GitHub';
-            } else if (hasChanges) {
-                html += '<span class="sync-dot local"></span> Local changes pending';
-                if (lastSaved) html += ` · ${new Date(lastSaved).toLocaleTimeString()}`;
-            } else if (dataSource === 'github') {
-                html += '<span class="sync-dot github"></span> From GitHub (read-only)';
-            } else {
-                html += '<span class="sync-dot none"></span> No data source';
-            }
-            sourceEl.innerHTML = html;
-        }
-
-        function updateSyncButton() {
-            const btn = document.getElementById('sync-btn');
-            if (!btn) return;
-            const hasChanges = localStorage.getItem('workshop_has_changes') === 'true';
-            const token = localStorage.getItem('github_token');
-            
-            if (!token) {
-                btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Setup Sync';
-                btn.classList.remove('bg-green-500', 'hover:bg-green-600');
-                btn.classList.add('bg-yellow-500', 'hover:bg-yellow-600');
-            } else if (hasChanges) {
-                btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Sync to GitHub *';
-                btn.classList.remove('bg-green-500', 'hover:bg-green-600');
-                btn.classList.add('bg-yellow-500', 'hover:bg-yellow-600');
-            } else {
-                btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Sync to GitHub';
-                btn.classList.remove('bg-yellow-500', 'hover:bg-yellow-600');
-                btn.classList.add('bg-green-500', 'hover:bg-green-600');
-            }
-        }
-
-        function showSyncStatus() {
-            const status = document.getElementById('sync-status');
-            if (localStorage.getItem('workshop_has_changes') === 'true') {
-                status.classList.remove('hidden');
-                setTimeout(() => status.classList.add('hidden'), 5000);
-            }
-        }
-
-        // ===================== REPOSITORY DIAGNOSTIC =====================
-        async function diagnoseRepoStructure(silent = false) {
-            const token = localStorage.getItem('github_token');
-            if (!token) {
-                if (!silent) showToast('Please configure GitHub token first', 'info');
-                return;
-            }
-            
-            const diagnosticPanel = document.getElementById('diagnostic-panel');
-            const diagnosticOutput = document.getElementById('diagnostic-output');
-            
-            if (!silent) {
-                diagnosticPanel.classList.remove('hidden');
-                diagnosticOutput.innerHTML = '<span class="text-yellow-400">🔍 Scanning repository...</span>';
-            }
-            
-            let log = '';
-            
-            function addLog(msg, color = 'text-green-300') {
-                log += `<span class="${color}">${msg}</span>\n`;
-                if (!silent) diagnosticOutput.innerHTML = log;
-                console.log(msg);
-            }
-            
-            try {
-                addLog('=== Repository Diagnostic ===', 'text-white');
-                addLog(`Owner: ${GITHUB_OWNER}`, 'text-blue-300');
-                addLog(`Repo: ${GITHUB_REPO}`, 'text-blue-300');
-                addLog(`Branch: ${GITHUB_BRANCH}`, 'text-blue-300');
-                addLog('');
-                
-                // Check repository exists
-                addLog('Checking repository...', 'text-yellow-400');
-                const repoResponse = await fetch(
-                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`,
-                    {
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Accept': 'application/vnd.github.v3+json'
-                        }
-                    }
-                );
-                
-                if (!repoResponse.ok) {
-                    addLog(`❌ Repository check failed: ${repoResponse.status}`, 'text-red-400');
-                    if (repoResponse.status === 404) {
-                        addLog(`Repository "${GITHUB_OWNER}/${GITHUB_REPO}" not found. Check spelling.`, 'text-red-400');
-                    }
-                    return;
-                }
-                
-                const repoData = await repoResponse.json();
-                addLog(`✅ Repository found: ${repoData.full_name}`, 'text-green-400');
-                addLog(`   Default branch: ${repoData.default_branch}`, 'text-gray-400');
-                addLog(`   Private: ${repoData.private}`, 'text-gray-400');
-                addLog('');
-                
-                // List root contents
-                addLog('Listing root directory contents...', 'text-yellow-400');
-                const rootResponse = await fetch(
-                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/?ref=${GITHUB_BRANCH}`,
-                    {
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Accept': 'application/vnd.github.v3+json'
-                        }
-                    }
-                );
-                
-                if (rootResponse.ok) {
-                    const contents = await rootResponse.json();
-                    addLog(`Found ${contents.length} items in root:`, 'text-white');
-                    
-                    let jsonFileFound = null;
-                    contents.forEach(item => {
-                        const icon = item.type === 'dir' ? '📁' : '📄';
-                        addLog(`  ${icon} ${item.name} (${item.type})`, 'text-gray-400');
-                        
-                        if (item.name === 'inventory_data.json') {
-                            jsonFileFound = item;
-                            githubFilePath = item.path;
-                        }
-                    });
-                    
-                    addLog('');
-                    
-                    if (jsonFileFound) {
-                        addLog(`✅ Found inventory_data.json at: ${jsonFileFound.path}`, 'text-green-400');
-                        addLog(`   Size: ${jsonFileFound.size} bytes`, 'text-gray-400');
-                        githubFilePath = jsonFileFound.path;
-                    } else {
-                        addLog('❌ inventory_data.json NOT FOUND in repository root', 'text-red-400');
-                        addLog('', 'text-white');
-                        addLog('💡 The file needs to be uploaded to your repository first.', 'text-yellow-400');
-                        addLog('   Go to: https://github.com/' + GITHUB_OWNER + '/' + GITHUB_REPO, 'text-blue-300');
-                        addLog('   Click "Add file" → "Upload files" → Upload your inventory_data.json', 'text-blue-300');
-                        addLog('   Then click "Commit changes"', 'text-blue-300');
-                    }
-                } else {
-                    addLog(`Failed to list contents: ${rootResponse.status}`, 'text-red-400');
-                }
-                
-            } catch (error) {
-                addLog(`❌ Diagnostic error: ${error.message}`, 'text-red-400');
-            }
-            
-            if (!silent) {
-                addLog('', 'text-white');
-                addLog('=== Diagnostic Complete ===', 'text-white');
-            }
-            
-            return log;
-        }
-
-        // ===================== GITHUB AUTO-SYNC =====================
-        async function autoSyncToGitHub(silent = false) {
-            let token = localStorage.getItem('github_token');
-            
-            if (!token) {
-                if (!silent) setupGitHubToken();
-                return;
-            }
-            
-            if (!githubFilePath) {
-                if (!silent) {
-                    showToast('Run "Diagnose" first to find your file path in Settings', 'info');
-                    diagnoseRepoStructure();
-                }
-                return;
-            }
-            
-            const syncBtn = document.getElementById('sync-btn');
-            const originalText = syncBtn.innerHTML;
-            syncBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
-            syncBtn.disabled = true;
-            
-            try {
-                // Get current file SHA
-                let sha = null;
-                const getResponse = await fetch(
-                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${githubFilePath}?ref=${GITHUB_BRANCH}`,
-                    {
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Accept': 'application/vnd.github.v3+json'
-                        }
-                    }
-                );
-                
-                if (getResponse.ok) {
-                    const fileData = await getResponse.json();
-                    sha = fileData.sha;
-                } else if (getResponse.status === 404) {
-                    // File doesn't exist yet
-                    sha = null;
-                } else if (getResponse.status === 401) {
-                    localStorage.removeItem('github_token');
-                    throw new Error('Invalid token');
-                } else {
-                    const errData = await getResponse.json();
-                    throw new Error(`GitHub API error: ${errData.message}`);
-                }
-                
-                // Prepare content
-                const jsonString = JSON.stringify(inventory, null, 2);
-                const content = btoa(unescape(encodeURIComponent(jsonString)));
-                
-                const commitMessage = `Auto-sync: Update inventory (${inventory.length} items) - ${new Date().toLocaleString()}`;
-                
-                const requestBody = {
-                    message: commitMessage,
-                    content: content,
-                    branch: GITHUB_BRANCH
-                };
-                
-                if (sha) requestBody.sha = sha;
-                
-                const updateResponse = await fetch(
-                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${githubFilePath}`,
-                    {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Accept': 'application/vnd.github.v3+json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(requestBody)
-                    }
-                );
-                
-                if (!updateResponse.ok) {
-                    const errorData = await updateResponse.json();
-                    throw new Error(errorData.message || 'Sync failed');
-                }
-                
-                // Success
-                localStorage.setItem('workshop_has_changes', 'false');
-                document.getElementById('sync-status').classList.add('hidden');
-                updateSyncSourceDisplay();
-                updateSyncButton();
-                dataSource = 'github';
-                
-                if (!silent) showToast('✅ Synced to GitHub successfully!', 'success');
-                
-            } catch (error) {
-                console.error('Sync error:', error);
-                if (!silent) showToast('Sync failed: ' + error.message, 'error');
-            } finally {
-                syncBtn.innerHTML = originalText;
-                syncBtn.disabled = false;
-            }
-        }
-
-        function setupGitHubToken() {
-            const existingToken = localStorage.getItem('github_token');
-            const token = prompt(
-                'Enter your GitHub Personal Access Token:\n\n' +
-                'Get one at: GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)\n' +
-                'Required scope: repo\n\n' +
-                'Token is stored securely in your browser only.',
-                existingToken || ''
-            );
-            
-            if (token && token.trim()) {
-                localStorage.setItem('github_token', token.trim());
-                updateTokenStatus();
-                updateSyncButton();
-                showToast('GitHub token saved! Run Diagnose to find your file.', 'success');
-            }
-        }
-
-        function clearGitHubToken() {
-            if (confirm('Remove your GitHub token?')) {
-                localStorage.removeItem('github_token');
-                updateTokenStatus();
-                updateSyncButton();
-                showToast('GitHub token removed', 'info');
-            }
-        }
-
-        function updateTokenStatus() {
-            const status = document.getElementById('token-status');
-            if (status) {
-                const token = localStorage.getItem('github_token');
-                if (token) {
-                    status.textContent = '✓ Configured - Run Diagnose';
-                    status.className = 'text-sm text-green-500';
-                } else {
-                    status.textContent = 'Not configured - click Configure';
-                    status.className = 'text-sm text-gray-400';
-                }
-            }
         }
 
         // ===================== NAVIGATION =====================
@@ -937,40 +506,31 @@
             document.getElementById('view-' + view).classList.remove('hidden');
             document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
             document.getElementById('nav-' + view).classList.add('active');
-
+            
             const titles = { dashboard: 'Dashboard', inventory: 'Inventory', lowstock: 'Low Stock Alerts', settings: 'Settings' };
             document.getElementById('page-title').textContent = titles[view];
-
+            
             if (view === 'dashboard') updateDashboard();
             if (view === 'inventory') renderInventory();
             if (view === 'lowstock') renderLowStock();
-            if (view === 'settings') { renderSettings(); updateTokenStatus(); }
-
-            if (window.innerWidth < 1024) hideSidebar();
+            if (view === 'settings') renderSettings();
+            
+            if (window.innerWidth < 1024) {
+                document.getElementById('sidebar').classList.add('-translate-x-full');
+                document.getElementById('sidebar-overlay').classList.add('hidden');
+            }
         }
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            if (sidebar.classList.contains('-translate-x-full')) showSidebar();
-            else hideSidebar();
-        }
-
-        function showSidebar() {
-            document.getElementById('sidebar').classList.remove('-translate-x-full');
-            document.getElementById('sidebar-overlay').classList.remove('hidden');
-            sidebarVisible = true;
-        }
-
-        function hideSidebar() {
-            document.getElementById('sidebar').classList.add('-translate-x-full');
-            document.getElementById('sidebar-overlay').classList.add('hidden');
-            sidebarVisible = false;
-        }
-
-        function showSidebarDesktop() {
-            document.getElementById('sidebar').classList.remove('-translate-x-full');
-            document.getElementById('sidebar-overlay').classList.add('hidden');
-            sidebarVisible = true;
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
         }
 
         // ===================== DASHBOARD =====================
@@ -992,18 +552,23 @@
                 list.innerHTML = lowStock.slice(0, 5).map(item => {
                     const threshold = item.low_stock_threshold || 5;
                     const pct = Math.min(100, ((item.stock || 0) / threshold) * 100);
-                    return `<div class="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-500 font-bold text-xs">${item.sku}</div>
-                            <div><div class="font-medium text-sm">${item.name}</div><div class="text-xs text-gray-400">${item.category || 'General'}</div></div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-sm font-bold text-red-500">${item.stock} left</div>
-                            <div class="w-24 h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full mt-1 overflow-hidden">
-                                <div class="h-full bg-red-500 rounded-full stock-bar" style="width: ${pct}%"></div>
+                    return `
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-500 font-bold text-xs">${item.sku}</div>
+                                <div>
+                                    <div class="font-medium text-sm">${item.name}</div>
+                                    <div class="text-xs text-gray-400">${item.category || 'General'}</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-bold text-red-500">${item.stock || 0} left</div>
+                                <div class="w-24 h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full mt-1 overflow-hidden">
+                                    <div class="h-full bg-red-500 rounded-full stock-bar" style="width: ${pct}%"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>`;
+                    `;
                 }).join('');
             }
 
@@ -1017,23 +582,30 @@
             const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
 
             const catData = {};
-            inventory.forEach(i => { const cat = i.category || 'Uncategorized'; catData[cat] = (catData[cat] || 0) + (i.stock || 0); });
+            inventory.forEach(i => { 
+                const cat = i.category || 'Uncategorized';
+                catData[cat] = (catData[cat] || 0) + (i.stock || 0); 
+            });
+            const catLabels = Object.keys(catData);
+            const catValues = Object.values(catData);
 
             if (categoryChart) categoryChart.destroy();
             const ctx1 = document.getElementById('categoryChart').getContext('2d');
             categoryChart = new Chart(ctx1, {
                 type: 'bar',
                 data: {
-                    labels: Object.keys(catData),
+                    labels: catLabels,
                     datasets: [{
                         label: 'Stock Quantity',
-                        data: Object.values(catData),
+                        data: catValues,
                         backgroundColor: ['#714B67', '#9c7fb0', '#fb923c', '#22c55e', '#3b82f6', '#ef4444', '#a855f7', '#14b8a6', '#f59e0b'],
-                        borderRadius: 8, borderSkipped: false
+                        borderRadius: 8,
+                        borderSkipped: false
                     }]
                 },
                 options: {
-                    responsive: true, maintainAspectRatio: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
                         y: { grid: { color: gridColor }, ticks: { color: textColor } },
@@ -1043,8 +615,11 @@
             });
 
             const valData = {};
-            inventory.forEach(i => { const cat = i.category || 'Uncategorized'; valData[cat] = (valData[cat] || 0) + ((i.price || 0) * (i.stock || 0)); });
-
+            inventory.forEach(i => { 
+                const cat = i.category || 'Uncategorized';
+                valData[cat] = (valData[cat] || 0) + ((i.price || 0) * (i.stock || 0)); 
+            });
+            
             if (valueChart) valueChart.destroy();
             const ctx2 = document.getElementById('valueChart').getContext('2d');
             valueChart = new Chart(ctx2, {
@@ -1058,8 +633,11 @@
                     }]
                 },
                 options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { color: textColor, boxWidth: 12, padding: 15, font: { size: 11 } } } },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: textColor, boxWidth: 12, padding: 15, font: { size: 11 } } }
+                    },
                     cutout: '65%'
                 }
             });
@@ -1067,18 +645,17 @@
 
         // ===================== INVENTORY =====================
         function populateCategoryFilters() {
-            const invCatEl = document.getElementById('inv-category');
-            if (invCatEl) {
-                const current = invCatEl.value;
-                invCatEl.innerHTML = '<option value="all">All Categories</option>';
-                categories.forEach(c => invCatEl.innerHTML += `<option value="${c}">${c}</option>`);
-                if (current && [...invCatEl.options].some(o => o.value === current)) invCatEl.value = current;
-            }
-            const datalist = document.getElementById('category-list');
-            if (datalist) {
-                datalist.innerHTML = '';
-                categories.forEach(c => datalist.innerHTML += `<option value="${c}">${c}</option>`);
-            }
+            const selects = ['inv-category', 'form-category'];
+            selects.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const current = el.value;
+                el.innerHTML = id === 'inv-category' ? '<option value="all">All Categories</option>' : '';
+                categories.forEach(c => {
+                    el.innerHTML += `<option value="${c}">${c}</option>`;
+                });
+                if (current && [...el.options].some(o => o.value === current)) el.value = current;
+            });
         }
 
         function renderInventory() {
@@ -1089,7 +666,10 @@
 
             let filtered = inventory.filter(item => {
                 const term = search;
-                const matchSearch = !term || (item.name || '').toLowerCase().includes(term) || (item.sku || '').toString().includes(term) || (item.description || '').toLowerCase().includes(term);
+                const matchSearch = !term || 
+                    (item.name || '').toLowerCase().includes(term) ||
+                    (item.sku || '').toString().includes(term) ||
+                    (item.description || '').toLowerCase().includes(term);
                 const matchCat = cat === 'all' || item.category === cat;
                 return matchSearch && matchCat;
             });
@@ -1117,72 +697,104 @@
                 const statusClass = isLow ? 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300' : 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300';
                 const statusText = isLow ? 'Low' : 'OK';
                 const stockClass = isLow ? 'text-red-500 font-bold' : '';
-                return `<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors group">
-                    <td class="px-5 py-3 font-mono text-gray-400 text-xs">${item.sku || '-'}</td>
-                    <td class="px-5 py-3"><div class="font-semibold text-gray-800 dark:text-gray-100">${item.name || 'Unnamed'}</div>${item.description ? `<div class="text-xs text-gray-400 mt-0.5 line-clamp-1">${item.description}</div>` : '<div class="text-xs text-gray-300 italic mt-0.5">None</div>'}</td>
-                    <td class="px-5 py-3"><span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">${item.category || 'General'}</span></td>
-                    <td class="px-5 py-3 text-right font-medium">${(item.price || 0).toLocaleString()}</td>
-                    <td class="px-5 py-3 text-center ${stockClass}">${item.stock || 0}</td>
-                    <td class="px-5 py-3 text-center"><span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium ${statusClass}">${statusText}</span></td>
-                    <td class="px-5 py-3 text-right">
-                        <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity touch-actions">
-                            <button onclick="openEditModal(${item.sku})" class="w-8 h-8 rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-500 hover:bg-primary-100 dark:hover:bg-primary-900/40 flex items-center justify-center transition-colors" title="Edit"><i class="fas fa-pen text-xs"></i></button>
-                            <button onclick="openDeleteModal(${item.sku})" class="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/40 flex items-center justify-center transition-colors" title="Delete"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </td>
-                </tr>`;
+                
+                return `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors group">
+                        <td class="px-5 py-3 font-mono text-gray-400 text-xs">${item.sku || '-'}</td>
+                        <td class="px-5 py-3">
+                            <div class="font-semibold text-gray-800 dark:text-gray-100">${item.name || 'Unnamed'}</div>
+                            ${item.description ? `<div class="text-xs text-gray-400 mt-0.5 line-clamp-1">${item.description}</div>` : '<div class="text-xs text-gray-300 italic mt-0.5">None</div>'}
+                        </td>
+                        <td class="px-5 py-3">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">${item.category || 'General'}</span>
+                        </td>
+                        <td class="px-5 py-3 text-right font-medium">${(item.price || 0).toLocaleString()}</td>
+                        <td class="px-5 py-3 text-center ${stockClass}">${item.stock || 0}</td>
+                        <td class="px-5 py-3 text-center">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium ${statusClass}">${statusText}</span>
+                        </td>
+                        <td class="px-5 py-3 text-right">
+                            <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="openEditModal(${item.sku})" class="w-8 h-8 rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-500 hover:bg-primary-100 dark:hover:bg-primary-900/40 flex items-center justify-center transition-colors" title="Edit">
+                                    <i class="fas fa-pen text-xs"></i>
+                                </button>
+                                <button onclick="openDeleteModal(${item.sku})" class="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/40 flex items-center justify-center transition-colors" title="Delete">
+                                    <i class="fas fa-trash text-xs"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
             }).join('');
         }
 
+        // ===================== LOW STOCK =====================
         function renderLowStock() {
             const tbody = document.getElementById('lowstock-table-body');
             const lowItems = inventory.filter(i => (i.stock || 0) <= (i.low_stock_threshold || 5));
+            
             if (lowItems.length === 0) {
                 tbody.innerHTML = '';
                 document.getElementById('lowstock-empty').classList.remove('hidden');
                 return;
             }
             document.getElementById('lowstock-empty').classList.add('hidden');
-            tbody.innerHTML = lowItems.map(item => `<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                <td class="px-5 py-3 font-mono text-gray-400 text-xs">${item.sku}</td>
-                <td class="px-5 py-3"><div class="font-semibold text-gray-800 dark:text-gray-100">${item.name}</div>${item.description ? `<div class="text-xs text-gray-400 mt-0.5">${item.description}</div>` : ''}</td>
-                <td class="px-5 py-3 text-xs">${item.category || 'General'}</td>
-                <td class="px-5 py-3 text-right">${(item.price || 0).toLocaleString()}</td>
-                <td class="px-5 py-3 text-center"><span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-bold">${item.stock || 0}</span></td>
-                <td class="px-5 py-3 text-center text-gray-500">${item.low_stock_threshold || 5}</td>
-                <td class="px-5 py-3 text-right"><button onclick="openEditModal(${item.sku})" class="text-sm text-primary-500 hover:text-primary-600 font-medium">Restock</button></td>
-            </tr>`).join('');
+
+            tbody.innerHTML = lowItems.map(item => `
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                    <td class="px-5 py-3 font-mono text-gray-400 text-xs">${item.sku}</td>
+                    <td class="px-5 py-3">
+                        <div class="font-semibold text-gray-800 dark:text-gray-100">${item.name}</div>
+                        ${item.description ? `<div class="text-xs text-gray-400 mt-0.5">${item.description}</div>` : ''}
+                    </td>
+                    <td class="px-5 py-3 text-xs">${item.category || 'General'}</td>
+                    <td class="px-5 py-3 text-right">${(item.price || 0).toLocaleString()}</td>
+                    <td class="px-5 py-3 text-center">
+                        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-bold">${item.stock || 0}</span>
+                    </td>
+                    <td class="px-5 py-3 text-center text-gray-500">${item.low_stock_threshold || 5}</td>
+                    <td class="px-5 py-3 text-right">
+                        <button onclick="openEditModal(${item.sku})" class="text-sm text-primary-500 hover:text-primary-600 font-medium">Restock</button>
+                    </td>
+                </tr>
+            `).join('');
         }
 
+        // ===================== SETTINGS =====================
         function renderSettings() {
             const list = document.getElementById('categories-list');
-            if (categories.length === 0) {
-                list.innerHTML = '<span class="text-gray-400 text-sm">No categories yet.</span>';
-            } else {
-                list.innerHTML = categories.map((cat, idx) => `<div class="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm"><span>${cat}</span><button onclick="removeCategory(${idx})" class="w-5 h-5 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-500 flex items-center justify-center transition-colors"><i class="fas fa-times text-xs"></i></button></div>`).join('');
-            }
-            updateTokenStatus();
+            list.innerHTML = categories.map((cat, idx) => `
+                <div class="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm">
+                    <span>${cat}</span>
+                    <button onclick="removeCategory(${idx})" class="w-5 h-5 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-500 flex items-center justify-center transition-colors">
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                </div>
+            `).join('');
         }
 
         function addCategory() {
             const name = prompt('Enter new category name:');
             if (name && name.trim() && !categories.includes(name.trim())) {
-                categories.push(name.trim()); categories.sort();
-                saveToStorage(); renderSettings(); populateCategoryFilters();
+                categories.push(name.trim());
+                saveToStorage();
+                renderSettings();
+                populateCategoryFilters();
                 showToast('Category added', 'success');
-            } else if (name && categories.includes(name.trim())) {
-                showToast('Category already exists', 'info');
             }
         }
 
         function removeCategory(idx) {
             if (confirm('Delete this category?')) {
                 categories.splice(idx, 1);
-                saveToStorage(); renderSettings(); populateCategoryFilters();
+                saveToStorage();
+                renderSettings();
+                populateCategoryFilters();
                 showToast('Category removed', 'success');
             }
         }
 
+        // ===================== MODALS =====================
         function openAddModal() {
             document.getElementById('modal-title').textContent = 'Add New Item';
             document.getElementById('edit-sku').value = '';
@@ -1192,13 +804,9 @@
             document.getElementById('form-price').value = '';
             document.getElementById('form-stock').value = '';
             document.getElementById('form-threshold').value = '5';
-            const ci = document.getElementById('form-category-input');
-            const ch = document.getElementById('form-category');
-            if (ci) ci.value = '';
-            if (ch) ch.value = categories[0] || 'General';
+            document.getElementById('form-category').value = categories[0] || 'General';
             document.getElementById('form-sku').disabled = false;
             document.getElementById('item-modal').classList.remove('hidden');
-            setTimeout(() => document.getElementById('form-sku').focus(), 100);
         }
 
         function openEditModal(sku) {
@@ -1213,16 +821,13 @@
             document.getElementById('form-price').value = item.price || 0;
             document.getElementById('form-stock').value = item.stock || 0;
             document.getElementById('form-threshold').value = item.low_stock_threshold || 5;
-            const ci = document.getElementById('form-category-input');
-            const ch = document.getElementById('form-category');
-            const ic = item.category || categories[0] || 'General';
-            if (ci) ci.value = ic;
-            if (ch) ch.value = ic;
+            document.getElementById('form-category').value = item.category || categories[0] || 'General';
             document.getElementById('item-modal').classList.remove('hidden');
-            setTimeout(() => document.getElementById('form-name').focus(), 100);
         }
 
-        function closeModal() { document.getElementById('item-modal').classList.add('hidden'); }
+        function closeModal() {
+            document.getElementById('item-modal').classList.add('hidden');
+        }
 
         function saveItem() {
             const editSku = document.getElementById('edit-sku').value;
@@ -1232,35 +837,38 @@
             const price = parseFloat(document.getElementById('form-price').value) || 0;
             const stock = parseInt(document.getElementById('form-stock').value) || 0;
             const threshold = parseInt(document.getElementById('form-threshold').value) || 5;
-            const ci = document.getElementById('form-category-input');
-            let category = ci ? ci.value.trim() : '';
-            if (!category) category = categories[0] || 'General';
-            const ch = document.getElementById('form-category');
-            if (ch) ch.value = category;
+            const category = document.getElementById('form-category').value;
 
-            if (!sku || !name) { showToast('SKU and Name are required', 'error'); return; }
-            if (stock < 0) { showToast('Stock cannot be negative', 'error'); return; }
-            if (price < 0) { showToast('Price cannot be negative', 'error'); return; }
+            if (!sku || !name) {
+                showToast('SKU and Name are required', 'error');
+                return;
+            }
 
             if (!editSku) {
-                if (inventory.some(i => i.sku === sku)) { showToast('SKU already exists', 'error'); return; }
-                lastAction = { type: 'add', item: { sku, name, description, category, price, stock, low_stock_threshold: threshold } };
+                if (inventory.some(i => i.sku === sku)) {
+                    showToast('SKU already exists', 'error');
+                    return;
+                }
                 inventory.push({ sku, name, description, category, price, stock, low_stock_threshold: threshold });
                 showToast('Item added successfully', 'success');
             } else {
                 const idx = inventory.findIndex(i => i.sku === parseInt(editSku));
                 if (idx !== -1) {
-                    lastAction = { type: 'edit', sku: parseInt(editSku), oldItem: {...inventory[idx]} };
                     inventory[idx] = { sku: parseInt(editSku), name, description, category, price, stock, low_stock_threshold: threshold };
                     showToast('Item updated successfully', 'success');
                 }
             }
 
-            if (!categories.includes(category)) { categories.push(category); categories.sort(); populateCategoryFilters(); if (currentView === 'settings') renderSettings(); }
+            if (!categories.includes(category)) {
+                categories.push(category);
+                categories.sort();
+                populateCategoryFilters();
+            }
+
             saveToStorage();
             closeModal();
             updateAllViews();
-            if (lastAction) showUndoToast();
+            updateConnectionStatus();
         }
 
         function openDeleteModal(sku) {
@@ -1271,105 +879,104 @@
             document.getElementById('delete-modal').classList.remove('hidden');
         }
 
-        function closeDeleteModal() { document.getElementById('delete-modal').classList.add('hidden'); deleteTargetSku = null; }
+        function closeDeleteModal() {
+            document.getElementById('delete-modal').classList.add('hidden');
+            deleteTargetSku = null;
+        }
 
         function confirmDelete() {
             if (deleteTargetSku !== null) {
-                const item = inventory.find(i => i.sku === deleteTargetSku);
-                if (item) lastAction = { type: 'delete', item: {...item} };
                 inventory = inventory.filter(i => i.sku !== deleteTargetSku);
                 saveToStorage();
                 showToast('Item deleted', 'success');
                 updateAllViews();
-                if (lastAction) showUndoToast();
+                updateConnectionStatus();
             }
             closeDeleteModal();
         }
 
-        function undoLastAction() {
-            if (!lastAction) return;
-            if (lastAction.type === 'add') { inventory = inventory.filter(i => i.sku !== lastAction.item.sku); showToast('Item addition undone', 'info'); }
-            else if (lastAction.type === 'delete') { inventory.push(lastAction.item); showToast('Item deletion undone', 'info'); }
-            else if (lastAction.type === 'edit') { const idx = inventory.findIndex(i => i.sku === lastAction.sku); if (idx !== -1) { inventory[idx] = lastAction.oldItem; showToast('Item edit undone', 'info'); } }
-            else if (lastAction.type === 'import' || lastAction.type === 'reset') { inventory = lastAction.oldInventory; categories = lastAction.oldCategories; showToast('Data restore undone', 'info'); }
-            lastAction = null;
-            saveToStorage();
-            updateAllViews();
-            populateCategoryFilters();
-        }
-
-        function showUndoToast() {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast flex items-center gap-3 px-5 py-3 bg-blue-500 text-white rounded-xl shadow-lg min-w-[280px]';
-            toast.innerHTML = `<i class="fas fa-undo"></i><span class="text-sm font-medium flex-1">Action performed</span><button onclick="undoLastAction(); this.parentElement.remove();" class="text-xs font-bold underline hover:no-underline">UNDO</button>`;
-            container.appendChild(toast);
-            setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)'; toast.style.transition = 'all 0.3s ease'; setTimeout(() => toast.remove(), 300); }, 8000);
-        }
-
+        // ===================== DATA IMPORT/EXPORT =====================
         function exportData() {
             const blob = new Blob([JSON.stringify(inventory, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `inventory_backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `inventory_data.json`;
             a.click();
             URL.revokeObjectURL(url);
-            showToast('Backup exported successfully', 'success');
+            showToast('inventory_data.json exported — commit to GitHub to sync', 'success');
         }
 
         function importData(input) {
             const file = input.files[0];
             if (!file) return;
-            if (!confirm('Importing will replace your current data. Continue?')) { input.value = ''; return; }
             const reader = new FileReader();
             reader.onload = e => {
                 try {
                     const data = JSON.parse(e.target.result);
                     if (Array.isArray(data)) {
-                        lastAction = { type: 'import', oldInventory: [...inventory], oldCategories: [...categories] };
                         inventory = data;
                         categories = [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
+                        saveToStorage();
+                        populateCategoryFilters();
+                        updateAllViews();
+                        updateConnectionStatus();
+                        showToast('Data imported successfully', 'success');
                     } else if (data.inventory && Array.isArray(data.inventory)) {
-                        lastAction = { type: 'import', oldInventory: [...inventory], oldCategories: [...categories] };
                         inventory = data.inventory;
-                        categories = data.categories && Array.isArray(data.categories) ? data.categories : [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
-                    } else { showToast('Invalid file format', 'error'); return; }
-                    saveToStorage();
-                    populateCategoryFilters();
-                    updateAllViews();
-                    document.getElementById('last-sync').textContent = inventory.length + ' items imported';
-                    showToast('Data imported successfully', 'success');
-                    showUndoToast();
-                } catch (err) { showToast('Error reading file', 'error'); }
+                        if (data.categories && Array.isArray(data.categories)) categories = data.categories;
+                        else categories = [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
+                        saveToStorage();
+                        populateCategoryFilters();
+                        updateAllViews();
+                        updateConnectionStatus();
+                        showToast('Data imported successfully', 'success');
+                    } else {
+                        showToast('Invalid file format — expected JSON array', 'error');
+                    }
+                } catch (err) {
+                    showToast('Error reading file', 'error');
+                }
             };
             reader.readAsText(file);
             input.value = '';
         }
 
         function resetData() {
-            if (confirm('WARNING: This will delete ALL inventory data. Continue?')) {
-                lastAction = { type: 'reset', oldInventory: [...inventory], oldCategories: [...categories] };
-                inventory = []; categories = [];
+            if (confirm('WARNING: This will delete ALL inventory data. Are you sure?')) {
+                inventory = [];
+                categories = [];
                 saveToStorage();
                 populateCategoryFilters();
                 updateAllViews();
                 document.getElementById('last-sync').textContent = 'No data loaded';
                 showToast('All data cleared', 'success');
-                showUndoToast();
             }
         }
 
-        function updateAllViews() { updateDashboard(); renderInventory(); renderLowStock(); updateSidebarBadge(); }
+        // ===================== UTILITIES =====================
+        function updateAllViews() {
+            updateDashboard();
+            renderInventory();
+            renderLowStock();
+            updateSidebarBadge();
+        }
 
         function updateSidebarBadge() {
             const lowCount = inventory.filter(i => (i.stock || 0) <= (i.low_stock_threshold || 5)).length;
             const badge = document.getElementById('sidebar-lowstock-badge');
-            if (lowCount > 0) { badge.textContent = lowCount; badge.classList.remove('hidden'); }
-            else { badge.classList.add('hidden'); }
+            if (lowCount > 0) {
+                badge.textContent = lowCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
         }
 
-        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); updateCharts(); }
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            updateCharts();
+        }
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
@@ -1379,20 +986,29 @@
             toast.className = `toast flex items-center gap-3 px-5 py-3 ${colors[type]} text-white rounded-xl shadow-lg min-w-[280px]`;
             toast.innerHTML = `<i class="fas ${icons[type]}"></i><span class="text-sm font-medium">${message}</span>`;
             container.appendChild(toast);
-            setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)'; toast.style.transition = 'all 0.3s ease'; setTimeout(() => toast.remove(), 300); }, 4000);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
         }
 
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape') { closeModal(); closeDeleteModal(); }
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); if (currentView === 'inventory') document.getElementById('inv-search').focus(); }
-            if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undoLastAction(); }
-            if ((e.ctrlKey || e.metaKey) && e.key === 'n') { e.preventDefault(); openAddModal(); }
-            if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); autoSyncToGitHub(); }
-            if ((e.ctrlKey || e.metaKey) && e.key === 'd') { e.preventDefault(); diagnoseRepoStructure(); }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                if (currentView === 'inventory') document.getElementById('inv-search').focus();
+            }
         });
 
         window.addEventListener('DOMContentLoaded', init);
-        handleResize();
     </script>
 </body>
-</html>
+</html>'''
+
+with open('/mnt/agents/output/index.html', 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print("File saved successfully!")
+print(f"Size: {len(html_content):,} characters")
