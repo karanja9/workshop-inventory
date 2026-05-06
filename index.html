@@ -91,14 +91,12 @@
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
 
-    <!-- Version: 2.0 - Auto-sync fixed -->
     <script>
-        const VERSION = '2.0';
+        const VERSION = '2.1';  // Changed from 2.0
         const storedVersion = localStorage.getItem('app_version');
         if (storedVersion !== VERSION) {
             localStorage.clear();
             localStorage.setItem('app_version', VERSION);
-            console.log('App updated to v' + VERSION + ' - localStorage cleared');
         }
     </script>
 
