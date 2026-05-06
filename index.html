@@ -86,6 +86,13 @@
         .sync-dot.github { background-color: #22c55e; }
         .sync-dot.none { background-color: #9ca3af; }
         .sync-dot.synced { background-color: #3b82f6; }
+        
+        #diagnostic-output {
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 11px;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -337,6 +344,7 @@
                         </div>
                     </div>
 
+                    <!-- GitHub Auto-Sync -->
                     <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
                         <div class="p-6 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="font-bold flex items-center gap-2"><i class="fab fa-github text-primary-500"></i> GitHub Auto-Sync</h3>
@@ -360,10 +368,22 @@
                                     <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center"><i class="fas fa-info-circle text-blue-500"></i></div>
                                     <div>
                                         <div class="font-medium">Repository</div>
-                                        <div class="text-sm text-gray-400" id="repo-info">karanja9/workshop-inventory</div>
+                                        <div class="text-sm text-gray-400">karanja9/workshop-inventory</div>
                                     </div>
                                 </div>
-                                <span class="text-xs text-gray-400">main branch</span>
+                                <button onclick="diagnoseRepoStructure()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors">
+                                    <i class="fas fa-stethoscope"></i> Diagnose
+                                </button>
+                            </div>
+                            <!-- Diagnostic Output -->
+                            <div id="diagnostic-panel" class="hidden p-4 bg-gray-900 rounded-xl">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-green-400 text-xs font-bold">Diagnostic Output</span>
+                                    <button onclick="document.getElementById('diagnostic-panel').classList.add('hidden')" class="text-gray-400 hover:text-white">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div id="diagnostic-output" class="text-green-300"></div>
                             </div>
                         </div>
                     </div>
@@ -387,7 +407,7 @@
                         </div>
                         <div class="p-6">
                             <div id="categories-list" class="flex flex-wrap gap-2"></div>
-                            <p class="text-xs text-gray-400 mt-4"><i class="fas fa-info-circle"></i> You can also add new categories directly when creating or editing an item by typing a new category name in the form.</p>
+                            <p class="text-xs text-gray-400 mt-4"><i class="fas fa-info-circle"></i> You can also add new categories directly when creating or editing an item.</p>
                         </div>
                     </div>
 
@@ -503,8 +523,8 @@
         
         const GITHUB_OWNER = 'karanja9';
         const GITHUB_REPO = 'workshop-inventory';
-        const GITHUB_PATH = 'inventory_data.json';
         const GITHUB_BRANCH = 'main';
+        let githubFilePath = 'inventory_data.json'; // Will be updated by diagnostic
 
         // ===================== INIT =====================
         async function init() {
@@ -527,6 +547,12 @@
             updateSyncSourceDisplay();
             updateSyncButton();
             updateTokenStatus();
+            
+            // Check if token exists and run diagnostic silently
+            const token = localStorage.getItem('github_token');
+            if (token) {
+                setTimeout(() => diagnoseRepoStructure(true), 1000);
+            }
         }
 
         async function loadData() {
@@ -542,7 +568,7 @@
                 dataLoaded = true;
             } else {
                 try {
-                    const res = await fetch('inventory_data.json');
+                    const res = await fetch(githubFilePath);
                     if (res.ok) {
                         inventory = await res.json();
                         categories = [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
@@ -595,7 +621,9 @@
             showSyncStatus();
             
             const token = localStorage.getItem('github_token');
-            if (token) autoSyncToGitHub(true);
+            if (token && githubFilePath) {
+                autoSyncToGitHub(true);
+            }
         }
 
         function updateSyncSourceDisplay() {
@@ -648,12 +676,134 @@
             }
         }
 
-        // ===================== GITHUB AUTO-SYNC (FIXED) =====================
+        // ===================== REPOSITORY DIAGNOSTIC =====================
+        async function diagnoseRepoStructure(silent = false) {
+            const token = localStorage.getItem('github_token');
+            if (!token) {
+                if (!silent) showToast('Please configure GitHub token first', 'info');
+                return;
+            }
+            
+            const diagnosticPanel = document.getElementById('diagnostic-panel');
+            const diagnosticOutput = document.getElementById('diagnostic-output');
+            
+            if (!silent) {
+                diagnosticPanel.classList.remove('hidden');
+                diagnosticOutput.innerHTML = '<span class="text-yellow-400">🔍 Scanning repository...</span>';
+            }
+            
+            let log = '';
+            
+            function addLog(msg, color = 'text-green-300') {
+                log += `<span class="${color}">${msg}</span>\n`;
+                if (!silent) diagnosticOutput.innerHTML = log;
+                console.log(msg);
+            }
+            
+            try {
+                addLog('=== Repository Diagnostic ===', 'text-white');
+                addLog(`Owner: ${GITHUB_OWNER}`, 'text-blue-300');
+                addLog(`Repo: ${GITHUB_REPO}`, 'text-blue-300');
+                addLog(`Branch: ${GITHUB_BRANCH}`, 'text-blue-300');
+                addLog('');
+                
+                // Check repository exists
+                addLog('Checking repository...', 'text-yellow-400');
+                const repoResponse = await fetch(
+                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`,
+                    {
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    }
+                );
+                
+                if (!repoResponse.ok) {
+                    addLog(`❌ Repository check failed: ${repoResponse.status}`, 'text-red-400');
+                    if (repoResponse.status === 404) {
+                        addLog(`Repository "${GITHUB_OWNER}/${GITHUB_REPO}" not found. Check spelling.`, 'text-red-400');
+                    }
+                    return;
+                }
+                
+                const repoData = await repoResponse.json();
+                addLog(`✅ Repository found: ${repoData.full_name}`, 'text-green-400');
+                addLog(`   Default branch: ${repoData.default_branch}`, 'text-gray-400');
+                addLog(`   Private: ${repoData.private}`, 'text-gray-400');
+                addLog('');
+                
+                // List root contents
+                addLog('Listing root directory contents...', 'text-yellow-400');
+                const rootResponse = await fetch(
+                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/?ref=${GITHUB_BRANCH}`,
+                    {
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    }
+                );
+                
+                if (rootResponse.ok) {
+                    const contents = await rootResponse.json();
+                    addLog(`Found ${contents.length} items in root:`, 'text-white');
+                    
+                    let jsonFileFound = null;
+                    contents.forEach(item => {
+                        const icon = item.type === 'dir' ? '📁' : '📄';
+                        addLog(`  ${icon} ${item.name} (${item.type})`, 'text-gray-400');
+                        
+                        if (item.name === 'inventory_data.json') {
+                            jsonFileFound = item;
+                            githubFilePath = item.path;
+                        }
+                    });
+                    
+                    addLog('');
+                    
+                    if (jsonFileFound) {
+                        addLog(`✅ Found inventory_data.json at: ${jsonFileFound.path}`, 'text-green-400');
+                        addLog(`   Size: ${jsonFileFound.size} bytes`, 'text-gray-400');
+                        githubFilePath = jsonFileFound.path;
+                    } else {
+                        addLog('❌ inventory_data.json NOT FOUND in repository root', 'text-red-400');
+                        addLog('', 'text-white');
+                        addLog('💡 The file needs to be uploaded to your repository first.', 'text-yellow-400');
+                        addLog('   Go to: https://github.com/' + GITHUB_OWNER + '/' + GITHUB_REPO, 'text-blue-300');
+                        addLog('   Click "Add file" → "Upload files" → Upload your inventory_data.json', 'text-blue-300');
+                        addLog('   Then click "Commit changes"', 'text-blue-300');
+                    }
+                } else {
+                    addLog(`Failed to list contents: ${rootResponse.status}`, 'text-red-400');
+                }
+                
+            } catch (error) {
+                addLog(`❌ Diagnostic error: ${error.message}`, 'text-red-400');
+            }
+            
+            if (!silent) {
+                addLog('', 'text-white');
+                addLog('=== Diagnostic Complete ===', 'text-white');
+            }
+            
+            return log;
+        }
+
+        // ===================== GITHUB AUTO-SYNC =====================
         async function autoSyncToGitHub(silent = false) {
             let token = localStorage.getItem('github_token');
             
             if (!token) {
                 if (!silent) setupGitHubToken();
+                return;
+            }
+            
+            if (!githubFilePath) {
+                if (!silent) {
+                    showToast('Run "Diagnose" first to find your file path in Settings', 'info');
+                    diagnoseRepoStructure();
+                }
                 return;
             }
             
@@ -663,29 +813,10 @@
             syncBtn.disabled = true;
             
             try {
-                // First verify token and repo access
-                const verifyResponse = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`, {
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-                
-                if (!verifyResponse.ok) {
-                    if (verifyResponse.status === 401) {
-                        localStorage.removeItem('github_token');
-                        throw new Error('Invalid token. Please reconfigure in Settings.');
-                    } else if (verifyResponse.status === 404) {
-                        throw new Error(`Repository not found: ${GITHUB_OWNER}/${GITHUB_REPO}. Check your repository name.`);
-                    }
-                    const errData = await verifyResponse.json();
-                    throw new Error(`GitHub error: ${errData.message}`);
-                }
-                
-                // Get current file SHA (if exists)
+                // Get current file SHA
                 let sha = null;
                 const getResponse = await fetch(
-                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}?ref=${GITHUB_BRANCH}`,
+                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${githubFilePath}?ref=${GITHUB_BRANCH}`,
                     {
                         headers: {
                             'Authorization': `token ${token}`,
@@ -697,19 +828,22 @@
                 if (getResponse.ok) {
                     const fileData = await getResponse.json();
                     sha = fileData.sha;
-                    console.log('File found, SHA:', sha);
                 } else if (getResponse.status === 404) {
-                    console.log('File not found, will create new file');
+                    // File doesn't exist yet
+                    sha = null;
+                } else if (getResponse.status === 401) {
+                    localStorage.removeItem('github_token');
+                    throw new Error('Invalid token');
                 } else {
                     const errData = await getResponse.json();
-                    throw new Error(`Error checking file: ${errData.message}`);
+                    throw new Error(`GitHub API error: ${errData.message}`);
                 }
                 
                 // Prepare content
                 const jsonString = JSON.stringify(inventory, null, 2);
                 const content = btoa(unescape(encodeURIComponent(jsonString)));
                 
-                const commitMessage = `${sha ? 'Update' : 'Create'} inventory_data.json (${inventory.length} items) - ${new Date().toLocaleString()}`;
+                const commitMessage = `Auto-sync: Update inventory (${inventory.length} items) - ${new Date().toLocaleString()}`;
                 
                 const requestBody = {
                     message: commitMessage,
@@ -720,7 +854,7 @@
                 if (sha) requestBody.sha = sha;
                 
                 const updateResponse = await fetch(
-                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`,
+                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${githubFilePath}`,
                     {
                         method: 'PUT',
                         headers: {
@@ -734,16 +868,7 @@
                 
                 if (!updateResponse.ok) {
                     const errorData = await updateResponse.json();
-                    console.error('Update error:', errorData);
-                    
-                    if (updateResponse.status === 404) {
-                        throw new Error(`Cannot find path: ${GITHUB_PATH} in ${GITHUB_OWNER}/${GITHUB_REPO}`);
-                    } else if (updateResponse.status === 409) {
-                        throw new Error('Conflict: File has been modified on GitHub. Please sync again.');
-                    } else if (updateResponse.status === 422) {
-                        throw new Error(`Validation error: ${errorData.message}. The file path may not exist in this branch.`);
-                    }
-                    throw new Error(`Sync failed: ${errorData.message}`);
+                    throw new Error(errorData.message || 'Sync failed');
                 }
                 
                 // Success
@@ -778,12 +903,12 @@
                 localStorage.setItem('github_token', token.trim());
                 updateTokenStatus();
                 updateSyncButton();
-                showToast('GitHub token saved! Click Sync to push changes.', 'success');
+                showToast('GitHub token saved! Run Diagnose to find your file.', 'success');
             }
         }
 
         function clearGitHubToken() {
-            if (confirm('Remove your GitHub token? You will need to re-enter it to auto-sync.')) {
+            if (confirm('Remove your GitHub token?')) {
                 localStorage.removeItem('github_token');
                 updateTokenStatus();
                 updateSyncButton();
@@ -796,7 +921,7 @@
             if (status) {
                 const token = localStorage.getItem('github_token');
                 if (token) {
-                    status.textContent = '✓ Configured (auto-sync enabled)';
+                    status.textContent = '✓ Configured - Run Diagnose';
                     status.className = 'text-sm text-green-500';
                 } else {
                     status.textContent = 'Not configured - click Configure';
@@ -904,8 +1029,7 @@
                         label: 'Stock Quantity',
                         data: Object.values(catData),
                         backgroundColor: ['#714B67', '#9c7fb0', '#fb923c', '#22c55e', '#3b82f6', '#ef4444', '#a855f7', '#14b8a6', '#f59e0b'],
-                        borderRadius: 8,
-                        borderSkipped: false
+                        borderRadius: 8, borderSkipped: false
                     }]
                 },
                 options: {
@@ -1010,7 +1134,6 @@
             }).join('');
         }
 
-        // ===================== LOW STOCK =====================
         function renderLowStock() {
             const tbody = document.getElementById('lowstock-table-body');
             const lowItems = inventory.filter(i => (i.stock || 0) <= (i.low_stock_threshold || 5));
@@ -1031,13 +1154,12 @@
             </tr>`).join('');
         }
 
-        // ===================== SETTINGS =====================
         function renderSettings() {
             const list = document.getElementById('categories-list');
             if (categories.length === 0) {
-                list.innerHTML = '<span class="text-gray-400 text-sm">No categories yet. Add your first category or create items to auto-generate categories.</span>';
+                list.innerHTML = '<span class="text-gray-400 text-sm">No categories yet.</span>';
             } else {
-                list.innerHTML = categories.map((cat, idx) => `<div class="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm"><span>${cat}</span><button onclick="removeCategory(${idx})" class="w-5 h-5 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-500 flex items-center justify-center transition-colors" title="Remove category"><i class="fas fa-times text-xs"></i></button></div>`).join('');
+                list.innerHTML = categories.map((cat, idx) => `<div class="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm"><span>${cat}</span><button onclick="removeCategory(${idx})" class="w-5 h-5 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-500 flex items-center justify-center transition-colors"><i class="fas fa-times text-xs"></i></button></div>`).join('');
             }
             updateTokenStatus();
         }
@@ -1045,11 +1167,8 @@
         function addCategory() {
             const name = prompt('Enter new category name:');
             if (name && name.trim() && !categories.includes(name.trim())) {
-                categories.push(name.trim());
-                categories.sort();
-                saveToStorage();
-                renderSettings();
-                populateCategoryFilters();
+                categories.push(name.trim()); categories.sort();
+                saveToStorage(); renderSettings(); populateCategoryFilters();
                 showToast('Category added', 'success');
             } else if (name && categories.includes(name.trim())) {
                 showToast('Category already exists', 'info');
@@ -1057,16 +1176,13 @@
         }
 
         function removeCategory(idx) {
-            if (confirm('Delete this category? Items using it will keep the category name but it won\'t be selectable for new items.')) {
+            if (confirm('Delete this category?')) {
                 categories.splice(idx, 1);
-                saveToStorage();
-                renderSettings();
-                populateCategoryFilters();
+                saveToStorage(); renderSettings(); populateCategoryFilters();
                 showToast('Category removed', 'success');
             }
         }
 
-        // ===================== MODALS =====================
         function openAddModal() {
             document.getElementById('modal-title').textContent = 'Add New Item';
             document.getElementById('edit-sku').value = '';
@@ -1076,10 +1192,10 @@
             document.getElementById('form-price').value = '';
             document.getElementById('form-stock').value = '';
             document.getElementById('form-threshold').value = '5';
-            const categoryInput = document.getElementById('form-category-input');
-            const categoryHidden = document.getElementById('form-category');
-            if (categoryInput) categoryInput.value = '';
-            if (categoryHidden) categoryHidden.value = categories[0] || 'General';
+            const ci = document.getElementById('form-category-input');
+            const ch = document.getElementById('form-category');
+            if (ci) ci.value = '';
+            if (ch) ch.value = categories[0] || 'General';
             document.getElementById('form-sku').disabled = false;
             document.getElementById('item-modal').classList.remove('hidden');
             setTimeout(() => document.getElementById('form-sku').focus(), 100);
@@ -1097,11 +1213,11 @@
             document.getElementById('form-price').value = item.price || 0;
             document.getElementById('form-stock').value = item.stock || 0;
             document.getElementById('form-threshold').value = item.low_stock_threshold || 5;
-            const categoryInput = document.getElementById('form-category-input');
-            const categoryHidden = document.getElementById('form-category');
-            const itemCategory = item.category || categories[0] || 'General';
-            if (categoryInput) categoryInput.value = itemCategory;
-            if (categoryHidden) categoryHidden.value = itemCategory;
+            const ci = document.getElementById('form-category-input');
+            const ch = document.getElementById('form-category');
+            const ic = item.category || categories[0] || 'General';
+            if (ci) ci.value = ic;
+            if (ch) ch.value = ic;
             document.getElementById('item-modal').classList.remove('hidden');
             setTimeout(() => document.getElementById('form-name').focus(), 100);
         }
@@ -1116,11 +1232,11 @@
             const price = parseFloat(document.getElementById('form-price').value) || 0;
             const stock = parseInt(document.getElementById('form-stock').value) || 0;
             const threshold = parseInt(document.getElementById('form-threshold').value) || 5;
-            const categoryInput = document.getElementById('form-category-input');
-            let category = categoryInput ? categoryInput.value.trim() : '';
+            const ci = document.getElementById('form-category-input');
+            let category = ci ? ci.value.trim() : '';
             if (!category) category = categories[0] || 'General';
-            const categoryHidden = document.getElementById('form-category');
-            if (categoryHidden) categoryHidden.value = category;
+            const ch = document.getElementById('form-category');
+            if (ch) ch.value = category;
 
             if (!sku || !name) { showToast('SKU and Name are required', 'error'); return; }
             if (stock < 0) { showToast('Stock cannot be negative', 'error'); return; }
@@ -1191,7 +1307,6 @@
             setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)'; toast.style.transition = 'all 0.3s ease'; setTimeout(() => toast.remove(), 300); }, 8000);
         }
 
-        // ===================== DATA IMPORT/EXPORT =====================
         function exportData() {
             const blob = new Blob([JSON.stringify(inventory, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -1218,9 +1333,8 @@
                     } else if (data.inventory && Array.isArray(data.inventory)) {
                         lastAction = { type: 'import', oldInventory: [...inventory], oldCategories: [...categories] };
                         inventory = data.inventory;
-                        if (data.categories && Array.isArray(data.categories)) categories = data.categories;
-                        else categories = [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
-                    } else { showToast('Invalid file format — expected JSON array', 'error'); return; }
+                        categories = data.categories && Array.isArray(data.categories) ? data.categories : [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
+                    } else { showToast('Invalid file format', 'error'); return; }
                     saveToStorage();
                     populateCategoryFilters();
                     updateAllViews();
@@ -1234,10 +1348,9 @@
         }
 
         function resetData() {
-            if (confirm('WARNING: This will delete ALL inventory data. Are you sure?\n\nThis action can be undone if you exported your data first.')) {
+            if (confirm('WARNING: This will delete ALL inventory data. Continue?')) {
                 lastAction = { type: 'reset', oldInventory: [...inventory], oldCategories: [...categories] };
-                inventory = [];
-                categories = [];
+                inventory = []; categories = [];
                 saveToStorage();
                 populateCategoryFilters();
                 updateAllViews();
@@ -1247,7 +1360,6 @@
             }
         }
 
-        // ===================== UTILITIES =====================
         function updateAllViews() { updateDashboard(); renderInventory(); renderLowStock(); updateSidebarBadge(); }
 
         function updateSidebarBadge() {
@@ -1276,6 +1388,7 @@
             if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undoLastAction(); }
             if ((e.ctrlKey || e.metaKey) && e.key === 'n') { e.preventDefault(); openAddModal(); }
             if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); autoSyncToGitHub(); }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'd') { e.preventDefault(); diagnoseRepoStructure(); }
         });
 
         window.addEventListener('DOMContentLoaded', init);
