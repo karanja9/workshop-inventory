@@ -45,6 +45,75 @@
         @keyframes toastSlide { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid #714B67; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Fix for sidebar and full-screen layout */
+        #sidebar {
+            transition: transform 0.3s ease;
+        }
+        
+        #sidebar.-translate-x-full {
+            transform: translateX(-100%);
+        }
+        
+        /* Mobile responsive fixes */
+        @media (max-width: 1023px) {
+            main {
+                width: 100% !important;
+                margin-left: 0 !important;
+            }
+            
+            #sidebar.-translate-x-full ~ main,
+            #sidebar.-translate-x-full + main {
+                width: 100% !important;
+                margin-left: 0 !important;
+            }
+            
+            /* Ensure main content is full width when sidebar is hidden */
+            body > div.flex > main {
+                width: 100% !important;
+            }
+            
+            /* Reduce padding on mobile */
+            main .flex-1.p-6 {
+                padding: 1rem !important;
+            }
+            
+            /* Make header more compact on mobile */
+            header {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .overflow-x-auto {
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            table {
+                min-width: 800px;
+            }
+            
+            /* Adjust grid layouts for mobile */
+            .grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            /* Make modals full screen on mobile */
+            #item-modal .max-w-lg {
+                max-width: 100%;
+                margin: 0.5rem;
+            }
+        }
+        
+        /* Fix for when sidebar is hidden on desktop */
+        @media (min-width: 1024px) {
+            #sidebar.-translate-x-full ~ main,
+            #sidebar.-translate-x-full + main {
+                width: 100% !important;
+                margin-left: 0 !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -54,7 +123,7 @@
 
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside id="sidebar" class="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col transition-all duration-300 z-40">
+        <aside id="sidebar" class="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col transition-all duration-300 z-40 fixed lg:relative h-full">
             <div class="p-6 border-b border-gray-200 dark:border-gray-700">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-primary-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary-500/30">
@@ -98,7 +167,7 @@
         <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
 
         <!-- Main Content -->
-        <main class="flex-1 flex flex-col overflow-hidden">
+        <main class="flex-1 flex flex-col overflow-hidden w-full lg:ml-64 transition-all duration-300">
             <!-- Top Header -->
             <header class="glass border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between z-20">
                 <div class="flex items-center gap-4">
@@ -471,6 +540,7 @@
         let categoryChart = null;
         let valueChart = null;
         let dataLoaded = false;
+        let sidebarVisible = false;
 
         // ===================== INIT =====================
         async function init() {
@@ -483,6 +553,9 @@
                 else document.documentElement.classList.remove('dark');
                 updateCharts();
             });
+
+            // Check initial screen size
+            handleResize();
 
             // Try to load from inventory_data.json (same origin for GitHub Pages)
             try {
@@ -512,6 +585,21 @@
 
             populateCategoryFilters();
             updateAllViews();
+            
+            // Hide sidebar on mobile by default
+            if (window.innerWidth < 1024) {
+                hideSidebar();
+            }
+        }
+
+        function handleResize() {
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 1024) {
+                    showSidebarDesktop();
+                } else {
+                    hideSidebar();
+                }
+            });
         }
 
         function saveToStorage() {
@@ -535,22 +623,62 @@
             if (view === 'lowstock') renderLowStock();
             if (view === 'settings') renderSettings();
 
+            // Auto-hide sidebar on mobile when navigating
             if (window.innerWidth < 1024) {
-                document.getElementById('sidebar').classList.add('-translate-x-full');
-                document.getElementById('sidebar-overlay').classList.add('hidden');
+                hideSidebar();
             }
         }
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
+            
             if (sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
+                showSidebar();
             } else {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
+                hideSidebar();
             }
+        }
+
+        function showSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const main = document.querySelector('main');
+            
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+            sidebarVisible = true;
+            
+            if (window.innerWidth < 1024) {
+                main.style.marginLeft = '0';
+            }
+        }
+
+        function hideSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const main = document.querySelector('main');
+            
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+            sidebarVisible = false;
+            
+            if (window.innerWidth < 1024) {
+                main.style.marginLeft = '0';
+                main.style.width = '100%';
+            }
+        }
+
+        function showSidebarDesktop() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const main = document.querySelector('main');
+            
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.add('hidden');
+            sidebarVisible = true;
+            main.style.marginLeft = '256px';
+            main.style.width = 'calc(100% - 256px)';
         }
 
         // ===================== DASHBOARD =====================
@@ -1040,6 +1168,7 @@
 
         // Initialize
         window.addEventListener('DOMContentLoaded', init);
+        handleResize();
     </script>
 </body>
 </html>
