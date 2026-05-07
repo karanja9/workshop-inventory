@@ -1,0 +1,250 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-05-07",
+  "categories": {
+    "bearings": {
+      "name": "Bearings",
+      "search_terms": ["bearing", "wheel bearing", "taper roller", "ball bearing", "seal"],
+      "fields": {
+        "part_number": {"type": "string", "required": true, "description": "Your SKU or part number"},
+        "alternate_numbers": {"type": "array", "required": false, "description": "Other known part numbers for same item"},
+        "oem_numbers": {"type": "array", "required": false, "description": "Original Equipment Manufacturer numbers"},
+        "bearing_type": {"type": "string", "required": true, "description": "Taper roller, ball, cylindrical, needle, thrust, etc."},
+        "inner_diameter_mm": {"type": "number", "required": true, "description": "Bore diameter in millimeters"},
+        "outer_diameter_mm": {"type": "number", "required": true, "description": "Outer diameter in millimeters"},
+        "width_mm": {"type": "number", "required": true, "description": "Width/thickness in millimeters"},
+        "seal_type": {"type": "string", "required": false, "description": "Open, 2RS (rubber seals), ZZ (metal shields), etc."},
+        "clearance": {"type": "string", "required": false, "description": "C3, C4, etc. if applicable"},
+        "vehicle_fitment": {"type": "array", "required": false, "description": "List of vehicles this fits"},
+        "applications": {"type": "array", "required": false, "description": "General applications (plough, trailer, etc.)"},
+        "brand": {"type": "string", "required": false, "description": "Manufacturer brand if known"},
+        "interchange_with": {"type": "array", "required": false, "description": "Direct replacements from other brands"},
+        "image_url": {"type": "string", "required": false, "description": "Link to product image"},
+        "notes": {"type": "string", "required": false, "description": "Any special notes"}
+      }
+    },
+    
+    "oil_filters": {
+      "name": "Oil Filters",
+      "search_terms": ["oil filter", "lube filter", "engine filter"],
+      "fields": {
+        "part_number": {"type": "string", "required": true},
+        "alternate_numbers": {"type": "array", "required": false},
+        "oem_numbers": {"type": "array", "required": false},
+        "filter_type": {"type": "string", "required": true, "description": "Spin-on, cartridge, element type"},
+        "height_mm": {"type": "number", "required": true},
+        "outer_diameter_mm": {"type": "number", "required": true},
+        "thread_size": {"type": "string", "required": false, "description": "Thread specification for spin-on filters"},
+        "gasket_diameter_mm": {"type": "number", "required": false},
+        "micron_rating": {"type": "number", "required": false, "description": "Filtration efficiency"},
+        "bypass_valve_psi": {"type": "number", "required": false},
+        "anti_drain_back": {"type": "boolean", "required": false, "description": "Has anti-drain back valve"},
+        "vehicle_fitment": {"type": "array", "required": false},
+        "engine_fitment": {"type": "array", "required": false, "description": "Engine models this fits"},
+        "brand": {"type": "string", "required": false},
+        "interchange_with": {"type": "array", "required": false},
+        "image_url": {"type": "string", "required": false},
+        "notes": {"type": "string", "required": false}
+      }
+    },
+    
+    "fuel_filters": {
+      "name": "Fuel Filters",
+      "search_terms": ["fuel filter", "diesel filter", "petrol filter"],
+      "fields": {
+        "part_number": {"type": "string", "required": true},
+        "alternate_numbers": {"type": "array", "required": false},
+        "oem_numbers": {"type": "array", "required": false},
+        "filter_type": {"type": "string", "required": true, "description": "Spin-on, in-line, cartridge, water separator"},
+        "height_mm": {"type": "number", "required": true},
+        "outer_diameter_mm": {"type": "number", "required": true},
+        "inlet_diameter_mm": {"type": "number", "required": false},
+        "outlet_diameter_mm": {"type": "number", "required": false},
+        "thread_size": {"type": "string", "required": false},
+        "micron_rating": {"type": "number", "required": false},
+        "water_separator": {"type": "boolean", "required": false},
+        "fuel_type": {"type": "string", "required": false, "description": "Diesel, petrol, biodiesel compatible"},
+        "vehicle_fitment": {"type": "array", "required": false},
+        "engine_fitment": {"type": "array", "required": false},
+        "brand": {"type": "string", "required": false},
+        "interchange_with": {"type": "array", "required": false},
+        "image_url": {"type": "string", "required": false},
+        "notes": {"type": "string", "required": false}
+      }
+    },
+    
+    "air_filters": {
+      "name": "Air Filters",
+      "search_terms": ["air filter", "air cleaner", "engine air"],
+      "fields": {
+        "part_number": {"type": "string", "required": true},
+        "alternate_numbers": {"type": "array", "required": false},
+        "oem_numbers": {"type": "array", "required": false},
+        "filter_type": {"type": "string", "required": true, "description": "Panel, cylindrical, conical"},
+        "length_mm": {"type": "number", "required": false},
+        "width_mm": {"type": "number", "required": false},
+        "height_mm": {"type": "number", "required": false},
+        "outer_diameter_mm": {"type": "number", "required": false},
+        "inner_diameter_mm": {"type": "number", "required": false},
+        "shape": {"type": "string", "required": true, "description": "Rectangular, round, oval, custom"},
+        "vehicle_fitment": {"type": "array", "required": false},
+        "brand": {"type": "string", "required": false},
+        "interchange_with": {"type": "array", "required": false},
+        "image_url": {"type": "string", "required": false},
+        "notes": {"type": "string", "required": false}
+      }
+    },
+    
+    "brake_parts": {
+      "name": "Brake Parts",
+      "search_terms": ["brake", "brake pad", "shoe", "disc", "drum"],
+      "fields": {
+        "part_number": {"type": "string", "required": true},
+        "alternate_numbers": {"type": "array", "required": false},
+        "oem_numbers": {"type": "array", "required": false},
+        "brake_part_type": {"type": "string", "required": true, "description": "Pad, shoe, disc, drum, cylinder, etc."},
+        "length_mm": {"type": "number", "required": false},
+        "width_mm": {"type": "number", "required": false},
+        "thickness_mm": {"type": "number", "required": false},
+        "diameter_mm": {"type": "number", "required": false, "description": "For discs and drums"},
+        "hole_count": {"type": "number", "required": false, "description": "Number of bolt holes for discs"},
+        "position": {"type": "string", "required": false, "description": "Front, rear, left, right"},
+        "material": {"type": "string", "required": false, "description": "Ceramic, semi-metallic, organic"},
+        "vehicle_fitment": {"type": "array", "required": false},
+        "brand": {"type": "string", "required": false},
+        "interchange_with": {"type": "array", "required": false},
+        "image_url": {"type": "string", "required": false},
+        "notes": {"type": "string", "required": false}
+      }
+    },
+    
+    "seals_gaskets": {
+      "name": "Seals & Gaskets",
+      "search_terms": ["seal", "gasket", "o-ring", "oil seal"],
+      "fields": {
+        "part_number": {"type": "string", "required": true},
+        "alternate_numbers": {"type": "array", "required": false},
+        "oem_numbers": {"type": "array", "required": false},
+        "part_type": {"type": "string", "required": true, "description": "Oil seal, gasket, O-ring, shaft seal"},
+        "outer_diameter_mm": {"type": "number", "required": false},
+        "inner_diameter_mm": {"type": "number", "required": false},
+        "width_mm": {"type": "number", "required": false},
+        "material": {"type": "string", "required": false, "description": "Rubber, cork, metal, composite"},
+        "application": {"type": "string", "required": false, "description": "Crankshaft, gearbox, differential, etc."},
+        "vehicle_fitment": {"type": "array", "required": false},
+        "brand": {"type": "string", "required": false},
+        "interchange_with": {"type": "array", "required": false},
+        "image_url": {"type": "string", "required": false},
+        "notes": {"type": "string", "required": false}
+      }
+    },
+    
+    "transmission_drivetrain": {
+      "name": "Transmission & Drivetrain",
+      "search_terms": ["clutch", "gear", "shaft", "universal joint", "cv joint"],
+      "fields": {
+        "part_number": {"type": "string", "required": true},
+        "alternate_numbers": {"type": "array", "required": false},
+        "oem_numbers": {"type": "array", "required": false},
+        "part_type": {"type": "string", "required": true, "description": "Clutch kit, pressure plate, disc, release bearing, etc."},
+        "clutch_disc_diameter_mm": {"type": "number", "required": false},
+        "spline_count": {"type": "number", "required": false},
+        "spline_diameter_mm": {"type": "number", "required": false},
+        "vehicle_fitment": {"type": "array", "required": false},
+        "engine_fitment": {"type": "array", "required": false},
+        "brand": {"type": "string", "required": false},
+        "interchange_with": {"type": "array", "required": false},
+        "image_url": {"type": "string", "required": false},
+        "notes": {"type": "string", "required": false}
+      }
+    },
+    
+    "steering_suspension": {
+      "name": "Steering & Suspension",
+      "search_terms": ["tie rod", "ball joint", "shock", "strut", "bushing"],
+      "fields": {
+        "part_number": {"type": "string", "required": true},
+        "alternate_numbers": {"type": "array", "required": false},
+        "oem_numbers": {"type": "array", "required": false},
+        "part_type": {"type": "string", "required": true, "description": "Tie rod end, ball joint, shock absorber, bushing, etc."},
+        "length_mm": {"type": "number", "required": false},
+        "thread_size": {"type": "string", "required": false},
+        "thread_direction": {"type": "string", "required": false, "description": "Left hand, right hand"},
+        "position": {"type": "string", "required": false, "description": "Front, rear, upper, lower, left, right"},
+        "vehicle_fitment": {"type": "array", "required": false},
+        "brand": {"type": "string", "required": false},
+        "interchange_with": {"type": "array", "required": false},
+        "image_url": {"type": "string", "required": false},
+        "notes": {"type": "string", "required": false}
+      }
+    },
+    
+    "electrical_parts": {
+      "name": "Electrical Parts",
+      "search_terms": ["alternator", "starter", "belt", "sensor", "switch"],
+      "fields": {
+        "part_number": {"type": "string", "required": true},
+        "alternate_numbers": {"type": "array", "required": false},
+        "oem_numbers": {"type": "array", "required": false},
+        "part_type": {"type": "string", "required": true, "description": "Belt, alternator, starter, sensor, etc."},
+        "belt_length_mm": {"type": "number", "required": false, "description": "For belts"},
+        "belt_ribs": {"type": "number", "required": false, "description": "Rib count for serpentine belts"},
+        "voltage": {"type": "number", "required": false, "description": "For electrical components"},
+        "amperage": {"type": "number", "required": false},
+        "vehicle_fitment": {"type": "array", "required": false},
+        "brand": {"type": "string", "required": false},
+        "interchange_with": {"type": "array", "required": false},
+        "image_url": {"type": "string", "required": false},
+        "notes": {"type": "string", "required": false}
+      }
+    },
+    
+    "lubricants_fluids": {
+      "name": "Lubricants & Fluids",
+      "search_terms": ["oil", "grease", "fluid", "lubricant"],
+      "fields": {
+        "part_number": {"type": "string", "required": true},
+        "alternate_numbers": {"type": "array", "required": false},
+        "fluid_type": {"type": "string", "required": true, "description": "Engine oil, gear oil, hydraulic fluid, grease, etc."},
+        "viscosity": {"type": "string", "required": false, "description": "15W-40, 80W-90, etc."},
+        "volume_liters": {"type": "number", "required": false},
+        "api_specification": {"type": "string", "required": false, "description": "API CI-4, GL-5, etc."},
+        "applications": {"type": "array", "required": false, "description": "Diesel engines, hydraulic systems, etc."},
+        "brand": {"type": "string", "required": false},
+        "interchange_with": {"type": "array", "required": false},
+        "image_url": {"type": "string", "required": false},
+        "notes": {"type": "string", "required": false}
+      }
+    },
+    
+    "plough_agricultural": {
+      "name": "Plough & Agricultural Parts",
+      "search_terms": ["plough", "agricultural", "spring", "disc", "furrow"],
+      "fields": {
+        "part_number": {"type": "string", "required": true},
+        "alternate_numbers": {"type": "array", "required": false},
+        "part_type": {"type": "string", "required": true, "description": "Spring, disc, shaft, cap, wheel, etc."},
+        "length_mm": {"type": "number", "required": false},
+        "diameter_mm": {"type": "number", "required": false},
+        "material": {"type": "string", "required": false},
+        "color": {"type": "string", "required": false, "description": "Black, green, red (often identifies brand)"},
+        "plough_brand": {"type": "string", "required": false, "description": "Baldan, Nardi, MF, etc."},
+        "applications": {"type": "array", "required": false},
+        "brand": {"type": "string", "required": false},
+        "interchange_with": {"type": "array", "required": false},
+        "image_url": {"type": "string", "required": false},
+        "notes": {"type": "string", "required": false}
+      }
+    }
+  },
+  
+  "common_fields": {
+    "description": "These fields apply to ALL categories",
+    "your_sku": {"type": "number", "description": "Your inventory SKU"},
+    "your_stock": {"type": "number", "description": "Current stock level"},
+    "your_price": {"type": "number", "description": "Your selling price in KSh"},
+    "source": {"type": "string", "description": "Where the data came from (size.name, manual, manufacturer catalog)"},
+    "date_added": {"type": "string", "description": "Date added to database"},
+    "verified": {"type": "boolean", "description": "Whether the specs have been verified"}
+  }
+}
