@@ -776,108 +776,149 @@
 
         // ===================== GITHUB AUTO-SYNC =====================
         async function autoSyncToGitHub(silent = false) {
-            let token = localStorage.getItem('github_token');
-            
-            if (!token) {
-                if (!silent) setupGitHubToken();
-                return false;
+    let token = localStorage.getItem('github_token');
+    
+    if (!token) {
+        if (!silent) setupGitHubToken();
+        return false;
+    }
+    
+    const syncBtn = document.getElementById('sync-btn');
+    const originalText = syncBtn ? syncBtn.innerHTML : '';
+    if (syncBtn) {
+        syncBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
+        syncBtn.disabled = true;
+    }
+    
+    try {
+        // First, verify token and get repository info
+        const repoCheck = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/vnd.github.v3+json'
             }
-            
-            if (!githubFilePath) {
-                if (!silent) {
-                    showToast('Run "Diagnose" first', 'info');
-                }
-                return false;
+        });
+        
+        if (!repoCheck.ok) {
+            const err = await repoCheck.json().catch(() => ({}));
+            throw new Error(`Repository error (${repoCheck.status}): ${err.message || 'Check owner/repo name'}`);
+        }
+        
+        const repoData = await repoCheck.json();
+        const defaultBranch = repoData.default_branch || 'main';
+        
+        console.log('Repository:', repoData.full_name);
+        console.log('Default branch:', defaultBranch);
+        console.log('Using branch:', GITHUB_BRANCH);
+        
+        // Get current file SHA (from the correct branch)
+        let sha = null;
+        const getUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/inventory_data.json?ref=${GITHUB_BRANCH}`;
+        
+        console.log('GET URL:', getUrl);
+        
+        const getRes = await fetch(getUrl, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/vnd.github.v3+json'
             }
+        });
+        
+        console.log('GET status:', getRes.status);
+        
+        if (getRes.ok) {
+            const fileData = await getRes.json();
+            sha = fileData.sha;
+            console.log('SHA found:', sha);
+        } else if (getRes.status === 404) {
+            console.log('File not found - will create new file');
+            sha = null;
+        } else {
+            const err = await getRes.json().catch(() => ({}));
+            throw new Error(`Cannot read file (${getRes.status}): ${err.message}`);
+        }
+        
+        // Prepare content
+        const jsonString = JSON.stringify(inventory, null, 2);
+        const encoder = new TextEncoder();
+        const bytes = encoder.encode(jsonString);
+        
+        // Convert to base64 properly
+        let binaryString = '';
+        bytes.forEach(byte => {
+            binaryString += String.fromCharCode(byte);
+        });
+        const content = btoa(binaryString);
+        
+        console.log('Content length:', jsonString.length, 'bytes');
+        console.log('Base64 length:', content.length);
+        
+        // PUT the update
+        const putUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/inventory_data.json`;
+        const putBody = {
+            message: `Update inventory (${inventory.length} items) - ${new Date().toLocaleString()}`,
+            content: content,
+            branch: GITHUB_BRANCH
+        };
+        if (sha) putBody.sha = sha;
+        
+        console.log('PUT URL:', putUrl);
+        console.log('Has SHA:', !!sha);
+        
+        const putRes = await fetch(putUrl, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(putBody)
+        });
+        
+        console.log('PUT status:', putRes.status);
+        
+        if (!putRes.ok) {
+            const err = await putRes.json().catch(() => ({}));
+            console.error('PUT error details:', err);
             
-            const syncBtn = document.getElementById('sync-btn');
-            const originalText = syncBtn ? syncBtn.innerHTML : '';
-            if (syncBtn) {
-                syncBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
-                syncBtn.disabled = true;
-            }
-            
-            try {
-                // Get current file SHA
-                let sha = null;
-                const getRes = await fetch(
-                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${githubFilePath}?ref=${GITHUB_BRANCH}`,
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Accept': 'application/vnd.github.v3+json',
-                            'X-GitHub-Api-Version': '2022-11-28'
-                        }
-                    }
-                );
-                
-                if (getRes.ok) {
-                    const fileData = await getRes.json();
-                    sha = fileData.sha;
-                } else if (getRes.status === 404) {
-                    sha = null;
-                } else if (getRes.status === 401 || getRes.status === 403) {
-                    throw new Error('Token invalid. Please re-configure.');
-                } else {
-                    throw new Error(`Cannot read file (${getRes.status})`);
-                }
-                
-                // Prepare content
-                const jsonString = JSON.stringify(inventory, null, 2);
-                const bytes = new TextEncoder().encode(jsonString);
-                const binaryString = bytes.reduce((acc, byte) => acc + String.fromCharCode(byte), '');
-                const content = btoa(binaryString);
-                
-                const putBody = {
-                    message: `Auto-sync: Update inventory (${inventory.length} items)`,
-                    content: content,
-                    branch: GITHUB_BRANCH
-                };
-                if (sha) putBody.sha = sha;
-                
-                const putRes = await fetch(
-                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${githubFilePath}`,
-                    {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Accept': 'application/vnd.github.v3+json',
-                            'Content-Type': 'application/json',
-                            'X-GitHub-Api-Version': '2022-11-28'
-                        },
-                        body: JSON.stringify(putBody)
-                    }
-                );
-                
-                if (!putRes.ok) {
-                    const err = await putRes.json().catch(() => ({}));
-                    throw new Error(err.message || `Sync failed (${putRes.status})`);
-                }
-                
-                // Success
-                localStorage.setItem('workshop_has_changes', 'false');
-                document.getElementById('sync-status').classList.add('hidden');
-                updateSyncSourceDisplay();
-                updateSyncButton();
-                dataSource = 'github';
-                
-                const now = new Date().toLocaleString();
-                document.getElementById('last-sync').textContent = `${inventory.length} items · Synced ${now}`;
-                
-                if (!silent) showToast('Synced to GitHub successfully!', 'success');
-                return true;
-                
-            } catch (error) {
-                console.error('Sync error:', error);
-                if (!silent) showToast('Sync failed: ' + error.message, 'error');
-                return false;
-            } finally {
-                if (syncBtn) {
-                    syncBtn.innerHTML = originalText;
-                    syncBtn.disabled = false;
-                }
+            if (putRes.status === 404) {
+                throw new Error(`File not found at path. Verify "inventory_data.json" exists in the root of your repository.`);
+            } else if (putRes.status === 409) {
+                throw new Error('Conflict - file was modified elsewhere. Please refresh and try again.');
+            } else if (putRes.status === 422) {
+                throw new Error(`Validation failed: ${err.message}. Check token has "repo" scope.`);
+            } else {
+                throw new Error(`Sync failed (${putRes.status}): ${err.message}`);
             }
         }
+        
+        // Success!
+        const result = await putRes.json();
+        console.log('Sync successful!', result.commit?.sha);
+        
+        localStorage.setItem('workshop_has_changes', 'false');
+        document.getElementById('sync-status').classList.add('hidden');
+        updateSyncSourceDisplay();
+        updateSyncButton();
+        dataSource = 'github';
+        
+        const now = new Date().toLocaleString();
+        document.getElementById('last-sync').textContent = `${inventory.length} items · Synced ${now}`;
+        
+        if (!silent) showToast('✅ Synced to GitHub!', 'success');
+        return true;
+        
+    } catch (error) {
+        console.error('Sync error:', error.message);
+        if (!silent) showToast('❌ ' + error.message, 'error');
+        return false;
+    } finally {
+        if (syncBtn) {
+            syncBtn.innerHTML = originalText;
+            syncBtn.disabled = false;
+        }
+    }
+}
 
         function setupGitHubToken() {
             const existingToken = localStorage.getItem('github_token');
