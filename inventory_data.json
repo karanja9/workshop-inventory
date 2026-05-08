@@ -1,1 +1,2558 @@
-[]
+[
+  {
+    "sku": 10000,
+    "name": "12649",
+    "description": "135, ford front small/ L200(out), probox,",
+    "category": "Bearings",
+    "price": 400,
+    "stock": 26,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10001,
+    "name": "11162/11300",
+    "category": "Bearings",
+    "description": "arrow",
+    "price": 750,
+    "stock": 8,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10002,
+    "name": "359S/354X",
+    "category": "Bearings",
+    "description": "arrow",
+    "price": 850,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10003,
+    "name": "2788",
+    "category": "Bearings",
+    "description": "arrow wheel bearing",
+    "price": 850,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10004,
+    "name": "32212",
+    "category": "Bearings",
+    "description": "baldan disc",
+    "price": 1200,
+    "stock": 24,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10005,
+    "name": "32210",
+    "category": "Bearings",
+    "description": "baldan disc",
+    "price": 1000,
+    "stock": 20,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10006,
+    "name": "32207",
+    "category": "Bearings",
+    "description": "baldan furrow wheel big",
+    "price": 700,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10007,
+    "name": "32206",
+    "category": "Bearings",
+    "description": "baldan/ nardi furrow wheel small",
+    "price": 600,
+    "stock": 48,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10008,
+    "name": "68149",
+    "category": "Bearings",
+    "description": "chambuli",
+    "price": 500,
+    "stock": 13,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10009,
+    "name": "12749",
+    "category": "Bearings",
+    "description": "chambuli (out)",
+    "price": 400,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10010,
+    "name": "44649",
+    "category": "Bearings",
+    "description": "datsun",
+    "price": 500,
+    "stock": 7,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10011,
+    "name": "11749",
+    "category": "Bearings",
+    "description": "datsun",
+    "price": 350,
+    "stock": 17,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10012,
+    "name": "32215",
+    "category": "Bearings",
+    "description": "FH",
+    "price": 1850,
+    "stock": 4,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10013,
+    "name": "32213",
+    "category": "Bearings",
+    "description": "FH back wheel",
+    "price": 1300,
+    "stock": 6,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10014,
+    "name": "11949",
+    "category": "Bearings",
+    "description": "ford front , 240",
+    "price": 400,
+    "stock": 8,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10015,
+    "name": "48548",
+    "category": "Bearings",
+    "description": "front wheel mf 135",
+    "price": 550,
+    "stock": 11,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10016,
+    "name": "67048",
+    "category": "Bearings",
+    "description": "fugerson  front",
+    "price": 500,
+    "stock": 15,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10017,
+    "name": "25590",
+    "category": "Bearings",
+    "description": "fugerson front",
+    "price": 1000,
+    "stock": 17,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10018,
+    "name": "0.09067",
+    "category": "Bearings",
+    "description": "furgerson furrow wheel",
+    "price": 500,
+    "stock": 21,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10019,
+    "name": "15123",
+    "category": "Bearings",
+    "description": "furgerson furrow wheel",
+    "price": 500,
+    "stock": 16,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10020,
+    "name": "GUT21",
+    "category": "Bearings",
+    "description": "Hilux diesel",
+    "price": 900,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10021,
+    "name": "32006",
+    "category": "Bearings",
+    "description": "kingpin",
+    "price": 500,
+    "stock": 32,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10022,
+    "name": "3984",
+    "category": "Bearings",
+    "description": "mersey plough disc big",
+    "price": 1350,
+    "stock": 8,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10023,
+    "name": "3782",
+    "category": "Bearings",
+    "description": "mersey plough disc small",
+    "price": 1000,
+    "stock": 24,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10024,
+    "name": "32209",
+    "category": "Bearings",
+    "description": "nardi",
+    "price": 800,
+    "stock": 11,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10025,
+    "name": "32214",
+    "category": "Bearings",
+    "description": "nardi",
+    "price": 1400,
+    "stock": 11,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10026,
+    "name": "32207",
+    "category": "Bearings",
+    "description": "nardi furrow wheel bearing (big)",
+    "price": 700,
+    "stock": 34,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10027,
+    "name": "30306",
+    "category": "Bearings",
+    "description": "nardi furrow wheel bearing (small)",
+    "price": 700,
+    "stock": 17,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10028,
+    "name": "arrow 208",
+    "category": "Bearings",
+    "description": "ndume",
+    "price": 1300,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10029,
+    "name": "603049",
+    "category": "Bearings",
+    "description": "nissan navara",
+    "price": 850,
+    "stock": 9,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10030,
+    "name": "6206",
+    "category": "Bearings",
+    "description": "planter,",
+    "price": 500,
+    "stock": 32,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10031,
+    "name": "1988",
+    "category": "Bearings",
+    "description": "t55 front bearing (small)",
+    "price": 700,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10032,
+    "name": "501349",
+    "category": "Bearings",
+    "description": "t55 front wheel bearing (big)",
+    "price": 700,
+    "stock": 17,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10033,
+    "name": "84548",
+    "category": "Bearings",
+    "description": "tt55 front",
+    "price": 750,
+    "stock": 13,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10034,
+    "name": "205",
+    "category": "Bearings",
+    "description": "",
+    "price": 650,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10035,
+    "name": "206",
+    "category": "Bearings",
+    "description": "",
+    "price": 850,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10036,
+    "name": "208",
+    "category": "Bearings",
+    "description": "",
+    "price": 1250,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10037,
+    "name": "209",
+    "category": "Bearings",
+    "description": "",
+    "price": 1500,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10038,
+    "name": "3490",
+    "category": "Bearings",
+    "description": "",
+    "price": 1350,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10039,
+    "name": "3780",
+    "category": "Bearings",
+    "description": "",
+    "price": 1000,
+    "stock": 38,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10040,
+    "name": "6007",
+    "category": "Bearings",
+    "description": "",
+    "price": 450,
+    "stock": 3,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10041,
+    "name": "6008",
+    "category": "Bearings",
+    "description": "",
+    "price": 750,
+    "stock": 15,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10042,
+    "name": "6009",
+    "category": "Bearings",
+    "description": "",
+    "price": 850,
+    "stock": 2,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10043,
+    "name": "6200",
+    "category": "Bearings",
+    "description": "",
+    "price": 150,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10044,
+    "name": "6201",
+    "category": "Bearings",
+    "description": "",
+    "price": 150,
+    "stock": 3,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10045,
+    "name": "6202",
+    "category": "Bearings",
+    "description": "",
+    "price": 200,
+    "stock": 8,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10046,
+    "name": "6203",
+    "category": "Bearings",
+    "description": "",
+    "price": 200,
+    "stock": 12,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10047,
+    "name": "6204",
+    "category": "Bearings",
+    "description": "",
+    "price": 300,
+    "stock": 27,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10048,
+    "name": "6205",
+    "category": "Bearings",
+    "description": "",
+    "price": 400,
+    "stock": 44,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10049,
+    "name": "6207",
+    "category": "Bearings",
+    "description": "",
+    "price": 700,
+    "stock": 25,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10050,
+    "name": "6208",
+    "category": "Bearings",
+    "description": "",
+    "price": 800,
+    "stock": 4,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10051,
+    "name": "6209",
+    "category": "Bearings",
+    "description": "",
+    "price": 1200,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10052,
+    "name": "6210",
+    "category": "Bearings",
+    "description": "",
+    "price": 1500,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10053,
+    "name": "6300",
+    "category": "Bearings",
+    "description": "",
+    "price": 150,
+    "stock": 2,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10054,
+    "name": "6301",
+    "category": "Bearings",
+    "description": "",
+    "price": 150,
+    "stock": 4,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10055,
+    "name": "6302",
+    "category": "Bearings",
+    "description": "",
+    "price": 300,
+    "stock": 25,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10056,
+    "name": "6303",
+    "category": "Bearings",
+    "description": "",
+    "price": 250,
+    "stock": 19,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10057,
+    "name": "6304",
+    "category": "Bearings",
+    "description": "",
+    "price": 300,
+    "stock": 23,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10058,
+    "name": "6305",
+    "category": "Bearings",
+    "description": "",
+    "price": 400,
+    "stock": 20,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10059,
+    "name": "6306",
+    "category": "Bearings",
+    "description": "",
+    "price": 600,
+    "stock": 12,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10060,
+    "name": "6307",
+    "category": "Bearings",
+    "description": "",
+    "price": 700,
+    "stock": 14,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10061,
+    "name": "6308",
+    "category": "Bearings",
+    "description": "",
+    "price": 800,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10062,
+    "name": "6309",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 2,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10064,
+    "name": "17887",
+    "category": "Bearings",
+    "description": "",
+    "price": 850,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10065,
+    "name": "18690",
+    "category": "Bearings",
+    "description": "",
+    "price": 800,
+    "stock": 4,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10066,
+    "name": "25580",
+    "category": "Bearings",
+    "description": "",
+    "price": 950,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10067,
+    "name": "29585",
+    "category": "Bearings",
+    "description": "",
+    "price": 1150,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10068,
+    "name": "29620",
+    "category": "Bearings",
+    "description": "",
+    "price": 1200,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10069,
+    "name": "29685",
+    "category": "Bearings",
+    "description": "",
+    "price": 1150,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10070,
+    "name": "30204",
+    "category": "Bearings",
+    "description": "",
+    "price": 400,
+    "stock": 9,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10071,
+    "name": "30205",
+    "category": "Bearings",
+    "description": "",
+    "price": 500,
+    "stock": 6,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10072,
+    "name": "30206",
+    "category": "Bearings",
+    "description": "",
+    "price": 500,
+    "stock": 6,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10073,
+    "name": "30305",
+    "category": "Bearings",
+    "description": "",
+    "price": 750,
+    "stock": 3,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10074,
+    "name": "30307",
+    "category": "Bearings",
+    "description": "",
+    "price": 1000,
+    "stock": 6,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10075,
+    "name": "30308",
+    "category": "Bearings",
+    "description": "",
+    "price": 1200,
+    "stock": 13,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10076,
+    "name": "32007",
+    "category": "Bearings",
+    "description": "",
+    "price": 650,
+    "stock": 2,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10077,
+    "name": "32208",
+    "category": "Bearings",
+    "description": "",
+    "price": 750,
+    "stock": 3,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10078,
+    "name": "32211",
+    "category": "Bearings",
+    "description": "",
+    "price": 1250,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10079,
+    "name": "69349",
+    "category": "Bearings",
+    "description": "",
+    "price": 600,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10080,
+    "name": "86610",
+    "category": "Bearings",
+    "description": "",
+    "price": 1000,
+    "stock": 4,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10081,
+    "name": "104910/48",
+    "category": "Bearings",
+    "description": "",
+    "price": 800,
+    "stock": 12,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10082,
+    "name": "1988/22",
+    "category": "Bearings",
+    "description": "",
+    "price": 700,
+    "stock": 20,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10083,
+    "name": "207(Harv.)207",
+    "category": "Bearings",
+    "description": "",
+    "price": 1000,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10084,
+    "name": "3030D",
+    "category": "Bearings",
+    "description": "",
+    "price": 500,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10085,
+    "name": "6004koyo",
+    "category": "Bearings",
+    "description": "",
+    "price": 250,
+    "stock": 18,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10086,
+    "name": "arrow 211",
+    "category": "Bearings",
+    "description": "",
+    "price": 1800,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10087,
+    "name": "baldan seal disc",
+    "category": "Bearings",
+    "description": "",
+    "price": 500,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10088,
+    "name": "furrow wheel seal B",
+    "category": "Bearings",
+    "description": "",
+    "price": 500,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10089,
+    "name": "GU1000",
+    "category": "Bearings",
+    "description": "",
+    "price": 850,
+    "stock": 6,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10090,
+    "name": "GU1100",
+    "category": "Bearings",
+    "description": "",
+    "price": 800,
+    "stock": 7,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10091,
+    "name": "GUIS52",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 2,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10092,
+    "name": "GUIS56",
+    "category": "Bearings",
+    "description": "",
+    "price": 700,
+    "stock": 13,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10093,
+    "name": "GUM87",
+    "category": "Bearings",
+    "description": "",
+    "price": 750,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10094,
+    "name": "GUN-28",
+    "category": "Bearings",
+    "description": "",
+    "price": 500,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10095,
+    "name": "GUN24",
+    "category": "Bearings",
+    "description": "",
+    "price": 600,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10096,
+    "name": "GUN27",
+    "category": "Bearings",
+    "description": "",
+    "price": 650,
+    "stock": 7,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10097,
+    "name": "GUN46",
+    "category": "Bearings",
+    "description": "",
+    "price": 700,
+    "stock": 6,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10098,
+    "name": "GUT12",
+    "category": "Bearings",
+    "description": "",
+    "price": 650,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20000,
+    "name": "6310",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 2,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20001,
+    "name": "GUM94",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 2,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20002,
+    "name": "6002",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 11,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20003,
+    "name": "6001",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 9,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20004,
+    "name": "6003",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 11,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20005,
+    "name": "6005",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 14,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20006,
+    "name": "6006",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20007,
+    "name": "29749",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20008,
+    "name": "102949",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 9,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20009,
+    "name": "29586",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 12,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20010,
+    "name": "29584",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 3,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20011,
+    "name": "28680",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 2,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20012,
+    "name": "32009",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 13,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20013,
+    "name": "30303",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 4,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20014,
+    "name": "30310",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 3,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20015,
+    "name": "32308",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 6,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20016,
+    "name": "39520",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 3,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20017,
+    "name": "30208",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20018,
+    "name": "30213",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 3,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20019,
+    "name": "30210",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20020,
+    "name": "32216",
+    "category": "Bearings",
+    "description": "",
+    "price": 0,
+    "stock": 3,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20021,
+    "name": "38bwd22",
+    "category": "Bearings",
+    "description": "",
+    "price": 1000,
+    "stock": 3,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20022,
+    "name": "40bwd17",
+    "category": "Bearings",
+    "description": "",
+    "price": 1000,
+    "stock": 1,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20023,
+    "name": "3871",
+    "category": "Bearings",
+    "description": "",
+    "price": 1000,
+    "stock": 1,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10099,
+    "name": "baldan spring black",
+    "category": "Plough & Agricultural Parts",
+    "description": "",
+    "price": 1000,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10100,
+    "name": "stones",
+    "category": "Plough & Agricultural Parts",
+    "description": "",
+    "price": 500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10101,
+    "name": "green spring",
+    "category": "Plough & Agricultural Parts",
+    "description": "",
+    "price": 1300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10102,
+    "name": "red cap  mf",
+    "category": "Plough & Agricultural Parts",
+    "description": "",
+    "price": 500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10103,
+    "name": "green cap nardi",
+    "category": "Plough & Agricultural Parts",
+    "description": "",
+    "price": 500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10104,
+    "name": "shaft nardi green",
+    "category": "Plough & Agricultural Parts",
+    "description": "",
+    "price": 3500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10105,
+    "name": "baldan furrow whel black",
+    "category": "Plough & Agricultural Parts",
+    "description": "",
+    "price": 1000,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10106,
+    "name": "clutch kit down 30054",
+    "category": "Transmission & Drivetrain",
+    "description": "nissan",
+    "price": 4500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10107,
+    "name": "clutch kit up 22040",
+    "category": "Transmission & Drivetrain",
+    "description": "nissan",
+    "price": 3500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10108,
+    "name": "air cleaner 21030",
+    "category": "Filters",
+    "description": "probox",
+    "price": 350,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10109,
+    "name": "air filter 11090",
+    "category": "Filters",
+    "description": "gtouring",
+    "price": 400,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10110,
+    "name": "RC 81501 clutch down",
+    "category": "Transmission & Drivetrain",
+    "description": "Isuzu 4.3",
+    "price": 500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10111,
+    "name": "RC 80471 clutch up",
+    "category": "Transmission & Drivetrain",
+    "description": "Isuzu 4.3",
+    "price": 400,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10112,
+    "name": "30100 clutch down. green",
+    "category": "Transmission & Drivetrain",
+    "description": "gtouring, fh, fuso",
+    "price": 300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10113,
+    "name": "22040 clutch kit up",
+    "category": "Transmission & Drivetrain",
+    "description": "gtouring",
+    "price": 400,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10114,
+    "name": "30054 clutch down. red",
+    "category": "Transmission & Drivetrain",
+    "description": "probox",
+    "price": 300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10115,
+    "name": "(seal)75*107*8",
+    "category": "Seals & Gaskets",
+    "description": "probox crankshaft seal",
+    "price": 600,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10116,
+    "name": "(seal)27.5*37*5",
+    "category": "Seals & Gaskets",
+    "description": "small crankshaft seal",
+    "price": 300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10117,
+    "name": "(seal)54*",
+    "category": "Seals & Gaskets",
+    "description": "gearbox probox",
+    "price": 300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10118,
+    "name": "alternator probox belt 4pk1200, 3pk930",
+    "category": "Electrical Parts",
+    "description": "probox",
+    "price": 400,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10119,
+    "name": "steering belt 3pk825 3pk830",
+    "category": "Steering & Suspension",
+    "description": "probox",
+    "price": 300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10120,
+    "name": "charging belt 4pk930 4pk1070",
+    "category": "Electrical Parts",
+    "description": "probox",
+    "price": 400,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10121,
+    "name": "11115-37030(1az)",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10122,
+    "name": "11115-28012(2az)",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1600,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10123,
+    "name": "11115-11010",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1200,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10124,
+    "name": "11044-H3901 A12-120Y",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1100,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10125,
+    "name": "E13 11044-01M00",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10126,
+    "name": "11116-20051 (2ZR)",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1700,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10127,
+    "name": "11115-11010 2E",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1200,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10128,
+    "name": "11115-54070 5L",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1800,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10129,
+    "name": "11044-53Y00 GA14",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10130,
+    "name": "1NZ-FE 2NZ-FE",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 600,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10131,
+    "name": "5AFE",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1200,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10132,
+    "name": "1NR",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10133,
+    "name": "GA15",
+    "category": "Seals & Gaskets",
+    "description": "sunny",
+    "price": 850,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10134,
+    "name": "1Y 2Y 3Y",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1400,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10135,
+    "name": "4E",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1200,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10136,
+    "name": "1ZZ",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1600,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10137,
+    "name": "3SZ vitz",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10138,
+    "name": "Nissan A12",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1000,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10139,
+    "name": "3Y",
+    "category": "Seals & Gaskets",
+    "description": "",
+    "price": 1400,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10140,
+    "name": "3638845M1 M31200",
+    "category": "Seals & Gaskets",
+    "description": "390/165",
+    "price": 2000,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10141,
+    "name": "lotus 2764",
+    "category": "Brake Parts",
+    "description": "new probox",
+    "price": 1000,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10142,
+    "name": "KD2764",
+    "category": "Brake Parts",
+    "description": "new probox",
+    "price": 1000,
+    "stock": 2,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10143,
+    "name": "KD1735",
+    "category": "Brake Parts",
+    "description": "xtrail",
+    "price": 1500,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10144,
+    "name": "394wk",
+    "category": "Brake Parts",
+    "description": "old caldina",
+    "price": 1500,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20024,
+    "name": "kd2780",
+    "category": "Brake Parts",
+    "description": "premio1.3/voxy",
+    "price": 0,
+    "stock": 9,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20025,
+    "name": "kd2770",
+    "category": "Brake Parts",
+    "description": "noah",
+    "price": 0,
+    "stock": 8,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20026,
+    "name": "kd2605",
+    "category": "Brake Parts",
+    "description": "7l",
+    "price": 0,
+    "stock": 6,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20027,
+    "name": "kd2726",
+    "category": "Brake Parts",
+    "description": "nze",
+    "price": 0,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20028,
+    "name": "kd2754",
+    "category": "Brake Parts",
+    "description": "probox",
+    "price": 700,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20029,
+    "name": "kd2701",
+    "category": "Brake Parts",
+    "description": "",
+    "price": 0,
+    "stock": 11,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20030,
+    "name": "kd2776",
+    "category": "Brake Parts",
+    "description": "102",
+    "price": 0,
+    "stock": 9,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20031,
+    "name": "kd2526",
+    "category": "Brake Parts",
+    "description": "",
+    "price": 0,
+    "stock": 7,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20032,
+    "name": "kd3732",
+    "category": "Brake Parts",
+    "description": "passio",
+    "price": 0,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20033,
+    "name": "kd4718",
+    "category": "Brake Parts",
+    "description": "rush",
+    "price": 1350,
+    "stock": 1,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20034,
+    "name": "kd2689",
+    "category": "Brake Parts",
+    "description": "",
+    "price": 0,
+    "stock": 1,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10145,
+    "name": "me 014838",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 500,
+    "stock": 2,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10146,
+    "name": "me036478 sf 1020",
+    "category": "Fuel Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10147,
+    "name": "me034611",
+    "category": "Oil Filters",
+    "description": "FH",
+    "price": 1000,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10148,
+    "name": "digue 8-97148270-0",
+    "category": "Oil Filters",
+    "description": "ftr",
+    "price": 1000,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10149,
+    "name": "3096 (8-98165071-0)",
+    "category": "Oil Filters",
+    "description": "isuzu dmax b5",
+    "price": 500,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10150,
+    "name": "FLF 8113 CAV296",
+    "category": "Fuel Filters",
+    "description": "ford, mf395",
+    "price": 400,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10151,
+    "name": "Perkins  2654403 oil",
+    "category": "Oil Filters",
+    "description": "mf390, 385, 390, 365",
+    "price": 1000,
+    "stock": 4,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10152,
+    "name": "Perkins 2654407",
+    "category": "Oil Filters",
+    "description": "mf399",
+    "price": 1500,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10153,
+    "name": "pfl 2024",
+    "category": "Oil Filters",
+    "description": "nissan isuzu",
+    "price": 0,
+    "stock": 1,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10154,
+    "name": "agristar/cnh",
+    "category": "Oil Filters",
+    "description": "oil filter for case75,",
+    "price": 2000,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10155,
+    "name": "7111.796",
+    "category": "Fuel Filters",
+    "description": "",
+    "price": 500,
+    "stock": 6,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10156,
+    "name": "sf 1004",
+    "category": "Filters",
+    "description": "isuzu tx55 ftr fvr",
+    "price": 1500,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10157,
+    "name": "90915/10001",
+    "category": "Oil Filters",
+    "description": "small toyotas",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10158,
+    "name": "23390-0L070.",
+    "category": "Fuel Filters",
+    "description": "new figo",
+    "price": 650,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10159,
+    "name": "ph8 / expert",
+    "category": "Oil Filters",
+    "description": "sonalika, Hilux ,165, 440, 390, 395, 390",
+    "price": 600,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10160,
+    "name": "expert 711-796, CAV796",
+    "category": "Fuel Filters",
+    "description": "440, 390,165, 365",
+    "price": 500,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10161,
+    "name": "15209-2w200",
+    "category": "Filters",
+    "description": "",
+    "price": 1100,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10162,
+    "name": "16510-73000",
+    "category": "Oil Filters",
+    "description": "suzuki FL/F",
+    "price": 0,
+    "stock": 3,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10163,
+    "name": "me 006066 3073",
+    "category": "Fuel Filters",
+    "description": "440, 390,165",
+    "price": 0,
+    "stock": 6,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10164,
+    "name": "23390-0L010",
+    "category": "Fuel Filters",
+    "description": "figo(pick up),dmax, chopper",
+    "price": 500,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10165,
+    "name": "90915-03002/pfl3065",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 500,
+    "stock": 11,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10166,
+    "name": "me036478",
+    "category": "Fuel Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10167,
+    "name": "15208-w1116",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 4,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10168,
+    "name": "FLF 8117 (23390-0L041)",
+    "category": "Fuel Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10169,
+    "name": "16510-73002",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10170,
+    "name": "97288947(8-97288947-0)",
+    "category": "Fuel Filters",
+    "description": "isuzu dmax",
+    "price": 0,
+    "stock": 1,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10171,
+    "name": "04152-37010",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10172,
+    "name": "mb 220900",
+    "category": "Fuel Filters",
+    "description": "",
+    "price": 700,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10173,
+    "name": "md 135737",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 500,
+    "stock": 7,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10174,
+    "name": "me035393",
+    "category": "Fuel Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10175,
+    "name": "md 135737 pfl-3081",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10176,
+    "name": "16403-59E00",
+    "category": "Fuel Filters",
+    "description": "",
+    "price": 0,
+    "stock": 1,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10177,
+    "name": "me 013307",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10178,
+    "name": "PFF 3013",
+    "category": "Fuel Filters",
+    "description": "isuzu 3.3 3.6",
+    "price": 0,
+    "stock": 4,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10179,
+    "name": "15208-65f00",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 5,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10180,
+    "name": "23303-64010",
+    "category": "Fuel Filters",
+    "description": "nissan pickup",
+    "price": 7,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10181,
+    "name": "cv500 diesel",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10182,
+    "name": "15208-65f00 (63063)",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10183,
+    "name": "me014833",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10184,
+    "name": "me 001445 PFL-3004",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 2,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10185,
+    "name": "15208-H8916(3002)",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 3,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10186,
+    "name": "04152-3810",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10187,
+    "name": "v836339371 agco",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10188,
+    "name": "15208-13212",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10189,
+    "name": "84259320 cnh",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 1,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10190,
+    "name": "me084641 SL 2144",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 1,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10191,
+    "name": "1909102-1 siato",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10192,
+    "name": "element sl 2038",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10193,
+    "name": "me013343",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10194,
+    "name": "8-973587200 siato",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 1,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10195,
+    "name": "90915-30002(03006)",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 0,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20035,
+    "name": "26561117 Perkins",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 4,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20036,
+    "name": "04152-38010",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 1,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20037,
+    "name": "31440-12030",
+    "category": "Oil Filters",
+    "description": "",
+    "price": 0,
+    "stock": 2,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20038,
+    "name": "FLF8114",
+    "category": "Fuel Filters",
+    "description": "",
+    "price": 0,
+    "stock": 12,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 20039,
+    "name": "v836339371",
+    "category": "Fuel Filters",
+    "description": "",
+    "price": 0,
+    "stock": 3,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10196,
+    "name": "lubricant type",
+    "category": "Lubricants & Fluids",
+    "description": "",
+    "price": 100,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10197,
+    "name": "rimulaR3",
+    "category": "Lubricants & Fluids",
+    "description": "",
+    "price": 3100,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10198,
+    "name": "powerex40",
+    "category": "Lubricants & Fluids",
+    "description": "",
+    "price": 1500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10199,
+    "name": "powerex37",
+    "category": "Lubricants & Fluids",
+    "description": "",
+    "price": 1500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10200,
+    "name": "OG",
+    "category": "Lubricants & Fluids",
+    "description": "",
+    "price": 2000,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10201,
+    "name": "r4",
+    "category": "Lubricants & Fluids",
+    "description": "",
+    "price": 4000,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10202,
+    "name": "T7400",
+    "category": "Lubricants & Fluids",
+    "description": "",
+    "price": 3300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10203,
+    "name": "atf4l",
+    "category": "Lubricants & Fluids",
+    "description": "",
+    "price": 2700,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10204,
+    "name": "lacheka40",
+    "category": "Lubricants & Fluids",
+    "description": "",
+    "price": 1500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10205,
+    "name": "motor honey",
+    "category": "Lubricants & Fluids",
+    "description": "",
+    "price": 300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10206,
+    "name": "telus",
+    "category": "Lubricants & Fluids",
+    "description": "",
+    "price": 2700,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10207,
+    "name": "Bolt 22 1.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 100,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10208,
+    "name": "Bolt 22 2.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 100,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10209,
+    "name": "Bolt 22 3.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 150,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10210,
+    "name": "Bolt 22 4.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 200,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10211,
+    "name": "Bolt 22 5.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 250,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10212,
+    "name": "Bolt 22 6.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10213,
+    "name": "Bolt 24 2.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 100,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10214,
+    "name": "Bolt 24 3.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 150,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10215,
+    "name": "Bolt 24 4.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 200,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10216,
+    "name": "Bolt 24 5.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 250,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10217,
+    "name": "Bolt 24 6.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10218,
+    "name": "Bolt 24 7.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 350,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10219,
+    "name": "Bolt 27 8.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 400,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10220,
+    "name": "Bolt 27 9.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 450,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10221,
+    "name": "Bolt  2.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 150,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10222,
+    "name": "Bolt 28 3.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 200,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10223,
+    "name": "Bolt 28 4.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 250,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10224,
+    "name": "Bolt 28 5.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10225,
+    "name": "Bolt 28 6.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 350,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10226,
+    "name": "Bolt 30 2.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 200,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10227,
+    "name": "Bolt 30 3.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 250,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10228,
+    "name": "Bolt 30 4.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10229,
+    "name": "Bolt 30 5.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 350,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10230,
+    "name": "Bolt 30 6.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 400,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10231,
+    "name": "Bolt 30 7.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 450,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10232,
+    "name": "Bolt  8.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10233,
+    "name": "Bolt  9.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 550,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10234,
+    "name": "Bolt 32 2.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 200,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10235,
+    "name": "Bolt 32 3.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 300,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10236,
+    "name": "Bolt 32 4.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 350,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10237,
+    "name": "Bolt 32 5.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 400,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10238,
+    "name": "Bolt 32 6.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 450,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10239,
+    "name": "Bolt  7.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 500,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10240,
+    "name": "Bolt  8.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 550,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10241,
+    "name": "Bolt  9.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 800,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10242,
+    "name": "Bolt baldan",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 1000,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10243,
+    "name": "Bolt 36 3.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 450,
+    "stock": 10,
+    "low_stock_threshold": 2
+  },
+  {
+    "sku": 10244,
+    "name": "Bolt  4.0",
+    "category": "Bolts & Fasteners",
+    "description": "",
+    "price": 550,
+    "stock": 10,
+    "low_stock_threshold": 2
+  }
+]
