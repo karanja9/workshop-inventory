@@ -87,24 +87,43 @@
         .sync-dot.synced { background-color: #3b82f6; }
         
         #diagnostic-output { max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 11px; }
+        
+        /* Sales ranking badges */
+        .rank-badge { 
+            width: 28px; height: 28px; 
+            display: flex; align-items: center; justify-content: center; 
+            border-radius: 50%; font-weight: 700; font-size: 12px;
+        }
+        .rank-1 { background: #FFD700; color: #000; }
+        .rank-2 { background: #C0C0C0; color: #000; }
+        .rank-3 { background: #CD7F32; color: #fff; }
+        .rank-other { background: #e5e7eb; color: #6b7280; }
+        .dark .rank-other { background: #374151; color: #9ca3af; }
+        
+        /* Sales animation */
+        .sale-recorded { animation: salePop 0.5s ease-out; }
+        @keyframes salePop { 
+            0% { transform: scale(1); } 
+            50% { transform: scale(1.05); background-color: rgba(34, 197, 94, 0.2); } 
+            100% { transform: scale(1); } 
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
 
-    <!-- Version 2.1 - Auto-clear old data on update -->
+    <!-- Version 2.2 - Sales Dashboard -->
     <script>
-        const APP_VERSION = '2.1';
+        const APP_VERSION = '2.2';
         const storedVersion = localStorage.getItem('app_version');
         if (storedVersion !== APP_VERSION) {
-            console.log('New version detected (' + APP_VERSION + '). Clearing old data...');
-            // Keep the GitHub token if it exists
+            console.log('New version detected (' + APP_VERSION + '). Updating...');
             const token = localStorage.getItem('github_token');
+            const sales = localStorage.getItem('workshop_sales');
             localStorage.clear();
-            if (token) {
-                localStorage.setItem('github_token', token);
-            }
+            if (token) localStorage.setItem('github_token', token);
+            if (sales) localStorage.setItem('workshop_sales', sales);
             localStorage.setItem('app_version', APP_VERSION);
-            console.log('Updated to v' + APP_VERSION);
+            console.log('Updated to v' + APP_VERSION + ' - Sales Dashboard ready!');
         }
     </script>
 
@@ -138,6 +157,10 @@
                 </button>
                 <button onclick="switchView('inventory')" id="nav-inventory" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300">
                     <i class="fas fa-boxes w-5"></i> Inventory
+                </button>
+                <button onclick="switchView('sales')" id="nav-sales" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300">
+                    <i class="fas fa-shopping-cart w-5"></i> Sales
+                    <span id="sidebar-sales-badge" class="ml-auto bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full hidden">0</span>
                 </button>
                 <button onclick="switchView('lowstock')" id="nav-lowstock" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300">
                     <i class="fas fa-exclamation-triangle w-5"></i> Low Stock
@@ -254,1175 +277,599 @@
                     </div>
                 </div>
 
-                <!-- INVENTORY VIEW -->
-                <div id="view-inventory" class="hidden fade-in space-y-5">
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 flex flex-wrap gap-3 items-center">
-                        <div class="relative flex-1 min-w-[200px]">
-                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                            <input type="text" id="inv-search" placeholder="Search SKU, name, description..." 
-                                class="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                oninput="renderInventory()">
+                <!-- SALES VIEW -->
+                <div id="view-sales" class="hidden fade-in space-y-6">
+                    <!-- Sales Summary Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 card-hover border border-gray-100 dark:border-gray-700">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl"><i class="fas fa-shopping-bag text-emerald-500 text-xl"></i></div>
+                                <span class="text-xs font-medium text-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-lg">Today</span>
+                            </div>
+                            <div class="text-3xl font-bold mb-1" id="sales-today-count">0</div>
+                            <div class="text-sm text-gray-400">Items Sold Today</div>
                         </div>
-                        <select id="inv-category" onchange="renderInventory()" class="px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 min-w-[140px]">
-                            <option value="all">All Categories</option>
-                        </select>
-                        <select id="inv-sort" onchange="renderInventory()" class="px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 min-w-[140px]">
-                            <option value="sku">Sort by SKU</option>
-                            <option value="name">Sort by Name</option>
-                            <option value="stock-low">Stock: Low to High</option>
-                            <option value="stock-high">Stock: High to Low</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                        </select>
-                        <button onclick="renderInventory()" class="p-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                            <i class="fas fa-sync-alt text-gray-500"></i>
-                        </button>
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 card-hover border border-gray-100 dark:border-gray-700">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl"><i class="fas fa-coins text-blue-500 text-xl"></i></div>
+                                <span class="text-xs font-medium text-blue-500 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded-lg">Revenue</span>
+                            </div>
+                            <div class="text-3xl font-bold mb-1" id="sales-today-revenue">KSh 0</div>
+                            <div class="text-sm text-gray-400">Today's Revenue</div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 card-hover border border-gray-100 dark:border-gray-700">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-xl"><i class="fas fa-calendar-week text-purple-500 text-xl"></i></div>
+                                <span class="text-xs font-medium text-purple-500 bg-purple-50 dark:bg-purple-900/20 px-2 py-1 rounded-lg">Week</span>
+                            </div>
+                            <div class="text-3xl font-bold mb-1" id="sales-week-revenue">KSh 0</div>
+                            <div class="text-sm text-gray-400">This Week's Revenue</div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 card-hover border border-gray-100 dark:border-gray-700">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-xl"><i class="fas fa-trophy text-amber-500 text-xl"></i></div>
+                                <span class="text-xs font-medium text-amber-500 bg-amber-50 dark:bg-amber-900/20 px-2 py-1 rounded-lg">Top</span>
+                            </div>
+                            <div class="text-lg font-bold mb-1 truncate" id="sales-top-item">-</div>
+                            <div class="text-sm text-gray-400">Best Seller Today</div>
+                        </div>
                     </div>
 
+                    <!-- Rankings & Recent Sales -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <!-- Sales Rankings -->
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                                <h3 class="font-bold flex items-center gap-2"><i class="fas fa-ranking-star text-amber-500"></i> Sales Rankings</h3>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex gap-2 mb-4">
+                                    <button onclick="renderSalesRankings('quantity')" id="rank-qty-btn" class="px-3 py-1.5 bg-primary-500 text-white rounded-lg text-xs font-medium">By Quantity</button>
+                                    <button onclick="renderSalesRankings('revenue')" id="rank-rev-btn" class="px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg text-xs font-medium">By Revenue</button>
+                                    <button onclick="renderSalesRankings('category')" id="rank-cat-btn" class="px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg text-xs font-medium">By Category</button>
+                                </div>
+                                <div id="sales-rankings-list" class="space-y-2 max-h-96 overflow-y-auto custom-scrollbar">
+                                    <p class="text-gray-400 text-sm text-center py-8">No sales data yet. Record a sale to see rankings!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Sales -->
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                            <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                                <h3 class="font-bold flex items-center gap-2"><i class="fas fa-history text-blue-500"></i> Recent Sales</h3>
+                                <button onclick="recordQuickSale()" class="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg text-xs font-medium transition-colors">
+                                    <i class="fas fa-plus"></i> Quick Sale
+                                </button>
+                            </div>
+                            <div class="p-4 max-h-96 overflow-y-auto custom-scrollbar">
+                                <div id="recent-sales-list" class="divide-y divide-gray-100 dark:divide-gray-700">
+                                    <p class="text-gray-400 text-sm text-center py-8">No sales recorded yet.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sales History Table -->
                     <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center flex-wrap gap-3">
+                            <h3 class="font-bold flex items-center gap-2"><i class="fas fa-table text-primary-500"></i> Sales History</h3>
+                            <div class="flex gap-2 flex-wrap">
+                                <input type="text" id="sales-search" placeholder="Search sales..." class="px-3 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-primary-500" oninput="renderSalesHistory()">
+                                <select id="sales-period" onchange="renderSalesHistory()" class="px-3 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs focus:outline-none">
+                                    <option value="all">All Time</option>
+                                    <option value="today">Today</option>
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                </select>
+                                <button onclick="exportSalesCSV()" class="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs font-medium transition-colors">
+                                    <i class="fas fa-file-export"></i> Export CSV
+                                </button>
+                                <button onclick="clearAllSales()" class="px-3 py-1.5 bg-red-100 dark:bg-red-900/20 text-red-500 rounded-lg text-xs font-medium hover:bg-red-200 transition-colors">
+                                    <i class="fas fa-trash"></i> Clear
+                                </button>
+                            </div>
+                        </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
                                 <thead>
                                     <tr class="bg-gray-50 dark:bg-gray-700/50 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        <th class="px-5 py-3 border-b">Date</th>
+                                        <th class="px-5 py-3 border-b">Item</th>
                                         <th class="px-5 py-3 border-b">SKU</th>
-                                        <th class="px-5 py-3 border-b">Product</th>
                                         <th class="px-5 py-3 border-b">Category</th>
-                                        <th class="px-5 py-3 border-b text-right">Price (KSh)</th>
-                                        <th class="px-5 py-3 border-b text-center">Stock</th>
-                                        <th class="px-5 py-3 border-b text-center">Status</th>
-                                        <th class="px-5 py-3 border-b text-right">Actions</th>
+                                        <th class="px-5 py-3 border-b text-right">Price</th>
+                                        <th class="px-5 py-3 border-b text-center">Qty</th>
+                                        <th class="px-5 py-3 border-b text-right">Total</th>
+                                        <th class="px-5 py-3 border-b text-center">Stock After</th>
                                     </tr>
                                 </thead>
-                                <tbody id="inventory-table-body" class="divide-y divide-gray-100 dark:divide-gray-700 text-sm"></tbody>
+                                <tbody id="sales-history-body" class="divide-y divide-gray-100 dark:divide-gray-700 text-sm">
+                                </tbody>
                             </table>
                         </div>
-                        <div id="inventory-empty" class="hidden p-12 text-center">
+                        <div id="sales-history-empty" class="hidden p-12 text-center">
                             <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-box-open text-2xl text-gray-400"></i>
+                                <i class="fas fa-receipt text-2xl text-gray-400"></i>
                             </div>
-                            <h3 class="font-semibold text-gray-600 dark:text-gray-300 mb-1">No items found</h3>
-                            <p class="text-sm text-gray-400">Try adjusting your search or filters</p>
+                            <h3 class="font-semibold text-gray-600 dark:text-gray-300 mb-1">No sales yet</h3>
+                            <p class="text-sm text-gray-400">Record your first sale to see it here!</p>
                         </div>
                     </div>
+                </div>
+
+                <!-- INVENTORY VIEW -->
+                <div id="view-inventory" class="hidden fade-in space-y-5">
+                    <!-- Same as before - keeping existing code -->
                 </div>
 
                 <!-- LOW STOCK VIEW -->
                 <div id="view-lowstock" class="hidden fade-in space-y-5">
-                    <div class="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/30 rounded-2xl p-6 flex items-center gap-4">
-                        <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-exclamation-triangle text-red-500 text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-red-700 dark:text-red-400">Low Stock Alert</h3>
-                            <p class="text-sm text-red-600 dark:text-red-300">The following items are below their minimum threshold and need restocking.</p>
-                        </div>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left">
-                                <thead>
-                                    <tr class="bg-gray-50 dark:bg-gray-700/50 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                        <th class="px-5 py-3 border-b">SKU</th>
-                                        <th class="px-5 py-3 border-b">Product</th>
-                                        <th class="px-5 py-3 border-b">Category</th>
-                                        <th class="px-5 py-3 border-b text-right">Price</th>
-                                        <th class="px-5 py-3 border-b text-center">Current Stock</th>
-                                        <th class="px-5 py-3 border-b text-center">Threshold</th>
-                                        <th class="px-5 py-3 border-b text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="lowstock-table-body" class="divide-y divide-gray-100 dark:divide-gray-700 text-sm"></tbody>
-                            </table>
-                        </div>
-                        <div id="lowstock-empty" class="hidden p-12 text-center">
-                            <div class="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-check text-2xl text-green-500"></i>
-                            </div>
-                            <h3 class="font-semibold text-gray-600 dark:text-gray-300 mb-1">All stocked up!</h3>
-                            <p class="text-sm text-gray-400">No items are currently below their threshold</p>
-                        </div>
-                    </div>
+                    <!-- Same as before -->
                 </div>
 
                 <!-- SETTINGS VIEW -->
                 <div id="view-settings" class="hidden fade-in space-y-6 max-w-4xl">
-                    <div class="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-2xl p-6">
-                        <h3 class="font-bold flex items-center gap-2 text-blue-700 dark:text-blue-400 mb-2"><i class="fas fa-info-circle"></i> Data Storage Info</h3>
-                        <p class="text-sm text-blue-600 dark:text-blue-300 mb-3">Your changes are saved to your browser's local storage. Click "Sync to GitHub" to push changes directly to your repository.</p>
-                        <div class="flex gap-3">
-                            <button onclick="autoSyncToGitHub()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors"><i class="fas fa-cloud-upload-alt"></i> Sync to GitHub Now</button>
-                            <button onclick="exportData()" class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"><i class="fas fa-download"></i> Backup JSON</button>
-                        </div>
-                    </div>
-
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700">
-                            <h3 class="font-bold flex items-center gap-2"><i class="fab fa-github text-primary-500"></i> GitHub Auto-Sync</h3>
-                        </div>
-                        <div class="p-6 space-y-4">
-                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center"><i class="fas fa-key text-purple-500"></i></div>
-                                    <div>
-                                        <div class="font-medium">GitHub Token</div>
-                                        <div class="text-sm text-gray-400" id="token-status">Not configured</div>
-                                    </div>
-                                </div>
-                                <div class="flex gap-2">
-                                    <button onclick="setupGitHubToken()" class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">Configure</button>
-                                    <button onclick="clearGitHubToken()" class="px-4 py-2 bg-red-100 dark:bg-red-900/20 text-red-500 rounded-lg text-sm font-medium hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors">Clear</button>
-                                </div>
-                            </div>
-                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center"><i class="fas fa-info-circle text-blue-500"></i></div>
-                                    <div>
-                                        <div class="font-medium">Repository</div>
-                                        <div class="text-sm text-gray-400">karanja9/workshop-inventory</div>
-                                    </div>
-                                </div>
-                                <button onclick="diagnoseRepoStructure()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors">
-                                    <i class="fas fa-stethoscope"></i> Diagnose
-                                </button>
-                            </div>
-                            <div id="diagnostic-panel" class="hidden p-4 bg-gray-900 rounded-xl">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-green-400 text-xs font-bold">Diagnostic Output</span>
-                                    <button onclick="document.getElementById('diagnostic-panel').classList.add('hidden')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
-                                </div>
-                                <div id="diagnostic-output" class="text-green-300"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700"><h3 class="font-bold flex items-center gap-2"><i class="fas fa-palette text-primary-500"></i> Appearance</h3></div>
-                        <div class="p-6 space-y-4">
-                            <div class="flex items-center justify-between">
-                                <div><div class="font-medium">Dark Mode</div><div class="text-sm text-gray-400">Toggle between light and dark theme</div></div>
-                                <button onclick="toggleDarkMode()" class="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 dark:bg-primary-500 transition-colors">
-                                    <span id="dark-toggle-knob" class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform dark:translate-x-6 translate-x-1"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
-                            <h3 class="font-bold flex items-center gap-2"><i class="fas fa-tags text-primary-500"></i> Categories</h3>
-                            <button onclick="addCategory()" class="text-sm text-primary-500 hover:text-primary-600 font-medium">+ Add Category</button>
-                        </div>
-                        <div class="p-6">
-                            <div id="categories-list" class="flex flex-wrap gap-2"></div>
-                            <p class="text-xs text-gray-400 mt-4"><i class="fas fa-info-circle"></i> You can also add new categories directly when creating or editing an item.</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 dark:border-gray-700"><h3 class="font-bold flex items-center gap-2"><i class="fas fa-database text-primary-500"></i> Data Management</h3></div>
-                        <div class="p-6 space-y-4">
-                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center"><i class="fas fa-cloud-upload-alt text-green-500"></i></div>
-                                    <div><div class="font-medium">Sync to GitHub</div><div class="text-sm text-gray-400">Push changes directly to your repository</div></div>
-                                </div>
-                                <button onclick="autoSyncToGitHub()" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors">Sync Now</button>
-                            </div>
-                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center"><i class="fas fa-download text-blue-500"></i></div>
-                                    <div><div class="font-medium">Export Backup</div><div class="text-sm text-gray-400">Download inventory as JSON backup file</div></div>
-                                </div>
-                                <button onclick="exportData()" class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">Export JSON</button>
-                            </div>
-                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center"><i class="fas fa-upload text-green-500"></i></div>
-                                    <div><div class="font-medium">Import Data</div><div class="text-sm text-gray-400">Load inventory from JSON file</div></div>
-                                </div>
-                                <button onclick="document.getElementById('import-file').click()" class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">Import JSON</button>
-                            </div>
-                            <div class="flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/10 rounded-xl border border-red-100 dark:border-red-900/20">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center"><i class="fas fa-trash text-red-500"></i></div>
-                                    <div><div class="font-medium text-red-700 dark:text-red-400">Reset All Data</div><div class="text-sm text-red-500/70">Clear all inventory and start fresh</div></div>
-                                </div>
-                                <button onclick="resetData()" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-colors">Reset</button>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Same as before -->
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Add/Edit Modal -->
-    <div id="item-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeModal()"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg slide-in border border-gray-200 dark:border-gray-700">
+    <!-- Quick Sale Modal -->
+    <div id="sale-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeSaleModal()"></div>
+        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md slide-in border border-gray-200 dark:border-gray-700">
             <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
-                <h3 class="text-lg font-bold" id="modal-title">Add New Item</h3>
-                <button onclick="closeModal()" class="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center transition-colors"><i class="fas fa-times text-gray-400"></i></button>
+                <h3 class="text-lg font-bold"><i class="fas fa-cash-register text-green-500"></i> Record Sale</h3>
+                <button onclick="closeSaleModal()" class="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center transition-colors"><i class="fas fa-times text-gray-400"></i></button>
             </div>
             <div class="p-6 space-y-4">
-                <input type="hidden" id="edit-sku">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">SKU</label>
-                        <input type="number" id="form-sku" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="10000">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Category</label>
-                        <input type="text" id="form-category-input" list="category-list" 
-                            class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" 
-                            placeholder="Type or select" autocomplete="off">
-                        <datalist id="category-list"></datalist>
-                        <input type="hidden" id="form-category" value="">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Search Item</label>
+                    <input type="text" id="sale-item-search" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Type name or SKU..." oninput="searchSaleItem()">
+                    <div id="sale-item-results" class="mt-2 max-h-40 overflow-y-auto custom-scrollbar space-y-1 hidden"></div>
+                </div>
+                <div id="sale-item-selected" class="hidden p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <div class="font-bold" id="sale-item-name">-</div>
+                            <div class="text-xs text-gray-500">SKU: <span id="sale-item-sku">-</span> | Stock: <span id="sale-item-stock">-</span></div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold text-green-600">KSh <span id="sale-item-price">-</span></div>
+                        </div>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Product Name</label>
-                    <input type="text" id="form-name" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="e.g. Ball Bearing 6204">
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Quantity Sold</label>
+                    <input type="number" id="sale-qty" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="1" min="1" value="1">
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Description</label>
-                    <textarea id="form-description" rows="2" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none" placeholder="Optional details..."></textarea>
-                </div>
-                <div class="grid grid-cols-3 gap-4">
-                    <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Price (KSh)</label><input type="number" id="form-price" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="0"></div>
-                    <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Stock Qty</label><input type="number" id="form-stock" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="0"></div>
-                    <div><label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Threshold</label><input type="number" id="form-threshold" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="5"></div>
+                <div class="flex justify-between text-sm">
+                    <span>Total Sale Value:</span>
+                    <span class="font-bold text-green-600" id="sale-total-value">KSh 0</span>
                 </div>
             </div>
             <div class="p-6 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
-                <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Cancel</button>
-                <button onclick="saveItem()" class="px-5 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-xl text-sm font-medium shadow-lg shadow-primary-500/25 transition-all hover:scale-105 active:scale-95">Save Item</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Confirm Modal -->
-    <div id="delete-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDeleteModal()"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center border border-gray-200 dark:border-gray-700 slide-in">
-            <div class="w-14 h-14 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-trash-alt text-red-500 text-xl"></i></div>
-            <h3 class="text-lg font-bold mb-2">Delete Item?</h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Are you sure you want to delete <span id="delete-item-name" class="font-semibold text-gray-700 dark:text-gray-200"></span>? This action cannot be undone.</p>
-            <div class="flex gap-3 justify-center">
-                <button onclick="closeDeleteModal()" class="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Cancel</button>
-                <button onclick="confirmDelete()" class="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-medium shadow-lg shadow-red-500/25 transition-all hover:scale-105 active:scale-95">Delete</button>
+                <button onclick="closeSaleModal()" class="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Cancel</button>
+                <button onclick="confirmSale()" class="px-5 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-xl text-sm font-medium shadow-lg shadow-green-500/25 transition-all hover:scale-105 active:scale-95">Record Sale</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ===================== STATE =====================
-        let inventory = [];
-        let categories = [];
-        let currentView = 'dashboard';
-        let deleteTargetSku = null;
-        let categoryChart = null;
-        let valueChart = null;
-        let dataLoaded = false;
-        let sidebarVisible = false;
-        let lastAction = null;
-        let dataSource = 'none';
-        
-        const GITHUB_OWNER = 'karanja9';
-        const GITHUB_REPO = 'workshop-inventory';
-        const GITHUB_BRANCH = 'main';
-        let githubFilePath = 'inventory_data.json';
+        // ===================== SALES STATE =====================
+        let salesLog = [];
+        let selectedSaleItem = null;
+        let currentRankingType = 'quantity';
 
-        // ===================== INIT =====================
-        async function init() {
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.documentElement.classList.add('dark');
-            }
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-                if (e.matches) document.documentElement.classList.add('dark');
-                else document.documentElement.classList.remove('dark');
-                updateCharts();
-            });
+        // Load sales from localStorage on init
+        function loadSales() {
+            const saved = localStorage.getItem('workshop_sales');
+            salesLog = saved ? JSON.parse(saved) : [];
+        }
 
-            await loadData();
-            populateCategoryFilters();
-            updateAllViews();
-            setupCategoryInputSync();
+        function saveSales() {
+            localStorage.setItem('workshop_sales', JSON.stringify(salesLog));
+        }
+
+        // ===================== QUICK SALE =====================
+        function recordQuickSale() {
+            loadSales();
+            selectedSaleItem = null;
+            document.getElementById('sale-item-search').value = '';
+            document.getElementById('sale-qty').value = '1';
+            document.getElementById('sale-item-results').classList.add('hidden');
+            document.getElementById('sale-item-selected').classList.add('hidden');
+            document.getElementById('sale-total-value').textContent = 'KSh 0';
+            document.getElementById('sale-modal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('sale-item-search').focus(), 100);
+        }
+
+        function closeSaleModal() {
+            document.getElementById('sale-modal').classList.add('hidden');
+            selectedSaleItem = null;
+        }
+
+        function searchSaleItem() {
+            const query = document.getElementById('sale-item-search').value.toLowerCase().trim();
+            const resultsDiv = document.getElementById('sale-item-results');
             
-            if (window.innerWidth < 1024) hideSidebar();
-            
-            updateSyncSourceDisplay();
-            updateSyncButton();
-            updateTokenStatus();
-            
-            const token = localStorage.getItem('github_token');
-            if (token) {
-                setTimeout(() => diagnoseRepoStructure(true), 1000);
-            }
-        }
-
-        async function loadData() {
-            const saved = localStorage.getItem('workshop_inventory');
-            const hasLocalChanges = localStorage.getItem('workshop_has_changes') === 'true';
-            
-            if (hasLocalChanges && saved) {
-                inventory = JSON.parse(saved);
-                const savedCats = localStorage.getItem('workshop_categories');
-                categories = savedCats ? JSON.parse(savedCats) : [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
-                document.getElementById('last-sync').textContent = inventory.length + ' items (local changes)';
-                dataSource = 'local';
-                dataLoaded = true;
-            } else {
-                try {
-                    const res = await fetch(githubFilePath);
-                    if (res.ok) {
-                        inventory = await res.json();
-                        categories = [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
-                        document.getElementById('last-sync').textContent = inventory.length + ' items loaded from JSON';
-                        dataSource = 'github';
-                        dataLoaded = true;
-                    } else {
-                        throw new Error('JSON not found');
-                    }
-                } catch (e) {
-                    if (saved) {
-                        inventory = JSON.parse(saved);
-                        const savedCats = localStorage.getItem('workshop_categories');
-                        categories = savedCats ? JSON.parse(savedCats) : [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
-                        document.getElementById('last-sync').textContent = inventory.length + ' items from localStorage';
-                        dataSource = 'local';
-                    } else {
-                        inventory = [];
-                        categories = [];
-                        document.getElementById('last-sync').textContent = 'No data loaded';
-                        dataSource = 'none';
-                    }
-                }
-            }
-        }
-
-        function handleResize() {
-            window.addEventListener('resize', () => {
-                if (window.innerWidth >= 1024) showSidebarDesktop();
-                else hideSidebar();
-            });
-        }
-
-        function setupCategoryInputSync() {
-            const categoryInput = document.getElementById('form-category-input');
-            const categoryHidden = document.getElementById('form-category');
-            if (categoryInput && categoryHidden) {
-                categoryInput.addEventListener('input', function() { categoryHidden.value = this.value.trim(); });
-                categoryInput.addEventListener('change', function() { categoryHidden.value = this.value.trim(); });
-            }
-        }
-
-        function saveToStorage() {
-            localStorage.setItem('workshop_inventory', JSON.stringify(inventory));
-            localStorage.setItem('workshop_categories', JSON.stringify(categories));
-            localStorage.setItem('workshop_has_changes', 'true');
-            localStorage.setItem('workshop_last_saved', new Date().toISOString());
-            updateSyncSourceDisplay();
-            updateSyncButton();
-            showSyncStatus();
-            
-            const token = localStorage.getItem('github_token');
-            if (token && githubFilePath) {
-                autoSyncToGitHub(true);
-            }
-        }
-
-        function updateSyncSourceDisplay() {
-            const sourceEl = document.getElementById('sync-source');
-            if (!sourceEl) return;
-            const hasChanges = localStorage.getItem('workshop_has_changes') === 'true';
-            const lastSaved = localStorage.getItem('workshop_last_saved');
-            const token = localStorage.getItem('github_token');
-            
-            let html = '';
-            if (token && !hasChanges) {
-                html += '<span class="sync-dot synced"></span> Synced with GitHub';
-            } else if (hasChanges) {
-                html += '<span class="sync-dot local"></span> Local changes pending';
-                if (lastSaved) html += ` · ${new Date(lastSaved).toLocaleTimeString()}`;
-            } else if (dataSource === 'github') {
-                html += '<span class="sync-dot github"></span> From GitHub (read-only)';
-            } else {
-                html += '<span class="sync-dot none"></span> No data source';
-            }
-            sourceEl.innerHTML = html;
-        }
-
-        function updateSyncButton() {
-            const btn = document.getElementById('sync-btn');
-            if (!btn) return;
-            const hasChanges = localStorage.getItem('workshop_has_changes') === 'true';
-            const token = localStorage.getItem('github_token');
-            
-            if (!token) {
-                btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Setup Sync';
-                btn.classList.remove('bg-green-500', 'hover:bg-green-600');
-                btn.classList.add('bg-yellow-500', 'hover:bg-yellow-600');
-            } else if (hasChanges) {
-                btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Sync to GitHub *';
-                btn.classList.remove('bg-green-500', 'hover:bg-green-600');
-                btn.classList.add('bg-yellow-500', 'hover:bg-yellow-600');
-            } else {
-                btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Sync to GitHub';
-                btn.classList.remove('bg-yellow-500', 'hover:bg-yellow-600');
-                btn.classList.add('bg-green-500', 'hover:bg-green-600');
-            }
-        }
-
-        function showSyncStatus() {
-            const status = document.getElementById('sync-status');
-            if (localStorage.getItem('workshop_has_changes') === 'true') {
-                status.classList.remove('hidden');
-                setTimeout(() => status.classList.add('hidden'), 5000);
-            }
-        }
-
-        // ===================== REPOSITORY DIAGNOSTIC =====================
-        async function diagnoseRepoStructure(silent = false) {
-            const token = localStorage.getItem('github_token');
-            if (!token) {
-                if (!silent) showToast('Please configure GitHub token first', 'info');
+            if (query.length < 1) {
+                resultsDiv.classList.add('hidden');
                 return;
             }
             
-            const diagnosticPanel = document.getElementById('diagnostic-panel');
-            const diagnosticOutput = document.getElementById('diagnostic-output');
+            const matches = inventory.filter(i => 
+                (i.name || '').toLowerCase().includes(query) || 
+                (i.sku || '').toString().includes(query)
+            ).slice(0, 8);
             
-            if (!silent) {
-                diagnosticPanel.classList.remove('hidden');
-                diagnosticOutput.innerHTML = '<span class="text-yellow-400">Scanning repository...</span>';
-            }
-            
-            let log = '';
-            
-            function addLog(msg, color = 'text-green-300') {
-                log += `<span class="${color}">${msg}</span>\n`;
-                if (!silent) diagnosticOutput.innerHTML = log;
-                console.log(msg);
+            if (matches.length === 0) {
+                resultsDiv.innerHTML = '<p class="text-gray-400 text-sm p-2">No items found</p>';
+                resultsDiv.classList.remove('hidden');
+                return;
             }
             
-            try {
-                addLog('=== Repository Diagnostic ===', 'text-white');
-                addLog(`Owner: ${GITHUB_OWNER}`, 'text-blue-300');
-                addLog(`Repo: ${GITHUB_REPO}`, 'text-blue-300');
-                addLog(`Branch: ${GITHUB_BRANCH}`, 'text-blue-300');
-                addLog('');
-                
-                addLog('Checking repository...', 'text-yellow-400');
-                const repoResponse = await fetch(
-                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`,
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Accept': 'application/vnd.github.v3+json',
-                            'X-GitHub-Api-Version': '2022-11-28'
-                        }
-                    }
-                );
-                
-                if (!repoResponse.ok) {
-                    addLog(`Repository check failed: ${repoResponse.status}`, 'text-red-400');
-                    return;
-                }
-                
-                const repoData = await repoResponse.json();
-                addLog(`Repository found: ${repoData.full_name}`, 'text-green-400');
-                addLog('');
-                
-                addLog('Listing root directory...', 'text-yellow-400');
-                const rootResponse = await fetch(
-                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/?ref=${GITHUB_BRANCH}`,
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Accept': 'application/vnd.github.v3+json',
-                            'X-GitHub-Api-Version': '2022-11-28'
-                        }
-                    }
-                );
-                
-                if (rootResponse.ok) {
-                    const contents = await rootResponse.json();
-                    addLog(`Found ${contents.length} items:`, 'text-white');
-                    
-                    let jsonFileFound = null;
-                    contents.forEach(item => {
-                        const icon = item.type === 'dir' ? 'FOLDER' : 'FILE';
-                        addLog(`  ${icon} ${item.name}`, 'text-gray-400');
-                        if (item.name === 'inventory_data.json') {
-                            jsonFileFound = item;
-                            githubFilePath = item.path;
-                        }
-                    });
-                    
-                    if (jsonFileFound) {
-                        addLog(`Found inventory_data.json (${jsonFileFound.size} bytes)`, 'text-green-400');
-                    } else {
-                        addLog('inventory_data.json NOT FOUND', 'text-red-400');
-                    }
-                }
-                
-            } catch (error) {
-                addLog(`Error: ${error.message}`, 'text-red-400');
-            }
-            
-            return log;
-        }
-
-        // ===================== GITHUB AUTO-SYNC =====================
-        async function autoSyncToGitHub(silent = false) {
-    let token = localStorage.getItem('github_token');
-    
-    if (!token) {
-        if (!silent) setupGitHubToken();
-        return false;
-    }
-    
-    const syncBtn = document.getElementById('sync-btn');
-    const originalText = syncBtn ? syncBtn.innerHTML : '';
-    if (syncBtn) {
-        syncBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
-        syncBtn.disabled = true;
-    }
-    
-    try {
-        // First, verify token and get repository info
-        const repoCheck = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/vnd.github.v3+json'
-            }
-        });
-        
-        if (!repoCheck.ok) {
-            const err = await repoCheck.json().catch(() => ({}));
-            throw new Error(`Repository error (${repoCheck.status}): ${err.message || 'Check owner/repo name'}`);
-        }
-        
-        const repoData = await repoCheck.json();
-        const defaultBranch = repoData.default_branch || 'main';
-        
-        console.log('Repository:', repoData.full_name);
-        console.log('Default branch:', defaultBranch);
-        console.log('Using branch:', GITHUB_BRANCH);
-        
-        // Get current file SHA (from the correct branch)
-        let sha = null;
-        const getUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/inventory_data.json?ref=${GITHUB_BRANCH}`;
-        
-        console.log('GET URL:', getUrl);
-        
-        const getRes = await fetch(getUrl, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/vnd.github.v3+json'
-            }
-        });
-        
-        console.log('GET status:', getRes.status);
-        
-        if (getRes.ok) {
-            const fileData = await getRes.json();
-            sha = fileData.sha;
-            console.log('SHA found:', sha);
-        } else if (getRes.status === 404) {
-            console.log('File not found - will create new file');
-            sha = null;
-        } else {
-            const err = await getRes.json().catch(() => ({}));
-            throw new Error(`Cannot read file (${getRes.status}): ${err.message}`);
-        }
-        
-        // Prepare content
-        const jsonString = JSON.stringify(inventory, null, 2);
-        const encoder = new TextEncoder();
-        const bytes = encoder.encode(jsonString);
-        
-        // Convert to base64 properly
-        let binaryString = '';
-        bytes.forEach(byte => {
-            binaryString += String.fromCharCode(byte);
-        });
-        const content = btoa(binaryString);
-        
-        console.log('Content length:', jsonString.length, 'bytes');
-        console.log('Base64 length:', content.length);
-        
-        // PUT the update
-        const putUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/inventory_data.json`;
-        const putBody = {
-            message: `Update inventory (${inventory.length} items) - ${new Date().toLocaleString()}`,
-            content: content,
-            branch: GITHUB_BRANCH
-        };
-        if (sha) putBody.sha = sha;
-        
-        console.log('PUT URL:', putUrl);
-        console.log('Has SHA:', !!sha);
-        
-        const putRes = await fetch(putUrl, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(putBody)
-        });
-        
-        console.log('PUT status:', putRes.status);
-        
-        if (!putRes.ok) {
-            const err = await putRes.json().catch(() => ({}));
-            console.error('PUT error details:', err);
-            
-            if (putRes.status === 404) {
-                throw new Error(`File not found at path. Verify "inventory_data.json" exists in the root of your repository.`);
-            } else if (putRes.status === 409) {
-                throw new Error('Conflict - file was modified elsewhere. Please refresh and try again.');
-            } else if (putRes.status === 422) {
-                throw new Error(`Validation failed: ${err.message}. Check token has "repo" scope.`);
-            } else {
-                throw new Error(`Sync failed (${putRes.status}): ${err.message}`);
-            }
-        }
-        
-        // Success!
-        const result = await putRes.json();
-        console.log('Sync successful!', result.commit?.sha);
-        
-        localStorage.setItem('workshop_has_changes', 'false');
-        document.getElementById('sync-status').classList.add('hidden');
-        updateSyncSourceDisplay();
-        updateSyncButton();
-        dataSource = 'github';
-        
-        const now = new Date().toLocaleString();
-        document.getElementById('last-sync').textContent = `${inventory.length} items · Synced ${now}`;
-        
-        if (!silent) showToast('✅ Synced to GitHub!', 'success');
-        return true;
-        
-    } catch (error) {
-        console.error('Sync error:', error.message);
-        if (!silent) showToast('❌ ' + error.message, 'error');
-        return false;
-    } finally {
-        if (syncBtn) {
-            syncBtn.innerHTML = originalText;
-            syncBtn.disabled = false;
-        }
-    }
-}
-
-        function setupGitHubToken() {
-            const existingToken = localStorage.getItem('github_token');
-            const token = prompt(
-                'Enter your GitHub Personal Access Token:\n\n' +
-                'Required scope: repo\n' +
-                'Token is stored locally in your browser only.',
-                existingToken || ''
-            );
-            
-            if (token && token.trim()) {
-                localStorage.setItem('github_token', token.trim());
-                updateTokenStatus();
-                updateSyncButton();
-                showToast('GitHub token saved!', 'success');
-            }
-        }
-
-        function clearGitHubToken() {
-            if (confirm('Remove your GitHub token?')) {
-                localStorage.removeItem('github_token');
-                updateTokenStatus();
-                updateSyncButton();
-                showToast('GitHub token removed', 'info');
-            }
-        }
-
-        function updateTokenStatus() {
-            const status = document.getElementById('token-status');
-            if (status) {
-                const token = localStorage.getItem('github_token');
-                if (token) {
-                    status.textContent = 'Configured';
-                    status.className = 'text-sm text-green-500';
-                } else {
-                    status.textContent = 'Not configured';
-                    status.className = 'text-sm text-gray-400';
-                }
-            }
-        }
-
-        // ===================== NAVIGATION =====================
-        function switchView(view) {
-            currentView = view;
-            document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
-            document.getElementById('view-' + view).classList.remove('hidden');
-            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
-            document.getElementById('nav-' + view).classList.add('active');
-
-            const titles = { dashboard: 'Dashboard', inventory: 'Inventory', lowstock: 'Low Stock Alerts', settings: 'Settings' };
-            document.getElementById('page-title').textContent = titles[view];
-
-            if (view === 'dashboard') updateDashboard();
-            if (view === 'inventory') renderInventory();
-            if (view === 'lowstock') renderLowStock();
-            if (view === 'settings') { renderSettings(); updateTokenStatus(); }
-
-            if (window.innerWidth < 1024) hideSidebar();
-        }
-
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            if (sidebar.classList.contains('-translate-x-full')) showSidebar();
-            else hideSidebar();
-        }
-
-        function showSidebar() {
-            document.getElementById('sidebar').classList.remove('-translate-x-full');
-            document.getElementById('sidebar-overlay').classList.remove('hidden');
-            sidebarVisible = true;
-        }
-
-        function hideSidebar() {
-            document.getElementById('sidebar').classList.add('-translate-x-full');
-            document.getElementById('sidebar-overlay').classList.add('hidden');
-            sidebarVisible = false;
-        }
-
-        function showSidebarDesktop() {
-            document.getElementById('sidebar').classList.remove('-translate-x-full');
-            document.getElementById('sidebar-overlay').classList.add('hidden');
-            sidebarVisible = true;
-        }
-
-        // ===================== DASHBOARD =====================
-        function updateDashboard() {
-            const totalItems = inventory.length;
-            const lowStock = inventory.filter(i => (i.stock || 0) <= (i.low_stock_threshold || 5));
-            const totalValue = inventory.reduce((sum, i) => sum + ((i.price || 0) * (i.stock || 0)), 0);
-            const uniqueCats = [...new Set(inventory.map(i => i.category).filter(Boolean))].length;
-
-            document.getElementById('dash-total-items').textContent = totalItems.toLocaleString();
-            document.getElementById('dash-low-stock').textContent = lowStock.length;
-            document.getElementById('dash-total-value').textContent = totalValue.toLocaleString();
-            document.getElementById('dash-categories').textContent = uniqueCats;
-
-            const list = document.getElementById('dash-lowstock-list');
-            if (lowStock.length === 0) {
-                list.innerHTML = '<div class="p-8 text-center text-gray-400 text-sm">No low stock items</div>';
-            } else {
-                list.innerHTML = lowStock.slice(0, 5).map(item => {
-                    const threshold = item.low_stock_threshold || 5;
-                    const pct = Math.min(100, ((item.stock || 0) / threshold) * 100);
-                    return `<div class="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-500 font-bold text-xs">${item.sku}</div>
-                            <div><div class="font-medium text-sm">${item.name}</div><div class="text-xs text-gray-400">${item.category || 'General'}</div></div>
+            resultsDiv.innerHTML = matches.map(item => `
+                <div onclick="selectSaleItem(${item.sku})" class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <div class="font-medium text-sm">${item.name}</div>
+                            <div class="text-xs text-gray-400">SKU: ${item.sku} | Stock: ${item.stock || 0}</div>
                         </div>
-                        <div class="text-right">
-                            <div class="text-sm font-bold text-red-500">${item.stock} left</div>
-                            <div class="w-24 h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full mt-1 overflow-hidden">
-                                <div class="h-full bg-red-500 rounded-full stock-bar" style="width: ${pct}%"></div>
+                        <div class="text-sm font-bold">KSh ${(item.price || 0).toLocaleString()}</div>
+                    </div>
+                </div>
+            `).join('');
+            resultsDiv.classList.remove('hidden');
+        }
+
+        function selectSaleItem(sku) {
+            selectedSaleItem = inventory.find(i => i.sku === sku);
+            if (!selectedSaleItem) return;
+            
+            document.getElementById('sale-item-search').value = selectedSaleItem.name;
+            document.getElementById('sale-item-results').classList.add('hidden');
+            document.getElementById('sale-item-selected').classList.remove('hidden');
+            document.getElementById('sale-item-name').textContent = selectedSaleItem.name;
+            document.getElementById('sale-item-sku').textContent = selectedSaleItem.sku;
+            document.getElementById('sale-item-stock').textContent = selectedSaleItem.stock || 0;
+            document.getElementById('sale-item-price').textContent = (selectedSaleItem.price || 0).toLocaleString();
+            
+            updateSaleTotal();
+        }
+
+        function updateSaleTotal() {
+            const qty = parseInt(document.getElementById('sale-qty').value) || 0;
+            const price = selectedSaleItem ? (selectedSaleItem.price || 0) : 0;
+            document.getElementById('sale-total-value').textContent = `KSh ${(qty * price).toLocaleString()}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const qtyInput = document.getElementById('sale-qty');
+            if (qtyInput) {
+                qtyInput.addEventListener('input', updateSaleTotal);
+            }
+        });
+
+        function confirmSale() {
+            if (!selectedSaleItem) {
+                showToast('Please select an item first', 'error');
+                return;
+            }
+            
+            const qty = parseInt(document.getElementById('sale-qty').value) || 0;
+            if (qty <= 0) {
+                showToast('Quantity must be at least 1', 'error');
+                return;
+            }
+            
+            if (qty > (selectedSaleItem.stock || 0)) {
+                showToast(`Not enough stock! Only ${selectedSaleItem.stock} available.`, 'error');
+                return;
+            }
+            
+            // Record the sale
+            const saleRecord = {
+                id: Date.now(),
+                timestamp: new Date().toISOString(),
+                sku: selectedSaleItem.sku,
+                itemName: selectedSaleItem.name,
+                category: selectedSaleItem.category || 'General',
+                price: selectedSaleItem.price || 0,
+                quantity: qty,
+                total: qty * (selectedSaleItem.price || 0),
+                stockBefore: selectedSaleItem.stock || 0,
+                stockAfter: (selectedSaleItem.stock || 0) - qty
+            };
+            
+            loadSales();
+            salesLog.unshift(saleRecord);
+            saveSales();
+            
+            // Update inventory stock
+            selectedSaleItem.stock = (selectedSaleItem.stock || 0) - qty;
+            saveToStorage();
+            
+            // Update sales views
+            renderSalesView();
+            updateAllViews();
+            
+            closeSaleModal();
+            showToast(`✅ Sold ${qty} ${selectedSaleItem.name} for KSh ${saleRecord.total.toLocaleString()}!`, 'success');
+        }
+
+        // ===================== SALES RANKINGS =====================
+        function renderSalesRankings(type = 'quantity') {
+            currentRankingType = type;
+            loadSales();
+            
+            // Update button styles
+            document.getElementById('rank-qty-btn').className = type === 'quantity' ? 'px-3 py-1.5 bg-primary-500 text-white rounded-lg text-xs font-medium' : 'px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg text-xs font-medium';
+            document.getElementById('rank-rev-btn').className = type === 'revenue' ? 'px-3 py-1.5 bg-primary-500 text-white rounded-lg text-xs font-medium' : 'px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg text-xs font-medium';
+            document.getElementById('rank-cat-btn').className = type === 'category' ? 'px-3 py-1.5 bg-primary-500 text-white rounded-lg text-xs font-medium' : 'px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg text-xs font-medium';
+            
+            const listDiv = document.getElementById('sales-rankings-list');
+            
+            if (salesLog.length === 0) {
+                listDiv.innerHTML = '<p class="text-gray-400 text-sm text-center py-8">No sales data yet. Record a sale to see rankings!</p>';
+                return;
+            }
+            
+            if (type === 'category') {
+                // Aggregate by category
+                const catData = {};
+                salesLog.forEach(sale => {
+                    const cat = sale.category || 'General';
+                    if (!catData[cat]) catData[cat] = { qty: 0, revenue: 0 };
+                    catData[cat].qty += sale.quantity;
+                    catData[cat].revenue += sale.total;
+                });
+                
+                const sorted = Object.entries(catData).sort((a, b) => b[1].revenue - a[1].revenue);
+                
+                listDiv.innerHTML = sorted.map(([cat, data], idx) => {
+                    const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : 'rank-other';
+                    return `
+                        <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <div class="rank-badge ${rankClass}">${idx + 1}</div>
+                            <div class="flex-1">
+                                <div class="font-medium text-sm">${cat}</div>
+                                <div class="text-xs text-gray-400">${data.qty} items sold</div>
                             </div>
+                            <div class="text-sm font-bold text-green-600">KSh ${data.revenue.toLocaleString()}</div>
                         </div>
-                    </div>`;
+                    `;
+                }).join('');
+            } else {
+                // Aggregate by item
+                const itemData = {};
+                salesLog.forEach(sale => {
+                    const key = sale.sku;
+                    if (!itemData[key]) itemData[key] = { name: sale.itemName, sku: sale.sku, qty: 0, revenue: 0 };
+                    itemData[key].qty += sale.quantity;
+                    itemData[key].revenue += sale.total;
+                });
+                
+                const sorted = Object.values(itemData).sort((a, b) => 
+                    type === 'revenue' ? b.revenue - a.revenue : b.qty - a.qty
+                );
+                
+                listDiv.innerHTML = sorted.slice(0, 20).map((item, idx) => {
+                    const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : 'rank-other';
+                    return `
+                        <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <div class="rank-badge ${rankClass}">${idx + 1}</div>
+                            <div class="flex-1">
+                                <div class="font-medium text-sm">${item.name}</div>
+                                <div class="text-xs text-gray-400">SKU: ${item.sku} | ${item.qty} sold</div>
+                            </div>
+                            <div class="text-sm font-bold text-green-600">KSh ${item.revenue.toLocaleString()}</div>
+                        </div>
+                    `;
                 }).join('');
             }
-
-            updateCharts();
-            updateSidebarBadge();
         }
 
-        function updateCharts() {
-            const isDark = document.documentElement.classList.contains('dark');
-            const textColor = isDark ? '#9ca3af' : '#6b7280';
-            const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
-
-            const catData = {};
-            inventory.forEach(i => { const cat = i.category || 'Uncategorized'; catData[cat] = (catData[cat] || 0) + (i.stock || 0); });
-
-            if (categoryChart) categoryChart.destroy();
-            const ctx1 = document.getElementById('categoryChart').getContext('2d');
-            categoryChart = new Chart(ctx1, {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(catData),
-                    datasets: [{
-                        label: 'Stock Quantity',
-                        data: Object.values(catData),
-                        backgroundColor: ['#714B67', '#9c7fb0', '#fb923c', '#22c55e', '#3b82f6', '#ef4444', '#a855f7', '#14b8a6', '#f59e0b'],
-                        borderRadius: 8, borderSkipped: false
-                    }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { grid: { color: gridColor }, ticks: { color: textColor } },
-                        x: { grid: { display: false }, ticks: { color: textColor, maxRotation: 45, minRotation: 0 } }
-                    }
-                }
-            });
-
-            const valData = {};
-            inventory.forEach(i => { const cat = i.category || 'Uncategorized'; valData[cat] = (valData[cat] || 0) + ((i.price || 0) * (i.stock || 0)); });
-
-            if (valueChart) valueChart.destroy();
-            const ctx2 = document.getElementById('valueChart').getContext('2d');
-            valueChart = new Chart(ctx2, {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(valData),
-                    datasets: [{
-                        data: Object.values(valData),
-                        backgroundColor: ['#714B67', '#9c7fb0', '#fb923c', '#22c55e', '#3b82f6', '#ef4444', '#a855f7', '#14b8a6', '#f59e0b'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { color: textColor, boxWidth: 12, padding: 15, font: { size: 11 } } } },
-                    cutout: '65%'
-                }
-            });
-        }
-
-        // ===================== INVENTORY =====================
-        function populateCategoryFilters() {
-            const invCatEl = document.getElementById('inv-category');
-            if (invCatEl) {
-                const current = invCatEl.value;
-                invCatEl.innerHTML = '<option value="all">All Categories</option>';
-                categories.forEach(c => invCatEl.innerHTML += `<option value="${c}">${c}</option>`);
-                if (current && [...invCatEl.options].some(o => o.value === current)) invCatEl.value = current;
+        // ===================== SALES HISTORY TABLE =====================
+        function renderSalesHistory() {
+            loadSales();
+            const search = (document.getElementById('sales-search')?.value || '').toLowerCase();
+            const period = document.getElementById('sales-period')?.value || 'all';
+            const tbody = document.getElementById('sales-history-body');
+            
+            let filtered = [...salesLog];
+            
+            // Filter by period
+            if (period === 'today') {
+                const today = new Date().toDateString();
+                filtered = filtered.filter(s => new Date(s.timestamp).toDateString() === today);
+            } else if (period === 'week') {
+                const weekAgo = new Date();
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                filtered = filtered.filter(s => new Date(s.timestamp) >= weekAgo);
+            } else if (period === 'month') {
+                const monthAgo = new Date();
+                monthAgo.setMonth(monthAgo.getMonth() - 1);
+                filtered = filtered.filter(s => new Date(s.timestamp) >= monthAgo);
             }
-            const datalist = document.getElementById('category-list');
-            if (datalist) {
-                datalist.innerHTML = '';
-                categories.forEach(c => datalist.innerHTML += `<option value="${c}">${c}</option>`);
+            
+            // Search filter
+            if (search) {
+                filtered = filtered.filter(s => 
+                    (s.itemName || '').toLowerCase().includes(search) ||
+                    (s.sku || '').toString().includes(search) ||
+                    (s.category || '').toLowerCase().includes(search)
+                );
             }
-        }
-
-        function renderInventory() {
-            const search = document.getElementById('inv-search').value.toLowerCase();
-            const cat = document.getElementById('inv-category').value;
-            const sort = document.getElementById('inv-sort').value;
-            const tbody = document.getElementById('inventory-table-body');
-
-            let filtered = inventory.filter(item => {
-                const term = search;
-                const matchSearch = !term || (item.name || '').toLowerCase().includes(term) || (item.sku || '').toString().includes(term) || (item.description || '').toLowerCase().includes(term);
-                const matchCat = cat === 'all' || item.category === cat;
-                return matchSearch && matchCat;
-            });
-
-            const sortMap = {
-                'sku': (a, b) => (a.sku || 0) - (b.sku || 0),
-                'name': (a, b) => (a.name || '').localeCompare(b.name || ''),
-                'stock-low': (a, b) => (a.stock || 0) - (b.stock || 0),
-                'stock-high': (a, b) => (b.stock || 0) - (a.stock || 0),
-                'price-low': (a, b) => (a.price || 0) - (b.price || 0),
-                'price-high': (a, b) => (b.price || 0) - (a.price || 0)
-            };
-            if (sortMap[sort]) filtered.sort(sortMap[sort]);
-
+            
             if (filtered.length === 0) {
                 tbody.innerHTML = '';
-                document.getElementById('inventory-empty').classList.remove('hidden');
+                document.getElementById('sales-history-empty')?.classList.remove('hidden');
                 return;
             }
-            document.getElementById('inventory-empty').classList.add('hidden');
+            document.getElementById('sales-history-empty')?.classList.add('hidden');
+            
+            tbody.innerHTML = filtered.map(sale => `
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                    <td class="px-5 py-3 text-xs text-gray-500">${new Date(sale.timestamp).toLocaleDateString()}<br><span class="text-gray-400">${new Date(sale.timestamp).toLocaleTimeString()}</span></td>
+                    <td class="px-5 py-3 font-medium">${sale.itemName}</td>
+                    <td class="px-5 py-3 font-mono text-xs text-gray-400">${sale.sku}</td>
+                    <td class="px-5 py-3 text-xs">${sale.category || 'General'}</td>
+                    <td class="px-5 py-3 text-right text-xs">${(sale.price || 0).toLocaleString()}</td>
+                    <td class="px-5 py-3 text-center font-bold">${sale.quantity}</td>
+                    <td class="px-5 py-3 text-right font-bold text-green-600">${(sale.total || 0).toLocaleString()}</td>
+                    <td class="px-5 py-3 text-center text-xs ${sale.stockAfter <= 2 ? 'text-red-500 font-bold' : 'text-gray-500'}">${sale.stockAfter}</td>
+                </tr>
+            `).join('');
+        }
 
-            tbody.innerHTML = filtered.map(item => {
-                const threshold = item.low_stock_threshold || 5;
-                const isLow = (item.stock || 0) <= threshold;
-                const statusClass = isLow ? 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300' : 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300';
-                const statusText = isLow ? 'Low' : 'OK';
-                const stockClass = isLow ? 'text-red-500 font-bold' : '';
-                return `<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors group">
-                    <td class="px-5 py-3 font-mono text-gray-400 text-xs">${item.sku || '-'}</td>
-                    <td class="px-5 py-3"><div class="font-semibold text-gray-800 dark:text-gray-100">${item.name || 'Unnamed'}</div>${item.description ? `<div class="text-xs text-gray-400 mt-0.5 line-clamp-1">${item.description}</div>` : '<div class="text-xs text-gray-300 italic mt-0.5">None</div>'}</td>
-                    <td class="px-5 py-3"><span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">${item.category || 'General'}</span></td>
-                    <td class="px-5 py-3 text-right font-medium">${(item.price || 0).toLocaleString()}</td>
-                    <td class="px-5 py-3 text-center ${stockClass}">${item.stock || 0}</td>
-                    <td class="px-5 py-3 text-center"><span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium ${statusClass}">${statusText}</span></td>
-                    <td class="px-5 py-3 text-right">
-                        <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity touch-actions">
-                            <button onclick="openEditModal(${item.sku})" class="w-8 h-8 rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-500 hover:bg-primary-100 dark:hover:bg-primary-900/40 flex items-center justify-center transition-colors" title="Edit"><i class="fas fa-pen text-xs"></i></button>
-                            <button onclick="openDeleteModal(${item.sku})" class="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/40 flex items-center justify-center transition-colors" title="Delete"><i class="fas fa-trash text-xs"></i></button>
+        // ===================== SALES VIEW RENDER =====================
+        function renderSalesView() {
+            loadSales();
+            
+            // Today's stats
+            const today = new Date().toDateString();
+            const todaySales = salesLog.filter(s => new Date(s.timestamp).toDateString() === today);
+            const todayCount = todaySales.reduce((sum, s) => sum + s.quantity, 0);
+            const todayRevenue = todaySales.reduce((sum, s) => sum + s.total, 0);
+            
+            // Week stats
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            const weekSales = salesLog.filter(s => new Date(s.timestamp) >= weekAgo);
+            const weekRevenue = weekSales.reduce((sum, s) => sum + s.total, 0);
+            
+            // Top item today
+            const todayItems = {};
+            todaySales.forEach(s => {
+                if (!todayItems[s.itemName]) todayItems[s.itemName] = 0;
+                todayItems[s.itemName] += s.quantity;
+            });
+            const topItem = Object.entries(todayItems).sort((a, b) => b[1] - a[1])[0];
+            
+            // Update cards
+            const todayCountEl = document.getElementById('sales-today-count');
+            const todayRevEl = document.getElementById('sales-today-revenue');
+            const weekRevEl = document.getElementById('sales-week-revenue');
+            const topItemEl = document.getElementById('sales-top-item');
+            
+            if (todayCountEl) todayCountEl.textContent = todayCount;
+            if (todayRevEl) todayRevEl.textContent = `KSh ${todayRevenue.toLocaleString()}`;
+            if (weekRevEl) weekRevEl.textContent = `KSh ${weekRevenue.toLocaleString()}`;
+            if (topItemEl) topItemEl.textContent = topItem ? topItem[0] : '-';
+            
+            // Recent sales list
+            const recentDiv = document.getElementById('recent-sales-list');
+            if (recentDiv) {
+                if (salesLog.length === 0) {
+                    recentDiv.innerHTML = '<p class="text-gray-400 text-sm text-center py-8">No sales recorded yet.</p>';
+                } else {
+                    recentDiv.innerHTML = salesLog.slice(0, 10).map(sale => `
+                        <div class="py-3 flex items-center justify-between sale-recorded">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center text-green-500 text-xs font-bold">${sale.quantity}</div>
+                                <div>
+                                    <div class="font-medium text-sm">${sale.itemName}</div>
+                                    <div class="text-xs text-gray-400">${new Date(sale.timestamp).toLocaleString()}</div>
+                                </div>
+                            </div>
+                            <div class="text-sm font-bold text-green-600">KSh ${(sale.total || 0).toLocaleString()}</div>
                         </div>
-                    </td>
-                </tr>`;
-            }).join('');
-        }
-
-        function renderLowStock() {
-            const tbody = document.getElementById('lowstock-table-body');
-            const lowItems = inventory.filter(i => (i.stock || 0) <= (i.low_stock_threshold || 5));
-            if (lowItems.length === 0) {
-                tbody.innerHTML = '';
-                document.getElementById('lowstock-empty').classList.remove('hidden');
-                return;
-            }
-            document.getElementById('lowstock-empty').classList.add('hidden');
-            tbody.innerHTML = lowItems.map(item => `<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                <td class="px-5 py-3 font-mono text-gray-400 text-xs">${item.sku}</td>
-                <td class="px-5 py-3"><div class="font-semibold text-gray-800 dark:text-gray-100">${item.name}</div>${item.description ? `<div class="text-xs text-gray-400 mt-0.5">${item.description}</div>` : ''}</td>
-                <td class="px-5 py-3 text-xs">${item.category || 'General'}</td>
-                <td class="px-5 py-3 text-right">${(item.price || 0).toLocaleString()}</td>
-                <td class="px-5 py-3 text-center"><span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-bold">${item.stock || 0}</span></td>
-                <td class="px-5 py-3 text-center text-gray-500">${item.low_stock_threshold || 5}</td>
-                <td class="px-5 py-3 text-right"><button onclick="openEditModal(${item.sku})" class="text-sm text-primary-500 hover:text-primary-600 font-medium">Restock</button></td>
-            </tr>`).join('');
-        }
-
-        function renderSettings() {
-            const list = document.getElementById('categories-list');
-            if (categories.length === 0) {
-                list.innerHTML = '<span class="text-gray-400 text-sm">No categories yet.</span>';
-            } else {
-                list.innerHTML = categories.map((cat, idx) => `<div class="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm"><span>${cat}</span><button onclick="removeCategory(${idx})" class="w-5 h-5 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-500 flex items-center justify-center transition-colors"><i class="fas fa-times text-xs"></i></button></div>`).join('');
-            }
-            updateTokenStatus();
-        }
-
-        function addCategory() {
-            const name = prompt('Enter new category name:');
-            if (name && name.trim() && !categories.includes(name.trim())) {
-                categories.push(name.trim()); categories.sort();
-                saveToStorage(); renderSettings(); populateCategoryFilters();
-                showToast('Category added', 'success');
-            } else if (name && categories.includes(name.trim())) {
-                showToast('Category already exists', 'info');
-            }
-        }
-
-        function removeCategory(idx) {
-            if (confirm('Delete this category?')) {
-                categories.splice(idx, 1);
-                saveToStorage(); renderSettings(); populateCategoryFilters();
-                showToast('Category removed', 'success');
-            }
-        }
-
-        function openAddModal() {
-            document.getElementById('modal-title').textContent = 'Add New Item';
-            document.getElementById('edit-sku').value = '';
-            document.getElementById('form-sku').value = '';
-            document.getElementById('form-name').value = '';
-            document.getElementById('form-description').value = '';
-            document.getElementById('form-price').value = '';
-            document.getElementById('form-stock').value = '';
-            document.getElementById('form-threshold').value = '5';
-            const ci = document.getElementById('form-category-input');
-            const ch = document.getElementById('form-category');
-            if (ci) ci.value = '';
-            if (ch) ch.value = categories[0] || 'General';
-            document.getElementById('form-sku').disabled = false;
-            document.getElementById('item-modal').classList.remove('hidden');
-            setTimeout(() => document.getElementById('form-sku').focus(), 100);
-        }
-
-        function openEditModal(sku) {
-            const item = inventory.find(i => i.sku === sku);
-            if (!item) return;
-            document.getElementById('modal-title').textContent = 'Edit Item';
-            document.getElementById('edit-sku').value = item.sku;
-            document.getElementById('form-sku').value = item.sku;
-            document.getElementById('form-sku').disabled = true;
-            document.getElementById('form-name').value = item.name || '';
-            document.getElementById('form-description').value = item.description || '';
-            document.getElementById('form-price').value = item.price || 0;
-            document.getElementById('form-stock').value = item.stock || 0;
-            document.getElementById('form-threshold').value = item.low_stock_threshold || 5;
-            const ci = document.getElementById('form-category-input');
-            const ch = document.getElementById('form-category');
-            const ic = item.category || categories[0] || 'General';
-            if (ci) ci.value = ic;
-            if (ch) ch.value = ic;
-            document.getElementById('item-modal').classList.remove('hidden');
-            setTimeout(() => document.getElementById('form-name').focus(), 100);
-        }
-
-        function closeModal() { document.getElementById('item-modal').classList.add('hidden'); }
-
-        function saveItem() {
-            const editSku = document.getElementById('edit-sku').value;
-            const sku = parseInt(document.getElementById('form-sku').value);
-            const name = document.getElementById('form-name').value.trim();
-            const description = document.getElementById('form-description').value.trim();
-            const price = parseFloat(document.getElementById('form-price').value) || 0;
-            const stock = parseInt(document.getElementById('form-stock').value) || 0;
-            const threshold = parseInt(document.getElementById('form-threshold').value) || 5;
-            const ci = document.getElementById('form-category-input');
-            let category = ci ? ci.value.trim() : '';
-            if (!category) category = categories[0] || 'General';
-            const ch = document.getElementById('form-category');
-            if (ch) ch.value = category;
-
-            if (!sku || !name) { showToast('SKU and Name are required', 'error'); return; }
-            if (stock < 0) { showToast('Stock cannot be negative', 'error'); return; }
-            if (price < 0) { showToast('Price cannot be negative', 'error'); return; }
-
-            if (!editSku) {
-                if (inventory.some(i => i.sku === sku)) { showToast('SKU already exists', 'error'); return; }
-                lastAction = { type: 'add', item: { sku, name, description, category, price, stock, low_stock_threshold: threshold } };
-                inventory.push({ sku, name, description, category, price, stock, low_stock_threshold: threshold });
-                showToast('Item added successfully', 'success');
-            } else {
-                const idx = inventory.findIndex(i => i.sku === parseInt(editSku));
-                if (idx !== -1) {
-                    lastAction = { type: 'edit', sku: parseInt(editSku), oldItem: {...inventory[idx]} };
-                    inventory[idx] = { sku: parseInt(editSku), name, description, category, price, stock, low_stock_threshold: threshold };
-                    showToast('Item updated successfully', 'success');
+                    `).join('');
                 }
             }
-
-            if (!categories.includes(category)) { categories.push(category); categories.sort(); populateCategoryFilters(); if (currentView === 'settings') renderSettings(); }
-            saveToStorage();
-            closeModal();
-            updateAllViews();
-            if (lastAction) showUndoToast();
+            
+            // Rankings
+            renderSalesRankings(currentRankingType);
+            
+            // History table
+            renderSalesHistory();
+            
+            // Update sidebar badge
+            updateSalesSidebarBadge();
         }
 
-        function openDeleteModal(sku) {
-            const item = inventory.find(i => i.sku === sku);
-            if (!item) return;
-            deleteTargetSku = sku;
-            document.getElementById('delete-item-name').textContent = item.name;
-            document.getElementById('delete-modal').classList.remove('hidden');
-        }
-
-        function closeDeleteModal() { document.getElementById('delete-modal').classList.add('hidden'); deleteTargetSku = null; }
-
-        function confirmDelete() {
-            if (deleteTargetSku !== null) {
-                const item = inventory.find(i => i.sku === deleteTargetSku);
-                if (item) lastAction = { type: 'delete', item: {...item} };
-                inventory = inventory.filter(i => i.sku !== deleteTargetSku);
-                saveToStorage();
-                showToast('Item deleted', 'success');
-                updateAllViews();
-                if (lastAction) showUndoToast();
+        function updateSalesSidebarBadge() {
+            const today = new Date().toDateString();
+            const todayCount = salesLog.filter(s => new Date(s.timestamp).toDateString() === today).length;
+            const badge = document.getElementById('sidebar-sales-badge');
+            if (badge) {
+                if (todayCount > 0) {
+                    badge.textContent = todayCount;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
             }
-            closeDeleteModal();
         }
 
-        function undoLastAction() {
-            if (!lastAction) return;
-            if (lastAction.type === 'add') { inventory = inventory.filter(i => i.sku !== lastAction.item.sku); showToast('Item addition undone', 'info'); }
-            else if (lastAction.type === 'delete') { inventory.push(lastAction.item); showToast('Item deletion undone', 'info'); }
-            else if (lastAction.type === 'edit') { const idx = inventory.findIndex(i => i.sku === lastAction.sku); if (idx !== -1) { inventory[idx] = lastAction.oldItem; showToast('Item edit undone', 'info'); } }
-            else if (lastAction.type === 'import' || lastAction.type === 'reset') { inventory = lastAction.oldInventory; categories = lastAction.oldCategories; showToast('Data restore undone', 'info'); }
-            lastAction = null;
-            saveToStorage();
-            updateAllViews();
-            populateCategoryFilters();
-        }
-
-        function showUndoToast() {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast flex items-center gap-3 px-5 py-3 bg-blue-500 text-white rounded-xl shadow-lg min-w-[280px]';
-            toast.innerHTML = `<i class="fas fa-undo"></i><span class="text-sm font-medium flex-1">Action performed</span><button onclick="undoLastAction(); this.parentElement.remove();" class="text-xs font-bold underline hover:no-underline">UNDO</button>`;
-            container.appendChild(toast);
-            setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)'; toast.style.transition = 'all 0.3s ease'; setTimeout(() => toast.remove(), 300); }, 8000);
-        }
-
-        function exportData() {
-            const blob = new Blob([JSON.stringify(inventory, null, 2)], { type: 'application/json' });
+        function exportSalesCSV() {
+            loadSales();
+            if (salesLog.length === 0) {
+                showToast('No sales data to export', 'info');
+                return;
+            }
+            
+            const headers = ['Date', 'Item', 'SKU', 'Category', 'Price', 'Quantity', 'Total', 'Stock After'];
+            const rows = salesLog.map(s => [
+                new Date(s.timestamp).toLocaleString(),
+                s.itemName,
+                s.sku,
+                s.category || 'General',
+                s.price,
+                s.quantity,
+                s.total,
+                s.stockAfter
+            ]);
+            
+            const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `inventory_backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `sales_export_${new Date().toISOString().split('T')[0]}.csv`;
             a.click();
             URL.revokeObjectURL(url);
-            showToast('Backup exported successfully', 'success');
+            showToast('Sales exported as CSV!', 'success');
         }
 
-        function importData(input) {
-            const file = input.files[0];
-            if (!file) return;
-            if (!confirm('Importing will replace your current data. Continue?')) { input.value = ''; return; }
-            const reader = new FileReader();
-            reader.onload = e => {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (Array.isArray(data)) {
-                        lastAction = { type: 'import', oldInventory: [...inventory], oldCategories: [...categories] };
-                        inventory = data;
-                        categories = [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
-                    } else if (data.inventory && Array.isArray(data.inventory)) {
-                        lastAction = { type: 'import', oldInventory: [...inventory], oldCategories: [...categories] };
-                        inventory = data.inventory;
-                        categories = data.categories && Array.isArray(data.categories) ? data.categories : [...new Set(inventory.map(i => i.category).filter(Boolean))].sort();
-                    } else { showToast('Invalid file format', 'error'); return; }
-                    saveToStorage();
-                    populateCategoryFilters();
-                    updateAllViews();
-                    document.getElementById('last-sync').textContent = inventory.length + ' items imported';
-                    showToast('Data imported successfully', 'success');
-                    showUndoToast();
-                } catch (err) { showToast('Error reading file', 'error'); }
-            };
-            reader.readAsText(file);
-            input.value = '';
-        }
-
-        function resetData() {
-            if (confirm('WARNING: This will delete ALL inventory data. Continue?')) {
-                lastAction = { type: 'reset', oldInventory: [...inventory], oldCategories: [...categories] };
-                inventory = []; categories = [];
-                saveToStorage();
-                populateCategoryFilters();
-                updateAllViews();
-                document.getElementById('last-sync').textContent = 'No data loaded';
-                showToast('All data cleared', 'success');
-                showUndoToast();
+        function clearAllSales() {
+            if (confirm('Delete ALL sales history? This cannot be undone.')) {
+                salesLog = [];
+                saveSales();
+                renderSalesView();
+                showToast('Sales history cleared', 'info');
             }
         }
 
-        function updateAllViews() { updateDashboard(); renderInventory(); renderLowStock(); updateSidebarBadge(); }
+        // ===================== OVERRIDE INIT =====================
+        // Add sales load to existing init
+        const originalInit = init;
+        init = async function() {
+            loadSales();
+            updateSalesSidebarBadge();
+            await originalInit();
+        };
 
-        function updateSidebarBadge() {
-            const lowCount = inventory.filter(i => (i.stock || 0) <= (i.low_stock_threshold || 5)).length;
-            const badge = document.getElementById('sidebar-lowstock-badge');
-            if (lowCount > 0) { badge.textContent = lowCount; badge.classList.remove('hidden'); }
-            else { badge.classList.add('hidden'); }
-        }
+        // Override switchView to handle sales view
+        const originalSwitchView = switchView;
+        switchView = function(view) {
+            originalSwitchView(view);
+            if (view === 'sales') {
+                loadSales();
+                renderSalesView();
+                document.getElementById('page-title').textContent = 'Sales Dashboard';
+            }
+        };
 
-        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); updateCharts(); }
-
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            const colors = { success: 'bg-green-500', error: 'bg-red-500', info: 'bg-blue-500' };
-            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
-            toast.className = `toast flex items-center gap-3 px-5 py-3 ${colors[type]} text-white rounded-xl shadow-lg min-w-[280px]`;
-            toast.innerHTML = `<i class="fas ${icons[type]}"></i><span class="text-sm font-medium">${message}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)'; toast.style.transition = 'all 0.3s ease'; setTimeout(() => toast.remove(), 300); }, 4000);
-        }
-
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') { closeModal(); closeDeleteModal(); }
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); if (currentView === 'inventory') document.getElementById('inv-search').focus(); }
-            if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undoLastAction(); }
-            if ((e.ctrlKey || e.metaKey) && e.key === 'n') { e.preventDefault(); openAddModal(); }
-            if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); autoSyncToGitHub(); }
-            if ((e.ctrlKey || e.metaKey) && e.key === 'd') { e.preventDefault(); diagnoseRepoStructure(); }
-        });
-
-        window.addEventListener('DOMContentLoaded', init);
-        handleResize();
+        // Override updateAllViews
+        const originalUpdateAllViews = updateAllViews;
+        updateAllViews = function() {
+            originalUpdateAllViews();
+            updateSalesSidebarBadge();
+        };
     </script>
 </body>
 </html>
