@@ -68,19 +68,18 @@
         .sync-dot.none { background-color: #9ca3af; }
         .sync-dot.synced { background-color: #3b82f6; }
         #diagnostic-output { max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 11px; }
-        /* Quick Sale search dropdown */
         #sale-search-results { max-height: 280px; overflow-y: auto; }
         .sale-result-item:hover { background: rgba(113,75,103,0.08); }
         .dark .sale-result-item:hover { background: rgba(113,75,103,0.2); }
-        /* Rank badges */
         .rank-gold { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
         .rank-silver { background: linear-gradient(135deg, #94a3b8, #64748b); color: white; }
         .rank-bronze { background: linear-gradient(135deg, #cd7c3a, #a0522d); color: white; }
         .rank-other { background: #e5e7eb; color: #374151; }
         .dark .rank-other { background: #374151; color: #d1d5db; }
-        /* Sale flash animation */
         @keyframes salePulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
         .sale-pulse { animation: salePulse 0.4s ease-out; }
+        /* Bot sale badge */
+        .bot-badge { display:inline-block;margin-left:4px;width:14px;height:14px;background:#25d366;border-radius:50%;vertical-align:middle;font-size:9px;line-height:14px;text-align:center;color:white; }
         #form-category-input::-webkit-calendar-picker-indicator { opacity: 0; position: absolute; right: 10px; cursor: pointer; }
         #form-category-input {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
@@ -299,7 +298,6 @@
 
                 <!-- SALES VIEW -->
                 <div id="view-sales" class="hidden fade-in space-y-6">
-                    <!-- Sales summary cards -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                         <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 card-hover border border-gray-100 dark:border-gray-700">
                             <div class="flex justify-between items-start mb-4">
@@ -335,9 +333,7 @@
                         </div>
                     </div>
 
-                    <!-- Sales Rankings + Quick Sale -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                        <!-- Rankings -->
                         <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
                             <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex flex-wrap items-center justify-between gap-3">
                                 <h3 class="font-bold flex items-center gap-2"><i class="fas fa-trophy text-yellow-500"></i> Sales Rankings</h3>
@@ -350,7 +346,6 @@
                             <div id="sales-rankings" class="divide-y divide-gray-100 dark:divide-gray-700 p-4 space-y-2"></div>
                         </div>
 
-                        <!-- Quick Sale Panel -->
                         <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
                             <div class="p-6 border-b border-gray-100 dark:border-gray-700">
                                 <h3 class="font-bold flex items-center gap-2"><i class="fas fa-bolt text-emerald-500"></i> Quick Sale</h3>
@@ -358,7 +353,7 @@
                             <div class="p-6 space-y-4">
                                 <div class="relative">
                                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                                    <input type="text" id="qs-search" placeholder="Search item..." 
+                                    <input type="text" id="qs-search" placeholder="Search item..."
                                         class="w-full pl-9 pr-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                         oninput="renderQsSuggestions()" autocomplete="off">
                                     <div id="qs-suggestions" class="hidden absolute top-full left-0 right-0 z-20 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl shadow-lg overflow-hidden">
@@ -392,14 +387,13 @@
                         </div>
                     </div>
 
-                    <!-- Sales History -->
                     <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
                         <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex flex-wrap gap-3 items-center justify-between">
                             <h3 class="font-bold flex items-center gap-2"><i class="fas fa-history text-primary-500"></i> Sales History</h3>
                             <div class="flex flex-wrap gap-2 items-center">
                                 <div class="relative">
                                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                                    <input type="text" id="sh-search" placeholder="Search sales..." 
+                                    <input type="text" id="sh-search" placeholder="Search sales..."
                                         class="pl-8 pr-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-primary-500"
                                         oninput="renderSalesHistory()">
                                 </div>
@@ -642,7 +636,7 @@
         </div>
     </div>
 
-    <!-- Quick Sale Modal (from header button) -->
+    <!-- Quick Sale Modal -->
     <div id="quick-sale-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeQuickSaleModal()"></div>
         <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md slide-in border border-gray-200 dark:border-gray-700">
@@ -707,7 +701,7 @@
         // ===================== STATE =====================
         let inventory = [];
         let categories = [];
-        let sales = [];          // { id, sku, name, category, qty, price, total, timestamp }
+        let sales = [];
         let currentView = 'dashboard';
         let deleteTargetSku = null;
         let categoryChart = null;
@@ -717,8 +711,8 @@
         let lastAction = null;
         let dataSource = 'none';
         let rankMode = 'qty';
-        let qsSelectedSku = null;   // quick sale panel on sales page
-        let qsmSelectedSku = null;  // quick sale modal
+        let qsSelectedSku = null;
+        let qsmSelectedSku = null;
 
         const GITHUB_OWNER = 'karanja9';
         const GITHUB_REPO = 'workshop-inventory';
@@ -737,7 +731,7 @@
             });
 
             await loadData();
-            loadSales();
+            await loadSales();              // ← CHANGED: was loadSales() without await
             populateCategoryFilters();
             updateAllViews();
             setupCategoryInputSync();
@@ -783,13 +777,46 @@
             }
         }
 
-        function loadSales() {
+        // ===================== CHANGED: loadSales now async, fetches sales_log.json =====================
+        async function loadSales() {
             const saved = localStorage.getItem('workshop_sales');
-            sales = saved ? JSON.parse(saved) : [];
+            const localSales = saved ? JSON.parse(saved) : [];
+            try {
+                const r = await fetch('sales_log.json?t=' + Date.now());
+                if (r.ok) {
+                    const botSales = await r.json();
+                    const normalized = botSales.map(s => ({
+                        id:        s.id || ('bot-' + s.sku + '-' + s.timestamp),
+                        sku:       s.sku,
+                        name:      s.name,
+                        category:  s.category || 'General',
+                        qty:       s.qty,
+                        price:     s.price,
+                        total:     s.total,
+                        timestamp: s.timestamp,
+                        source:    'bot'
+                    }));
+                    const seen = new Set();
+                    sales = [...normalized, ...localSales].filter(s => {
+                        if (seen.has(s.id)) return false;
+                        seen.add(s.id);
+                        return true;
+                    }).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                } else {
+                    sales = localSales;
+                }
+            } catch(e) {
+                console.warn('Could not load sales_log.json:', e);
+                sales = localSales;
+            }
         }
+        // ==============================================================================================
 
         function saveSales() {
-            localStorage.setItem('workshop_sales', JSON.stringify(sales));
+            // Only saves locally-recorded (non-bot) sales to localStorage.
+            // Bot sales live in sales_log.json on GitHub.
+            const localOnly = sales.filter(s => s.source !== 'bot');
+            localStorage.setItem('workshop_sales', JSON.stringify(localOnly));
         }
 
         function handleResize() {
@@ -861,7 +888,6 @@
 
         // ===================== SALES MODULE =====================
 
-        // --- Quick Sale (sidebar panel on Sales view) ---
         function renderQsSuggestions() {
             const q = document.getElementById('qs-search').value.toLowerCase().trim();
             const box = document.getElementById('qs-suggestions');
@@ -938,7 +964,6 @@
             document.getElementById('qs-qty').value = 1;
         }
 
-        // --- Quick Sale Modal (from header) ---
         function openQuickSaleModal() {
             clearQsmSelection();
             document.getElementById('quick-sale-modal').classList.remove('hidden');
@@ -1023,7 +1048,6 @@
             closeQuickSaleModal();
         }
 
-        // --- Core sale processing ---
         function processSale(item, qty) {
             const saleEntry = {
                 id: Date.now() + Math.random().toString(36).slice(2,7),
@@ -1034,11 +1058,11 @@
                 price: item.price || 0,
                 total: (item.price || 0) * qty,
                 timestamp: new Date().toISOString()
+                // no source field = local sale
             };
             sales.unshift(saleEntry);
             saveSales();
 
-            // Deduct from inventory
             const idx = inventory.findIndex(i => i.sku === item.sku);
             if (idx !== -1) {
                 inventory[idx].stock = Math.max(0, (inventory[idx].stock || 0) - qty);
@@ -1055,12 +1079,11 @@
             showToast(`✅ Sale recorded: ${qty}× ${item.name} (KSh ${saleEntry.total.toLocaleString()})`, 'success');
         }
 
-        // --- Delete sale (undo) ---
         function deleteSaleEntry(id) {
             const sale = sales.find(s => s.id === id);
             if (!sale) return;
+            if (sale.source === 'bot') { showToast('Bot sales cannot be deleted here — remove from sales_log.json on GitHub.', 'info'); return; }
             if (!confirm(`Remove this sale of ${sale.qty}× ${sale.name}? Stock will be restored.`)) return;
-            // Restore stock
             const idx = inventory.findIndex(i => i.sku === sale.sku);
             if (idx !== -1) {
                 inventory[idx].stock = (inventory[idx].stock || 0) + sale.qty;
@@ -1076,7 +1099,6 @@
             showToast('Sale removed and stock restored', 'info');
         }
 
-        // --- Sales Dashboard stats ---
         function renderSalesDashboard() {
             const today = new Date().toDateString();
             const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
@@ -1087,14 +1109,12 @@
             document.getElementById('sales-today-revenue').textContent = todaySales.reduce((a,s)=>a+s.total,0).toLocaleString();
             document.getElementById('sales-week-revenue').textContent = weekSales.reduce((a,s)=>a+s.total,0).toLocaleString();
 
-            // Best seller today
             const qtys = {};
             todaySales.forEach(s => qtys[s.name] = (qtys[s.name]||0) + s.qty);
             const best = Object.entries(qtys).sort((a,b)=>b[1]-a[1])[0];
             document.getElementById('sales-best-seller').textContent = best ? best[0] : '—';
         }
 
-        // --- Rankings ---
         function setRankMode(mode) {
             rankMode = mode;
             ['qty','rev','cat'].forEach(m => {
@@ -1112,7 +1132,6 @@
                 container.innerHTML = '<div class="p-8 text-center text-gray-400 text-sm"><i class="fas fa-chart-bar text-2xl mb-3 block opacity-30"></i>No sales data yet</div>';
                 return;
             }
-
             let ranked = [];
             if (rankMode === 'qty') {
                 const map = {};
@@ -1127,7 +1146,6 @@
                 sales.forEach(s => { if (!map[s.category]) map[s.category] = {cat:s.category, qty:0, rev:0}; map[s.category].qty+=s.qty; map[s.category].rev+=s.total; });
                 ranked = Object.values(map).sort((a,b)=>b.rev-a.rev).slice(0,7).map(r=>({label:r.cat, sub:`${r.qty} units sold`, value:`KSh ${r.rev.toLocaleString()}`, secondary:''}));
             }
-
             const badges = ['rank-gold','rank-silver','rank-bronze'];
             const medals = ['🥇','🥈','🥉'];
             container.innerHTML = ranked.map((r, i) => {
@@ -1147,7 +1165,6 @@
             }).join('');
         }
 
-        // --- Sales History ---
         function getFilteredSales() {
             const q = (document.getElementById('sh-search')?.value || '').toLowerCase();
             const filter = document.getElementById('sh-filter')?.value || 'all';
@@ -1155,7 +1172,6 @@
             const today = now.toDateString();
             const weekAgo = new Date(now - 7*24*60*60*1000);
             const monthAgo = new Date(now.getFullYear(), now.getMonth(), 1);
-
             return sales.filter(s => {
                 const d = new Date(s.timestamp);
                 const matchFilter = filter === 'all' ? true
@@ -1172,7 +1188,6 @@
             const empty = document.getElementById('sales-history-empty');
             const summary = document.getElementById('sales-history-summary');
             const filtered = getFilteredSales();
-
             if (filtered.length === 0) {
                 tbody.innerHTML = '';
                 empty.classList.remove('hidden');
@@ -1181,30 +1196,29 @@
             }
             empty.classList.add('hidden');
             summary.classList.remove('hidden');
-
             const totalRev = filtered.reduce((a,s)=>a+s.total,0);
             const totalQty = filtered.reduce((a,s)=>a+s.qty,0);
             document.getElementById('sh-showing-count').textContent = `${filtered.length} sale${filtered.length !== 1 ? 's':'' }`;
             document.getElementById('sh-total-revenue').textContent = `KSh ${totalRev.toLocaleString()}`;
             document.getElementById('sh-total-qty').textContent = totalQty.toLocaleString();
-
             tbody.innerHTML = filtered.map((s, i) => {
                 const dt = new Date(s.timestamp);
                 const dateStr = dt.toLocaleDateString('en-KE', { day:'2-digit', month:'short', year:'numeric' });
                 const timeStr = dt.toLocaleTimeString('en-KE', { hour:'2-digit', minute:'2-digit' });
+                const botBadge = s.source === 'bot'
+                    ? '<span class="bot-badge" title="Recorded via WhatsApp bot">W</span>'
+                    : '';
                 return `<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors group">
                     <td class="px-5 py-3 text-xs text-gray-400 font-mono">${filtered.length - i}</td>
                     <td class="px-5 py-3 text-xs"><div class="font-medium">${dateStr}</div><div class="text-gray-400">${timeStr}</div></td>
-                    <td class="px-5 py-3 font-mono text-gray-400 text-xs">${s.sku}</td>
+                    <td class="px-5 py-3 font-mono text-gray-400 text-xs">${s.sku}${botBadge}</td>
                     <td class="px-5 py-3 font-semibold text-sm">${s.name}</td>
                     <td class="px-5 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">${s.category}</span></td>
                     <td class="px-5 py-3 text-center font-bold text-emerald-600 dark:text-emerald-400">${s.qty}</td>
                     <td class="px-5 py-3 text-right text-gray-500">${s.price.toLocaleString()}</td>
                     <td class="px-5 py-3 text-right font-bold">KSh ${s.total.toLocaleString()}</td>
                     <td class="px-5 py-3 text-right">
-                        <button onclick="deleteSaleEntry('${s.id}')" class="w-7 h-7 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-400 hover:text-red-600 hover:bg-red-100 dark:hover:bg-red-900/40 flex items-center justify-center transition-colors opacity-0 group-hover:opacity-100 touch-actions ml-auto" title="Delete sale">
-                            <i class="fas fa-trash text-xs"></i>
-                        </button>
+                        ${s.source !== 'bot' ? `<button onclick="deleteSaleEntry('${s.id}')" class="w-7 h-7 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-400 hover:text-red-600 hover:bg-red-100 dark:hover:bg-red-900/40 flex items-center justify-center transition-colors opacity-0 group-hover:opacity-100 touch-actions ml-auto" title="Delete sale"><i class="fas fa-trash text-xs"></i></button>` : '<span class="text-xs text-gray-300 dark:text-gray-600">bot</span>'}
                     </td>
                 </tr>`;
             }).join('');
@@ -1213,7 +1227,7 @@
         function exportSalesCSV() {
             const filtered = getFilteredSales();
             if (filtered.length === 0) { showToast('No sales to export', 'info'); return; }
-            const headers = ['#','Date','Time','SKU','Product','Category','Quantity','Unit Price (KSh)','Total (KSh)'];
+            const headers = ['#','Date','Time','SKU','Product','Category','Quantity','Unit Price (KSh)','Total (KSh)','Source'];
             const rows = filtered.map((s, i) => {
                 const dt = new Date(s.timestamp);
                 return [
@@ -1221,7 +1235,7 @@
                     dt.toLocaleDateString('en-KE'),
                     dt.toLocaleTimeString('en-KE'),
                     s.sku, `"${s.name}"`, s.category,
-                    s.qty, s.price, s.total
+                    s.qty, s.price, s.total, s.source || 'web'
                 ].join(',');
             });
             const csv = [headers.join(','), ...rows].join('\n');
@@ -1234,15 +1248,16 @@
         }
 
         function clearSalesHistory() {
-            if (sales.length === 0) { showToast('No sales history to clear', 'info'); return; }
-            if (!confirm(`Clear all ${sales.length} sales records? Stock will NOT be restored.`)) return;
-            sales = [];
+            const localSales = sales.filter(s => s.source !== 'bot');
+            if (localSales.length === 0) { showToast('No local sales to clear (bot sales are on GitHub)', 'info'); return; }
+            if (!confirm(`Clear ${localSales.length} local sales? Bot sales on GitHub will remain. Stock will NOT be restored.`)) return;
+            sales = sales.filter(s => s.source === 'bot');
             saveSales();
             renderSalesDashboard();
             renderSalesRankings();
             renderSalesHistory();
             updateSalesBadge();
-            showToast('Sales history cleared', 'success');
+            showToast('Local sales cleared', 'success');
         }
 
         function updateSalesBadge() {
@@ -1291,7 +1306,6 @@
             try {
                 const repoCheck = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`, { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' } });
                 if (!repoCheck.ok) { const err = await repoCheck.json().catch(()=>({})); throw new Error(`Repository error (${repoCheck.status}): ${err.message || 'Check owner/repo name'}`); }
-                const repoData = await repoCheck.json();
                 let sha = null;
                 const getRes = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/inventory_data.json?ref=${GITHUB_BRANCH}`, { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' } });
                 if (getRes.ok) { const fd = await getRes.json(); sha = fd.sha; }
@@ -1325,7 +1339,8 @@
         function updateTokenStatus() { const status = document.getElementById('token-status'); if (status) { const token = localStorage.getItem('github_token'); if (token) { status.textContent = 'Configured'; status.className = 'text-sm text-green-500'; } else { status.textContent = 'Not configured'; status.className = 'text-sm text-gray-400'; } } }
 
         // ===================== NAVIGATION =====================
-        function switchView(view) {
+        // ← CHANGED: switchView is now async; awaits loadSales before rendering sales tab
+        async function switchView(view) {
             currentView = view;
             document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
             document.getElementById('view-' + view).classList.remove('hidden');
@@ -1335,7 +1350,12 @@
             document.getElementById('page-title').textContent = titles[view];
             if (view === 'dashboard') updateDashboard();
             if (view === 'inventory') renderInventory();
-            if (view === 'sales') { renderSalesDashboard(); renderSalesRankings(); renderSalesHistory(); }
+            if (view === 'sales') {
+                await loadSales();              // ← fetch fresh bot sales every time Sales tab opens
+                renderSalesDashboard();
+                renderSalesRankings();
+                renderSalesHistory();
+            }
             if (view === 'lowstock') renderLowStock();
             if (view === 'settings') { renderSettings(); updateTokenStatus(); }
             if (window.innerWidth < 1024) hideSidebar();
@@ -1621,7 +1641,6 @@
             setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)'; toast.style.transition = 'all 0.3s ease'; setTimeout(() => toast.remove(), 300); }, 4000);
         }
 
-        // Close dropdowns when clicking outside
         document.addEventListener('click', (e) => {
             if (!e.target.closest('#qs-search') && !e.target.closest('#qs-suggestions')) document.getElementById('qs-suggestions')?.classList.add('hidden');
             if (!e.target.closest('#qsm-search') && !e.target.closest('#qsm-suggestions')) document.getElementById('qsm-suggestions')?.classList.add('hidden');
@@ -1639,7 +1658,5 @@
         window.addEventListener('DOMContentLoaded', init);
         handleResize();
     </script>
-
-    <script src="sales_patch.js"></script>  <!-- ADD THIS LINE -->
 </body>
 </html>
