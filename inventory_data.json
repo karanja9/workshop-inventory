@@ -5,10 +5,10 @@
     "description": "135, ford front small/ L200(out), probox,",
     "category": "Bearings",
     "price": 400,
-    "stock": 23,
+    "stock": 24,
     "low_stock_threshold": 2,
-    "stock_baseline": 23,
-    "baseline_date": "2026-05-10T13:17:01.623Z"
+    "stock_baseline": 24,
+    "baseline_date": "2026-05-10T13:19:43.134Z"
   },
   {
     "sku": 10001,
@@ -63,17 +63,6 @@
     "stock": 20,
     "low_stock_threshold": 2,
     "stock_baseline": 20,
-    "baseline_date": "2026-05-10T13:17:01.623Z"
-  },
-  {
-    "sku": 10006,
-    "name": "32207",
-    "category": "Bearings",
-    "description": "baldan furrow wheel big",
-    "price": 700,
-    "stock": 0,
-    "low_stock_threshold": 2,
-    "stock_baseline": 0,
     "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
