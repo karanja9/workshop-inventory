@@ -6,7 +6,9 @@
     "category": "Bearings",
     "price": 400,
     "stock": 23,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 23,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10001,
@@ -15,7 +17,9 @@
     "description": "arrow",
     "price": 750,
     "stock": 8,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 8,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10002,
@@ -24,7 +28,9 @@
     "description": "arrow",
     "price": 850,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10003,
@@ -33,7 +39,9 @@
     "description": "arrow wheel bearing",
     "price": 850,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10004,
@@ -42,7 +50,9 @@
     "description": "baldan disc",
     "price": 1200,
     "stock": 24,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 24,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10005,
@@ -51,7 +61,9 @@
     "description": "baldan disc",
     "price": 1000,
     "stock": 20,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 20,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10006,
@@ -60,7 +72,9 @@
     "description": "baldan furrow wheel big",
     "price": 700,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10007,
@@ -69,7 +83,9 @@
     "description": "baldan/ nardi furrow wheel small",
     "price": 600,
     "stock": 48,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 48,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10008,
@@ -78,7 +94,9 @@
     "description": "chambuli",
     "price": 500,
     "stock": 13,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 13,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10009,
@@ -87,7 +105,9 @@
     "description": "chambuli (out)",
     "price": 400,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10010,
@@ -96,7 +116,9 @@
     "description": "datsun",
     "price": 500,
     "stock": 7,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 7,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10011,
@@ -105,7 +127,9 @@
     "description": "datsun",
     "price": 350,
     "stock": 17,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 17,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10012,
@@ -114,7 +138,9 @@
     "description": "FH",
     "price": 1850,
     "stock": 4,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 4,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10013,
@@ -123,7 +149,9 @@
     "description": "FH back wheel",
     "price": 1300,
     "stock": 6,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 6,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10014,
@@ -132,7 +160,9 @@
     "description": "ford front , 240",
     "price": 400,
     "stock": 8,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 8,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10015,
@@ -141,7 +171,9 @@
     "description": "front wheel mf 135",
     "price": 550,
     "stock": 11,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 11,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10016,
@@ -150,7 +182,9 @@
     "description": "fugerson  front",
     "price": 500,
     "stock": 15,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 15,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10017,
@@ -159,7 +193,9 @@
     "description": "fugerson front",
     "price": 1000,
     "stock": 17,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 17,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10018,
@@ -168,7 +204,9 @@
     "description": "furgerson furrow wheel",
     "price": 500,
     "stock": 21,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 21,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10019,
@@ -177,7 +215,9 @@
     "description": "furgerson furrow wheel",
     "price": 500,
     "stock": 16,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 16,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10020,
@@ -186,7 +226,9 @@
     "description": "Hilux diesel",
     "price": 900,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10021,
@@ -195,7 +237,9 @@
     "description": "kingpin",
     "price": 500,
     "stock": 32,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 32,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10022,
@@ -204,7 +248,9 @@
     "description": "mersey plough disc big",
     "price": 1350,
     "stock": 8,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 8,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10023,
@@ -213,7 +259,9 @@
     "description": "mersey plough disc small",
     "price": 1000,
     "stock": 24,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 24,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10024,
@@ -222,7 +270,9 @@
     "description": "nardi",
     "price": 800,
     "stock": 11,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 11,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10025,
@@ -231,16 +281,20 @@
     "description": "nardi",
     "price": 1400,
     "stock": 11,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 11,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10026,
     "name": "32207",
     "category": "Bearings",
-    "description": "nardi furrow wheel bearing (big)",
+    "description": "nardi furrow wheel bearing (big), baldan furrow wheel big",
     "price": 700,
     "stock": 34,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 34,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10027,
@@ -249,7 +303,9 @@
     "description": "nardi furrow wheel bearing (small)",
     "price": 700,
     "stock": 17,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 17,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10028,
@@ -258,7 +314,9 @@
     "description": "ndume",
     "price": 1300,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10029,
@@ -267,7 +325,9 @@
     "description": "nissan navara",
     "price": 850,
     "stock": 9,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 9,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10030,
@@ -276,7 +336,9 @@
     "description": "planter,",
     "price": 500,
     "stock": 32,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 32,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10031,
@@ -285,7 +347,9 @@
     "description": "t55 front bearing (small)",
     "price": 700,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10032,
@@ -294,7 +358,9 @@
     "description": "t55 front wheel bearing (big)",
     "price": 700,
     "stock": 17,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 17,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10033,
@@ -303,7 +369,9 @@
     "description": "tt55 front",
     "price": 750,
     "stock": 13,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 13,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10034,
@@ -312,7 +380,9 @@
     "description": "",
     "price": 650,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10035,
@@ -321,7 +391,9 @@
     "description": "",
     "price": 850,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10036,
@@ -330,7 +402,9 @@
     "description": "",
     "price": 1250,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10037,
@@ -339,7 +413,9 @@
     "description": "",
     "price": 1500,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10038,
@@ -348,7 +424,9 @@
     "description": "",
     "price": 1350,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10039,
@@ -357,7 +435,9 @@
     "description": "",
     "price": 1000,
     "stock": 38,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 38,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10040,
@@ -366,7 +446,9 @@
     "description": "",
     "price": 450,
     "stock": 3,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 3,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10041,
@@ -375,7 +457,9 @@
     "description": "",
     "price": 750,
     "stock": 15,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 15,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10042,
@@ -384,7 +468,9 @@
     "description": "",
     "price": 850,
     "stock": 2,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 2,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10043,
@@ -393,7 +479,9 @@
     "description": "",
     "price": 150,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10044,
@@ -402,7 +490,9 @@
     "description": "",
     "price": 150,
     "stock": 3,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 3,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10045,
@@ -411,7 +501,9 @@
     "description": "",
     "price": 200,
     "stock": 8,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 8,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10046,
@@ -420,7 +512,9 @@
     "description": "",
     "price": 200,
     "stock": 12,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 12,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10047,
@@ -429,7 +523,9 @@
     "description": "",
     "price": 300,
     "stock": 27,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 27,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10048,
@@ -438,7 +534,9 @@
     "description": "",
     "price": 400,
     "stock": 44,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 44,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10049,
@@ -447,7 +545,9 @@
     "description": "",
     "price": 700,
     "stock": 25,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 25,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10050,
@@ -456,7 +556,9 @@
     "description": "",
     "price": 800,
     "stock": 4,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 4,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10051,
@@ -465,7 +567,9 @@
     "description": "",
     "price": 1200,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10052,
@@ -474,7 +578,9 @@
     "description": "",
     "price": 1500,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10053,
@@ -483,7 +589,9 @@
     "description": "",
     "price": 150,
     "stock": 2,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 2,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10054,
@@ -492,7 +600,9 @@
     "description": "",
     "price": 150,
     "stock": 4,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 4,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10055,
@@ -501,7 +611,9 @@
     "description": "",
     "price": 300,
     "stock": 25,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 25,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10056,
@@ -510,7 +622,9 @@
     "description": "",
     "price": 250,
     "stock": 19,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 19,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10057,
@@ -519,7 +633,9 @@
     "description": "",
     "price": 300,
     "stock": 23,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 23,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10058,
@@ -528,7 +644,9 @@
     "description": "",
     "price": 400,
     "stock": 20,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 20,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10059,
@@ -537,7 +655,9 @@
     "description": "",
     "price": 600,
     "stock": 12,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 12,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10060,
@@ -546,7 +666,9 @@
     "description": "",
     "price": 700,
     "stock": 14,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 14,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10061,
@@ -555,7 +677,9 @@
     "description": "",
     "price": 800,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10062,
@@ -564,7 +688,9 @@
     "description": "",
     "price": 0,
     "stock": 2,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 2,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10064,
@@ -573,7 +699,9 @@
     "description": "",
     "price": 850,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10065,
@@ -582,7 +710,9 @@
     "description": "",
     "price": 800,
     "stock": 4,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 4,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10066,
@@ -591,7 +721,9 @@
     "description": "",
     "price": 950,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10067,
@@ -600,7 +732,9 @@
     "description": "",
     "price": 1150,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10068,
@@ -609,7 +743,9 @@
     "description": "",
     "price": 1200,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10069,
@@ -618,7 +754,9 @@
     "description": "",
     "price": 1150,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10070,
@@ -627,7 +765,9 @@
     "description": "",
     "price": 400,
     "stock": 9,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 9,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10071,
@@ -636,7 +776,9 @@
     "description": "",
     "price": 500,
     "stock": 6,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 6,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10072,
@@ -645,7 +787,9 @@
     "description": "",
     "price": 500,
     "stock": 6,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 6,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10073,
@@ -654,7 +798,9 @@
     "description": "",
     "price": 750,
     "stock": 3,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 3,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10074,
@@ -663,7 +809,9 @@
     "description": "",
     "price": 1000,
     "stock": 6,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 6,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10075,
@@ -672,7 +820,9 @@
     "description": "",
     "price": 1200,
     "stock": 13,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 13,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10076,
@@ -681,7 +831,9 @@
     "description": "",
     "price": 650,
     "stock": 2,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 2,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10077,
@@ -690,7 +842,9 @@
     "description": "",
     "price": 750,
     "stock": 3,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 3,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10078,
@@ -699,7 +853,9 @@
     "description": "",
     "price": 1250,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10079,
@@ -708,7 +864,9 @@
     "description": "",
     "price": 600,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10080,
@@ -717,7 +875,9 @@
     "description": "",
     "price": 1000,
     "stock": 4,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 4,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10081,
@@ -726,7 +886,9 @@
     "description": "",
     "price": 800,
     "stock": 12,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 12,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10082,
@@ -735,7 +897,9 @@
     "description": "",
     "price": 700,
     "stock": 20,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 20,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10083,
@@ -744,7 +908,9 @@
     "description": "",
     "price": 1000,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10084,
@@ -753,7 +919,9 @@
     "description": "",
     "price": 500,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10085,
@@ -762,7 +930,9 @@
     "description": "",
     "price": 250,
     "stock": 18,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 18,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10086,
@@ -771,7 +941,9 @@
     "description": "",
     "price": 1800,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10087,
@@ -780,7 +952,9 @@
     "description": "",
     "price": 500,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10088,
@@ -789,7 +963,9 @@
     "description": "",
     "price": 500,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10089,
@@ -798,7 +974,9 @@
     "description": "",
     "price": 850,
     "stock": 6,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 6,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10090,
@@ -807,7 +985,9 @@
     "description": "",
     "price": 800,
     "stock": 7,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 7,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10091,
@@ -816,7 +996,9 @@
     "description": "",
     "price": 0,
     "stock": 2,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 2,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10092,
@@ -825,7 +1007,9 @@
     "description": "",
     "price": 700,
     "stock": 13,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 13,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10093,
@@ -834,7 +1018,9 @@
     "description": "",
     "price": 750,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10094,
@@ -843,7 +1029,9 @@
     "description": "",
     "price": 500,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10095,
@@ -852,7 +1040,9 @@
     "description": "",
     "price": 600,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10096,
@@ -861,7 +1051,9 @@
     "description": "",
     "price": 650,
     "stock": 7,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 7,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10097,
@@ -870,7 +1062,9 @@
     "description": "",
     "price": 700,
     "stock": 6,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 6,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 10098,
@@ -879,7 +1073,9 @@
     "description": "",
     "price": 650,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 20000,
@@ -888,7 +1084,9 @@
     "description": "",
     "price": 0,
     "stock": 2,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 2,
+    "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
     "sku": 20001,
@@ -897,7 +1095,9 @@
     "description": "",
     "price": 0,
     "stock": 2,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 2,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20002,
@@ -906,7 +1106,9 @@
     "description": "",
     "price": 0,
     "stock": 11,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 11,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20003,
@@ -915,7 +1117,9 @@
     "description": "",
     "price": 0,
     "stock": 9,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 9,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20004,
@@ -924,7 +1128,9 @@
     "description": "",
     "price": 0,
     "stock": 11,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 11,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20005,
@@ -933,7 +1139,9 @@
     "description": "",
     "price": 0,
     "stock": 14,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 14,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20006,
@@ -942,7 +1150,9 @@
     "description": "",
     "price": 0,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20007,
@@ -951,7 +1161,9 @@
     "description": "",
     "price": 0,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20008,
@@ -960,7 +1172,9 @@
     "description": "",
     "price": 0,
     "stock": 9,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 9,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20009,
@@ -969,7 +1183,9 @@
     "description": "",
     "price": 0,
     "stock": 12,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 12,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20010,
@@ -978,7 +1194,9 @@
     "description": "",
     "price": 0,
     "stock": 3,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 3,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20011,
@@ -987,7 +1205,9 @@
     "description": "",
     "price": 0,
     "stock": 2,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 2,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20012,
@@ -996,7 +1216,9 @@
     "description": "",
     "price": 0,
     "stock": 13,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 13,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20013,
@@ -1005,7 +1227,9 @@
     "description": "",
     "price": 0,
     "stock": 4,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 4,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20014,
@@ -1014,7 +1238,9 @@
     "description": "",
     "price": 0,
     "stock": 3,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 3,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20015,
@@ -1023,7 +1249,9 @@
     "description": "",
     "price": 0,
     "stock": 6,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 6,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20016,
@@ -1032,7 +1260,9 @@
     "description": "",
     "price": 0,
     "stock": 3,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 3,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20017,
@@ -1041,7 +1271,9 @@
     "description": "",
     "price": 0,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20018,
@@ -1050,7 +1282,9 @@
     "description": "",
     "price": 0,
     "stock": 3,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 3,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20019,
@@ -1059,7 +1293,9 @@
     "description": "",
     "price": 0,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20020,
@@ -1068,7 +1304,9 @@
     "description": "",
     "price": 0,
     "stock": 3,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 3,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20021,
@@ -1077,7 +1315,9 @@
     "description": "",
     "price": 1000,
     "stock": 3,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 3,
+    "baseline_date": "2026-05-10T13:17:01.624Z"
   },
   {
     "sku": 20022,
@@ -1086,7 +1326,9 @@
     "description": "",
     "price": 1000,
     "stock": 1,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 1,
+    "baseline_date": "2026-05-10T13:17:01.625Z"
   },
   {
     "sku": 20023,
@@ -1095,7 +1337,9 @@
     "description": "",
     "price": 1000,
     "stock": 1,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 1,
+    "baseline_date": "2026-05-10T13:17:01.625Z"
   },
   {
     "sku": 10099,
@@ -1104,7 +1348,9 @@
     "description": "",
     "price": 1000,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.625Z"
   },
   {
     "sku": 10100,
@@ -1113,7 +1359,9 @@
     "description": "",
     "price": 500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.625Z"
   },
   {
     "sku": 10101,
@@ -1122,7 +1370,9 @@
     "description": "",
     "price": 1300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.625Z"
   },
   {
     "sku": 10102,
@@ -1131,7 +1381,9 @@
     "description": "",
     "price": 500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.625Z"
   },
   {
     "sku": 10103,
@@ -1140,7 +1392,9 @@
     "description": "",
     "price": 500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10104,
@@ -1149,7 +1403,9 @@
     "description": "",
     "price": 3500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10105,
@@ -1158,7 +1414,9 @@
     "description": "",
     "price": 1000,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10106,
@@ -1167,7 +1425,9 @@
     "description": "nissan",
     "price": 4500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10107,
@@ -1176,7 +1436,9 @@
     "description": "nissan",
     "price": 3500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10108,
@@ -1185,7 +1447,9 @@
     "description": "probox",
     "price": 350,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10109,
@@ -1194,7 +1458,9 @@
     "description": "gtouring",
     "price": 400,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10110,
@@ -1203,7 +1469,9 @@
     "description": "Isuzu 4.3",
     "price": 500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10111,
@@ -1212,7 +1480,9 @@
     "description": "Isuzu 4.3",
     "price": 400,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10112,
@@ -1221,7 +1491,9 @@
     "description": "gtouring, fh, fuso",
     "price": 300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10113,
@@ -1230,7 +1502,9 @@
     "description": "gtouring",
     "price": 400,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10114,
@@ -1239,7 +1513,9 @@
     "description": "probox",
     "price": 300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10115,
@@ -1248,7 +1524,9 @@
     "description": "probox crankshaft seal",
     "price": 600,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10116,
@@ -1257,7 +1535,9 @@
     "description": "small crankshaft seal",
     "price": 300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10117,
@@ -1266,7 +1546,9 @@
     "description": "gearbox probox",
     "price": 300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10118,
@@ -1275,7 +1557,9 @@
     "description": "probox",
     "price": 400,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10119,
@@ -1284,7 +1568,9 @@
     "description": "probox",
     "price": 300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10120,
@@ -1293,7 +1579,9 @@
     "description": "probox",
     "price": 400,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10121,
@@ -1302,7 +1590,9 @@
     "description": "",
     "price": 1500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10122,
@@ -1311,7 +1601,9 @@
     "description": "",
     "price": 1600,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10123,
@@ -1320,7 +1612,9 @@
     "description": "",
     "price": 1200,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10124,
@@ -1329,7 +1623,9 @@
     "description": "",
     "price": 1100,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10125,
@@ -1338,7 +1634,9 @@
     "description": "",
     "price": 1300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10126,
@@ -1347,7 +1645,9 @@
     "description": "",
     "price": 1700,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10127,
@@ -1356,7 +1656,9 @@
     "description": "",
     "price": 1200,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10128,
@@ -1365,7 +1667,9 @@
     "description": "",
     "price": 1800,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10129,
@@ -1374,7 +1678,9 @@
     "description": "",
     "price": 1300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10130,
@@ -1383,7 +1689,9 @@
     "description": "",
     "price": 600,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10131,
@@ -1392,7 +1700,9 @@
     "description": "",
     "price": 1200,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10132,
@@ -1401,7 +1711,9 @@
     "description": "",
     "price": 1500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10133,
@@ -1410,7 +1722,9 @@
     "description": "sunny",
     "price": 850,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10134,
@@ -1419,7 +1733,9 @@
     "description": "",
     "price": 1400,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10135,
@@ -1428,7 +1744,9 @@
     "description": "",
     "price": 1200,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10136,
@@ -1437,7 +1755,9 @@
     "description": "",
     "price": 1600,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10137,
@@ -1446,7 +1766,9 @@
     "description": "",
     "price": 1500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10138,
@@ -1455,7 +1777,9 @@
     "description": "",
     "price": 1000,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10139,
@@ -1464,7 +1788,9 @@
     "description": "",
     "price": 1400,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10140,
@@ -1473,7 +1799,9 @@
     "description": "390/165",
     "price": 2000,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10141,
@@ -1482,7 +1810,9 @@
     "description": "new probox",
     "price": 1000,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10142,
@@ -1491,7 +1821,9 @@
     "description": "new probox",
     "price": 1000,
     "stock": 2,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 2,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10143,
@@ -1500,7 +1832,9 @@
     "description": "xtrail",
     "price": 1500,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10144,
@@ -1509,7 +1843,9 @@
     "description": "old caldina",
     "price": 1500,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 20024,
@@ -1518,7 +1854,9 @@
     "description": "premio1.3/voxy",
     "price": 0,
     "stock": 9,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 9,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 20025,
@@ -1527,7 +1865,9 @@
     "description": "noah",
     "price": 0,
     "stock": 8,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 8,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 20026,
@@ -1536,7 +1876,9 @@
     "description": "7l",
     "price": 0,
     "stock": 6,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 6,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 20027,
@@ -1545,7 +1887,9 @@
     "description": "nze",
     "price": 0,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 20028,
@@ -1554,7 +1898,9 @@
     "description": "probox",
     "price": 700,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 20029,
@@ -1563,7 +1909,9 @@
     "description": "",
     "price": 0,
     "stock": 11,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 11,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 20030,
@@ -1572,7 +1920,9 @@
     "description": "102",
     "price": 0,
     "stock": 9,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 9,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 20031,
@@ -1581,7 +1931,9 @@
     "description": "",
     "price": 0,
     "stock": 7,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 7,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 20032,
@@ -1590,7 +1942,9 @@
     "description": "passio",
     "price": 0,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 20033,
@@ -1599,7 +1953,9 @@
     "description": "rush",
     "price": 1350,
     "stock": 1,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 1,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 20034,
@@ -1608,7 +1964,9 @@
     "description": "",
     "price": 0,
     "stock": 1,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 1,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10145,
@@ -1617,7 +1975,9 @@
     "description": "",
     "price": 500,
     "stock": 2,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 2,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10146,
@@ -1626,7 +1986,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10147,
@@ -1635,7 +1997,9 @@
     "description": "FH",
     "price": 1000,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10148,
@@ -1644,7 +2008,9 @@
     "description": "ftr",
     "price": 1000,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10149,
@@ -1653,7 +2019,9 @@
     "description": "isuzu dmax b5",
     "price": 500,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10150,
@@ -1662,7 +2030,9 @@
     "description": "ford, mf395",
     "price": 400,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10151,
@@ -1671,7 +2041,9 @@
     "description": "mf390, 385, 390, 365",
     "price": 1000,
     "stock": 4,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 4,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10152,
@@ -1680,7 +2052,9 @@
     "description": "mf399",
     "price": 1500,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10153,
@@ -1689,7 +2063,9 @@
     "description": "nissan isuzu",
     "price": 0,
     "stock": 1,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 1,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10154,
@@ -1698,7 +2074,9 @@
     "description": "oil filter for case75,",
     "price": 2000,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10155,
@@ -1707,7 +2085,9 @@
     "description": "",
     "price": 500,
     "stock": 6,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 6,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10156,
@@ -1716,7 +2096,9 @@
     "description": "isuzu tx55 ftr fvr",
     "price": 1500,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10157,
@@ -1725,7 +2107,9 @@
     "description": "small toyotas",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10158,
@@ -1734,7 +2118,9 @@
     "description": "new figo",
     "price": 650,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10159,
@@ -1743,7 +2129,9 @@
     "description": "sonalika, Hilux ,165, 440, 390, 395, 390",
     "price": 600,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10160,
@@ -1752,7 +2140,9 @@
     "description": "440, 390,165, 365",
     "price": 500,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10161,
@@ -1761,7 +2151,9 @@
     "description": "",
     "price": 1100,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10162,
@@ -1770,7 +2162,9 @@
     "description": "suzuki FL/F",
     "price": 0,
     "stock": 3,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 3,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10163,
@@ -1779,7 +2173,9 @@
     "description": "440, 390,165",
     "price": 0,
     "stock": 6,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 6,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10164,
@@ -1788,7 +2184,9 @@
     "description": "figo(pick up),dmax, chopper",
     "price": 500,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10165,
@@ -1797,7 +2195,9 @@
     "description": "",
     "price": 500,
     "stock": 11,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 11,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10166,
@@ -1806,7 +2206,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10167,
@@ -1815,7 +2217,9 @@
     "description": "",
     "price": 0,
     "stock": 4,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 4,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10168,
@@ -1824,7 +2228,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10169,
@@ -1833,7 +2239,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10170,
@@ -1842,7 +2250,9 @@
     "description": "isuzu dmax",
     "price": 0,
     "stock": 1,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 1,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10171,
@@ -1851,7 +2261,9 @@
     "description": "",
     "price": 0,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10172,
@@ -1860,7 +2272,9 @@
     "description": "",
     "price": 700,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10173,
@@ -1869,7 +2283,9 @@
     "description": "",
     "price": 500,
     "stock": 7,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 7,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10174,
@@ -1878,7 +2294,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10175,
@@ -1887,7 +2305,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10176,
@@ -1896,7 +2316,9 @@
     "description": "",
     "price": 0,
     "stock": 1,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 1,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10177,
@@ -1905,7 +2327,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10178,
@@ -1914,7 +2338,9 @@
     "description": "isuzu 3.3 3.6",
     "price": 0,
     "stock": 4,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 4,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10179,
@@ -1923,7 +2349,9 @@
     "description": "",
     "price": 0,
     "stock": 5,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 5,
+    "baseline_date": "2026-05-10T13:17:01.626Z"
   },
   {
     "sku": 10180,
@@ -1932,7 +2360,9 @@
     "description": "nissan pickup",
     "price": 7,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10181,
@@ -1941,7 +2371,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10182,
@@ -1950,7 +2382,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10183,
@@ -1959,7 +2393,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10184,
@@ -1968,7 +2404,9 @@
     "description": "",
     "price": 0,
     "stock": 2,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 2,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10185,
@@ -1977,7 +2415,9 @@
     "description": "",
     "price": 0,
     "stock": 3,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 3,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10186,
@@ -1986,7 +2426,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10187,
@@ -1995,7 +2437,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10188,
@@ -2004,7 +2448,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10189,
@@ -2013,7 +2459,9 @@
     "description": "",
     "price": 0,
     "stock": 1,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 1,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10190,
@@ -2022,7 +2470,9 @@
     "description": "",
     "price": 0,
     "stock": 1,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 1,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10191,
@@ -2031,7 +2481,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10192,
@@ -2040,7 +2492,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10193,
@@ -2049,7 +2503,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10194,
@@ -2058,7 +2514,9 @@
     "description": "",
     "price": 0,
     "stock": 1,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 1,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10195,
@@ -2067,7 +2525,9 @@
     "description": "",
     "price": 0,
     "stock": 0,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 0,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 20035,
@@ -2076,7 +2536,9 @@
     "description": "",
     "price": 0,
     "stock": 4,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 4,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 20036,
@@ -2085,7 +2547,9 @@
     "description": "",
     "price": 0,
     "stock": 1,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 1,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 20037,
@@ -2094,7 +2558,9 @@
     "description": "",
     "price": 0,
     "stock": 2,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 2,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 20038,
@@ -2103,7 +2569,9 @@
     "description": "",
     "price": 0,
     "stock": 12,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 12,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 20039,
@@ -2112,7 +2580,9 @@
     "description": "",
     "price": 0,
     "stock": 3,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 3,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10196,
@@ -2121,7 +2591,9 @@
     "description": "",
     "price": 100,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10197,
@@ -2130,7 +2602,9 @@
     "description": "",
     "price": 3100,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10198,
@@ -2139,7 +2613,9 @@
     "description": "",
     "price": 1500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10199,
@@ -2148,7 +2624,9 @@
     "description": "",
     "price": 1500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10200,
@@ -2157,7 +2635,9 @@
     "description": "",
     "price": 2000,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10201,
@@ -2166,7 +2646,9 @@
     "description": "",
     "price": 4000,
     "stock": 8,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 8,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10202,
@@ -2175,7 +2657,9 @@
     "description": "",
     "price": 3300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10203,
@@ -2184,7 +2668,9 @@
     "description": "",
     "price": 2700,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10204,
@@ -2193,7 +2679,9 @@
     "description": "",
     "price": 1500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.627Z"
   },
   {
     "sku": 10205,
@@ -2202,7 +2690,9 @@
     "description": "",
     "price": 300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10206,
@@ -2211,7 +2701,9 @@
     "description": "",
     "price": 2700,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10207,
@@ -2220,7 +2712,9 @@
     "description": "",
     "price": 100,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10208,
@@ -2229,7 +2723,9 @@
     "description": "",
     "price": 100,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10209,
@@ -2238,7 +2734,9 @@
     "description": "",
     "price": 150,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10210,
@@ -2247,7 +2745,9 @@
     "description": "",
     "price": 200,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10211,
@@ -2256,7 +2756,9 @@
     "description": "",
     "price": 250,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10212,
@@ -2265,7 +2767,9 @@
     "description": "",
     "price": 300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10213,
@@ -2274,7 +2778,9 @@
     "description": "",
     "price": 100,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10214,
@@ -2283,7 +2789,9 @@
     "description": "",
     "price": 150,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10215,
@@ -2292,7 +2800,9 @@
     "description": "",
     "price": 200,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10216,
@@ -2301,7 +2811,9 @@
     "description": "",
     "price": 250,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10217,
@@ -2310,7 +2822,9 @@
     "description": "",
     "price": 300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10218,
@@ -2319,7 +2833,9 @@
     "description": "",
     "price": 350,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10219,
@@ -2328,7 +2844,9 @@
     "description": "",
     "price": 400,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10220,
@@ -2337,7 +2855,9 @@
     "description": "",
     "price": 450,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10221,
@@ -2346,7 +2866,9 @@
     "description": "",
     "price": 150,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10222,
@@ -2355,7 +2877,9 @@
     "description": "",
     "price": 200,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10223,
@@ -2364,7 +2888,9 @@
     "description": "",
     "price": 250,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10224,
@@ -2373,7 +2899,9 @@
     "description": "",
     "price": 300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10225,
@@ -2382,7 +2910,9 @@
     "description": "",
     "price": 350,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10226,
@@ -2391,7 +2921,9 @@
     "description": "",
     "price": 200,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10227,
@@ -2400,7 +2932,9 @@
     "description": "",
     "price": 250,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10228,
@@ -2409,7 +2943,9 @@
     "description": "",
     "price": 300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10229,
@@ -2418,7 +2954,9 @@
     "description": "",
     "price": 350,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10230,
@@ -2427,7 +2965,9 @@
     "description": "",
     "price": 400,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10231,
@@ -2436,7 +2976,9 @@
     "description": "",
     "price": 450,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10232,
@@ -2445,7 +2987,9 @@
     "description": "",
     "price": 500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10233,
@@ -2454,7 +2998,9 @@
     "description": "",
     "price": 550,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10234,
@@ -2463,7 +3009,9 @@
     "description": "",
     "price": 200,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10235,
@@ -2472,7 +3020,9 @@
     "description": "",
     "price": 300,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10236,
@@ -2481,7 +3031,9 @@
     "description": "",
     "price": 350,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10237,
@@ -2490,7 +3042,9 @@
     "description": "",
     "price": 400,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10238,
@@ -2499,7 +3053,9 @@
     "description": "",
     "price": 450,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10239,
@@ -2508,7 +3064,9 @@
     "description": "",
     "price": 500,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10240,
@@ -2517,7 +3075,9 @@
     "description": "",
     "price": 550,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10241,
@@ -2526,7 +3086,9 @@
     "description": "",
     "price": 800,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10242,
@@ -2535,7 +3097,9 @@
     "description": "",
     "price": 1000,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10243,
@@ -2544,7 +3108,9 @@
     "description": "",
     "price": 450,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   },
   {
     "sku": 10244,
@@ -2553,6 +3119,8 @@
     "description": "",
     "price": 550,
     "stock": 10,
-    "low_stock_threshold": 2
+    "low_stock_threshold": 2,
+    "stock_baseline": 10,
+    "baseline_date": "2026-05-10T13:17:01.628Z"
   }
 ]
