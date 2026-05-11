@@ -330,17 +330,6 @@
     "baseline_date": "2026-05-10T13:17:01.623Z"
   },
   {
-    "sku": 10031,
-    "name": "1988",
-    "category": "Bearings",
-    "description": "",
-    "price": 700,
-    "stock": 0,
-    "low_stock_threshold": 2,
-    "stock_baseline": 0,
-    "baseline_date": "2026-05-10T13:17:01.623Z"
-  },
-  {
     "sku": 10032,
     "name": "501349",
     "category": "Bearings",
@@ -883,7 +872,7 @@
     "sku": 10082,
     "name": "1988/22",
     "category": "Bearings",
-    "description": "",
+    "description": "t55 front bearing (small)",
     "price": 700,
     "stock": 20,
     "low_stock_threshold": 2,
