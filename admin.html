@@ -1,0 +1,769 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Dashboard - Karanja Auto Spares</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
+        .dark body { background-color: #111827; }
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #4b5563; }
+        @media (max-width: 768px) { table { min-width: 640px; } }
+        .form-input {
+            width: 100%; padding: 0.6rem 0.9rem; border-radius: 0.75rem;
+            border: 1px solid #e5e7eb; background: white; font-size: 0.9rem;
+            outline: none; transition: box-shadow 0.15s ease;
+        }
+        .form-input:focus { box-shadow: 0 0 0 2px rgba(147,51,234,0.4); border-color: #9333ea; }
+        .dark .form-input { background: #1f2937; border-color: #374151; color: #f3f4f6; }
+        .form-label { font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.3rem; display: block; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+
+    <!-- ============ LOCK SCREEN ============ -->
+    <!-- NOTE: This PIN gate is a basic deterrent only, not real security. This file lives on
+         GitHub Pages as plain, publicly-fetchable HTML/JS: anyone with the URL (or who views
+         page source) can read the code and bypass this screen. Do not treat it as protecting
+         real secrets. See the message in chat for options if you need this genuinely private. -->
+    <div id="lockScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+        <div class="w-full max-w-sm bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-lg p-8 text-center fade-in">
+            <div class="w-14 h-14 mx-auto bg-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg mb-4">
+                <i class="fas fa-lock text-xl"></i>
+            </div>
+            <h1 class="text-xl font-bold mb-1">Admin Access</h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-5">Enter the PIN to open the internal dashboard.</p>
+            <input type="password" id="pinInput" inputmode="numeric" placeholder="PIN"
+                class="form-input text-center tracking-widest text-lg mb-3" autofocus>
+            <p id="pinError" class="text-red-500 text-sm mb-3 hidden">Incorrect PIN. Try again.</p>
+            <button onclick="tryUnlock()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-xl transition-colors">
+                Unlock
+            </button>
+            <a href="index.html" class="block text-xs text-gray-400 hover:text-purple-500 mt-4">← Back to public catalog</a>
+        </div>
+    </div>
+
+    <!-- ============ DASHBOARD ============ -->
+    <div id="dashboard" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 fade-in">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-chart-line text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold leading-tight">Karanja Auto Spares</h1>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">Internal inventory &amp; sales dashboard</p>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="index.html" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors">
+                    <i class="fas fa-arrow-left mr-1.5"></i>Public site
+                </a>
+                <button onclick="lockDashboard()" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors">
+                    <i class="fas fa-lock mr-1.5"></i>Lock
+                </button>
+            </div>
+        </div>
+
+        <!-- Low stock banner -->
+        <div id="lowStockBanner" class="hidden mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl fade-in">
+            <p class="text-amber-700 dark:text-amber-400 text-sm font-medium">
+                <i class="fas fa-triangle-exclamation mr-2"></i><span id="lowStockText"></span>
+            </p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8 fade-in">
+            <div class="card-hover bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-sm">
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Total Revenue</p>
+                <p id="statRevenue" class="text-xl font-bold text-green-600 dark:text-green-400">KSh 0</p>
+            </div>
+            <div class="card-hover bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-sm">
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Total Profit</p>
+                <p id="statProfit" class="text-xl font-bold text-purple-600 dark:text-purple-400">KSh 0</p>
+            </div>
+            <div class="card-hover bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-sm">
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Stock Value (Cost)</p>
+                <p id="statStockCost" class="text-xl font-bold">KSh 0</p>
+            </div>
+            <div class="card-hover bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-sm">
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Stock Value (Retail)</p>
+                <p id="statStockRetail" class="text-xl font-bold">KSh 0</p>
+            </div>
+            <div class="card-hover bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-sm">
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Low Stock Items</p>
+                <p id="statLowStock" class="text-xl font-bold text-red-500">0</p>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 fade-in">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-sm">
+                <h3 class="font-semibold mb-3 text-sm text-gray-500 dark:text-gray-400">Revenue — Last 14 Days</h3>
+                <canvas id="revenueChart" height="180"></canvas>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-sm">
+                <h3 class="font-semibold mb-3 text-sm text-gray-500 dark:text-gray-400">Revenue by Category (All Time)</h3>
+                <canvas id="categoryChart" height="180"></canvas>
+            </div>
+        </div>
+
+        <!-- Record a Sale -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 shadow-sm mb-8 fade-in">
+            <h3 class="font-semibold mb-4">Record a Sale</h3>
+            <form id="saleForm" onsubmit="recordSale(event)" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                <div class="md:col-span-2">
+                    <label class="form-label">Item</label>
+                    <select id="saleItem" class="form-input" required onchange="onSaleItemChange()"></select>
+                </div>
+                <div>
+                    <label class="form-label">Quantity</label>
+                    <input type="number" id="saleQty" class="form-input" min="1" value="1" required>
+                </div>
+                <div>
+                    <label class="form-label">Unit Price (KSh)</label>
+                    <input type="number" id="salePrice" class="form-input" min="0" step="1" required>
+                </div>
+                <div>
+                    <label class="form-label">Date</label>
+                    <input type="date" id="saleDate" class="form-input" required>
+                </div>
+                <div class="md:col-span-5">
+                    <p id="saleError" class="text-red-500 text-sm mb-2 hidden"></p>
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition-colors">
+                        <i class="fas fa-plus mr-1.5"></i>Record Sale
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Inventory Management -->
+        <div class="mb-8 fade-in">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                <h3 class="font-semibold text-lg">Inventory Management</h3>
+                <div class="flex flex-wrap gap-2">
+                    <input type="text" id="invSearch" oninput="renderInventoryTable()" placeholder="Filter inventory..."
+                        class="form-input !w-56">
+                    <button onclick="openItemModal(null)" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-medium transition-colors">
+                        <i class="fas fa-plus mr-1.5"></i>Add Item
+                    </button>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden shadow-sm">
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 dark:bg-gray-700/50 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <th class="px-4 py-3 border-b">Name</th>
+                                <th class="px-4 py-3 border-b">Category</th>
+                                <th class="px-4 py-3 border-b text-right">Cost</th>
+                                <th class="px-4 py-3 border-b text-right">Price</th>
+                                <th class="px-4 py-3 border-b text-right">Margin</th>
+                                <th class="px-4 py-3 border-b text-right">Qty</th>
+                                <th class="px-4 py-3 border-b text-center">Status</th>
+                                <th class="px-4 py-3 border-b text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody" class="divide-y divide-gray-100 dark:divide-gray-700"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales History -->
+        <div class="mb-8 fade-in">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                <h3 class="font-semibold text-lg">Sales History</h3>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="exportInventoryJSON()" class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl text-xs font-medium hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-download mr-1.5"></i>Export inventory_data.json
+                    </button>
+                    <button onclick="exportSalesCSV()" class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl text-xs font-medium hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-download mr-1.5"></i>Export Sales CSV
+                    </button>
+                    <button onclick="syncFromJSON()" class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl text-xs font-medium hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-rotate mr-1.5"></i>Re-sync from JSON
+                    </button>
+                    <button onclick="resetAllData()" class="px-3 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-xs font-medium hover:bg-red-100 transition-colors">
+                        <i class="fas fa-trash mr-1.5"></i>Reset All Data
+                    </button>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden shadow-sm">
+                <div class="overflow-x-auto custom-scrollbar max-h-96">
+                    <table class="w-full text-left text-sm">
+                        <thead class="sticky top-0">
+                            <tr class="bg-gray-50 dark:bg-gray-700/50 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <th class="px-4 py-3 border-b">Date</th>
+                                <th class="px-4 py-3 border-b">Item</th>
+                                <th class="px-4 py-3 border-b text-right">Qty</th>
+                                <th class="px-4 py-3 border-b text-right">Revenue</th>
+                                <th class="px-4 py-3 border-b text-right">Profit</th>
+                                <th class="px-4 py-3 border-b text-center">Undo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesTableBody" class="divide-y divide-gray-100 dark:divide-gray-700"></tbody>
+                    </table>
+                </div>
+                <div id="salesEmpty" class="hidden p-10 text-center text-gray-400 text-sm">No sales recorded yet.</div>
+            </div>
+        </div>
+
+        <p class="text-center text-xs text-gray-400 dark:text-gray-500 mb-4">
+            Data is stored in this browser only (localStorage) — export regularly to back it up.
+        </p>
+    </div>
+
+    <!-- ============ ITEM MODAL ============ -->
+    <div id="itemModal" class="hidden fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
+        <div class="w-full max-w-lg bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <h3 id="modalTitle" class="font-semibold text-lg">Add Item</h3>
+                <button onclick="closeItemModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-xmark text-lg"></i></button>
+            </div>
+            <input type="hidden" id="modalItemId">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="md:col-span-2">
+                    <label class="form-label">Name</label>
+                    <input type="text" id="modalName" class="form-input" required>
+                </div>
+                <div>
+                    <label class="form-label">Category</label>
+                    <input type="text" id="modalCategory" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Reorder Level</label>
+                    <input type="number" id="modalReorder" class="form-input" min="0" value="3">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="form-label">Description / Compatibility</label>
+                    <textarea id="modalDescription" class="form-input" rows="2"></textarea>
+                </div>
+                <div>
+                    <label class="form-label">Cost Price (KSh)</label>
+                    <input type="number" id="modalCost" class="form-input" min="0" step="1" required>
+                </div>
+                <div>
+                    <label class="form-label">Retail Price (KSh)</label>
+                    <input type="number" id="modalPrice" class="form-input" min="0" step="1" required>
+                </div>
+                <div>
+                    <label class="form-label">Quantity in Stock</label>
+                    <input type="number" id="modalQty" class="form-input" min="0" step="1" required>
+                </div>
+            </div>
+            <p id="modalError" class="text-red-500 text-sm mt-3 hidden"></p>
+            <div class="flex justify-end gap-2 mt-5">
+                <button onclick="closeItemModal()" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl text-sm font-medium">Cancel</button>
+                <button onclick="saveItemModal()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-medium">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ================= CONFIG =================
+        // Change this PIN before you publish the file. Remember: this only deters casual
+        // visitors, it is not real access control (see note in chat / at top of file).
+        const CONFIG = {
+            adminPin: '2026',
+            defaultReorderLevel: 3,
+            defaultMarginPercent: 30 // used only to seed a starting cost estimate on first import
+        };
+
+        const INVENTORY_JSON_URL = 'inventory_data.json';
+        const STORAGE_INVENTORY = 'kas_admin_inventory_v1';
+        const STORAGE_SALES = 'kas_admin_sales_v1';
+        const SESSION_UNLOCK = 'kas_admin_unlocked';
+
+        // In-memory state, mirrored to localStorage on every change.
+        // inventory item schema: { id, name, category, description, cost, price, qty, reorder }
+        // sale record schema:    { id, itemId, itemName, category, qty, unitPrice, unitCost, revenue, cost, profit, date }
+        let inventory = [];
+        let sales = [];
+        let revenueChart, categoryChart;
+
+        function uid() {
+            return (crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now() + '-' + Math.random().toString(16).slice(2));
+        }
+
+        // ================= LOCK SCREEN =================
+        function checkLock() {
+            if (sessionStorage.getItem(SESSION_UNLOCK) === 'true') {
+                document.getElementById('lockScreen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                boot();
+            } else {
+                document.getElementById('pinInput').addEventListener('keydown', e => {
+                    if (e.key === 'Enter') tryUnlock();
+                });
+            }
+        }
+
+        function tryUnlock() {
+            const val = document.getElementById('pinInput').value.trim();
+            if (val === CONFIG.adminPin) {
+                sessionStorage.setItem(SESSION_UNLOCK, 'true');
+                document.getElementById('lockScreen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                boot();
+            } else {
+                document.getElementById('pinError').classList.remove('hidden');
+            }
+        }
+
+        function lockDashboard() {
+            sessionStorage.removeItem(SESSION_UNLOCK);
+            location.reload();
+        }
+
+        // ================= DATA LOADING =================
+        function loadInventory() {
+            const raw = localStorage.getItem(STORAGE_INVENTORY);
+            return raw ? JSON.parse(raw) : null;
+        }
+        function saveInventory() {
+            localStorage.setItem(STORAGE_INVENTORY, JSON.stringify(inventory));
+        }
+        function loadSales() {
+            const raw = localStorage.getItem(STORAGE_SALES);
+            return raw ? JSON.parse(raw) : [];
+        }
+        function saveSales() {
+            localStorage.setItem(STORAGE_SALES, JSON.stringify(sales));
+        }
+
+        async function fetchPublicInventory() {
+            try {
+                const res = await fetch(INVENTORY_JSON_URL);
+                if (!res.ok) throw new Error('Failed to load ' + INVENTORY_JSON_URL);
+                return await res.json();
+            } catch (e) {
+                console.error(e);
+                return [];
+            }
+        }
+
+        // Builds a fresh admin inventory from the public JSON, seeding cost/qty/reorder
+        // with rough defaults since the public file only tracks price + in/out of stock.
+        // Go into "Edit" on each item afterwards and enter the real cost and quantity.
+        function seedFromPublicData(publicItems) {
+            return publicItems.map(item => ({
+                id: uid(),
+                name: item.name || 'Unnamed item',
+                category: item.category || 'General',
+                description: item.description || '',
+                price: Number(item.price) || 0,
+                cost: Math.round((Number(item.price) || 0) * (1 - CONFIG.defaultMarginPercent / 100)),
+                qty: item.stock ? 10 : 0,
+                reorder: CONFIG.defaultReorderLevel
+            }));
+        }
+
+        async function boot() {
+            const stored = loadInventory();
+            if (stored && stored.length) {
+                inventory = stored;
+            } else {
+                const publicItems = await fetchPublicInventory();
+                inventory = seedFromPublicData(publicItems);
+                saveInventory();
+            }
+            sales = loadSales();
+
+            const today = new Date().toISOString().slice(0, 10);
+            document.getElementById('saleDate').value = today;
+
+            renderAll();
+        }
+
+        // Re-imports inventory_data.json, updating name/category/description/price for
+        // items that already exist (matched by name) and adding brand-new items, while
+        // preserving your edited cost/qty/reorder values for items you already manage here.
+        async function syncFromJSON() {
+            if (!confirm('Re-sync from inventory_data.json? Existing cost, quantity and reorder values you\'ve set will be kept for matching items.')) return;
+            const publicItems = await fetchPublicInventory();
+            const byName = new Map(inventory.map(i => [i.name.trim().toLowerCase(), i]));
+            const merged = [];
+            publicItems.forEach(pub => {
+                const key = (pub.name || '').trim().toLowerCase();
+                const existing = byName.get(key);
+                if (existing) {
+                    existing.category = pub.category || existing.category;
+                    existing.description = pub.description || existing.description;
+                    existing.price = Number(pub.price) || existing.price;
+                    merged.push(existing);
+                    byName.delete(key);
+                } else {
+                    merged.push({
+                        id: uid(),
+                        name: pub.name || 'Unnamed item',
+                        category: pub.category || 'General',
+                        description: pub.description || '',
+                        price: Number(pub.price) || 0,
+                        cost: Math.round((Number(pub.price) || 0) * (1 - CONFIG.defaultMarginPercent / 100)),
+                        qty: pub.stock ? 10 : 0,
+                        reorder: CONFIG.defaultReorderLevel
+                    });
+                }
+            });
+            // Keep any admin-only items that weren't in the JSON (not auto-deleted).
+            byName.forEach(leftover => merged.push(leftover));
+            inventory = merged;
+            saveInventory();
+            renderAll();
+            alert('Inventory synced from inventory_data.json.');
+        }
+
+        function resetAllData() {
+            if (!confirm('This clears all locally stored inventory edits and sales history in this browser. This cannot be undone. Continue?')) return;
+            localStorage.removeItem(STORAGE_INVENTORY);
+            localStorage.removeItem(STORAGE_SALES);
+            location.reload();
+        }
+
+        // ================= COMPUTED STATS =================
+        function computeStats() {
+            const totalRevenue = sales.reduce((s, r) => s + r.revenue, 0);
+            const totalProfit = sales.reduce((s, r) => s + r.profit, 0);
+            const stockCost = inventory.reduce((s, i) => s + i.qty * i.cost, 0);
+            const stockRetail = inventory.reduce((s, i) => s + i.qty * i.price, 0);
+            const lowStock = inventory.filter(i => i.qty <= i.reorder);
+            return { totalRevenue, totalProfit, stockCost, stockRetail, lowStock };
+        }
+
+        function fmt(n) {
+            return 'KSh ' + Math.round(n).toLocaleString();
+        }
+
+        // ================= RENDER =================
+        function renderAll() {
+            renderDashboardStats();
+            renderCharts();
+            renderSaleItemOptions();
+            renderInventoryTable();
+            renderSalesTable();
+        }
+
+        function renderDashboardStats() {
+            const s = computeStats();
+            document.getElementById('statRevenue').textContent = fmt(s.totalRevenue);
+            document.getElementById('statProfit').textContent = fmt(s.totalProfit);
+            document.getElementById('statStockCost').textContent = fmt(s.stockCost);
+            document.getElementById('statStockRetail').textContent = fmt(s.stockRetail);
+            document.getElementById('statLowStock').textContent = s.lowStock.length;
+
+            const banner = document.getElementById('lowStockBanner');
+            if (s.lowStock.length > 0) {
+                banner.classList.remove('hidden');
+                const names = s.lowStock.slice(0, 5).map(i => i.name).join(', ');
+                document.getElementById('lowStockText').textContent =
+                    `${s.lowStock.length} item${s.lowStock.length > 1 ? 's' : ''} at or below reorder level: ${names}${s.lowStock.length > 5 ? '…' : ''}`;
+            } else {
+                banner.classList.add('hidden');
+            }
+        }
+
+        function renderCharts() {
+            // Revenue, last 14 days
+            const days = [];
+            for (let i = 13; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                days.push(d.toISOString().slice(0, 10));
+            }
+            const revenueByDay = days.map(d =>
+                sales.filter(s => s.date === d).reduce((sum, s) => sum + s.revenue, 0)
+            );
+            const dayLabels = days.map(d => d.slice(5)); // MM-DD
+
+            const revCtx = document.getElementById('revenueChart');
+            if (revenueChart) revenueChart.destroy();
+            revenueChart = new Chart(revCtx, {
+                type: 'line',
+                data: {
+                    labels: dayLabels,
+                    datasets: [{
+                        label: 'Revenue (KSh)',
+                        data: revenueByDay,
+                        borderColor: '#9333ea',
+                        backgroundColor: 'rgba(147,51,234,0.12)',
+                        tension: 0.3,
+                        fill: true,
+                        pointRadius: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // Revenue by category, all-time
+            const catTotals = {};
+            sales.forEach(s => { catTotals[s.category] = (catTotals[s.category] || 0) + s.revenue; });
+            const catLabels = Object.keys(catTotals);
+            const catValues = Object.values(catTotals);
+            const palette = ['#9333ea', '#2563eb', '#16a34a', '#f59e0b', '#dc2626', '#0891b2', '#db2777', '#65a30d'];
+
+            const catCtx = document.getElementById('categoryChart');
+            if (categoryChart) categoryChart.destroy();
+            categoryChart = new Chart(catCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: catLabels.length ? catLabels : ['No sales yet'],
+                    datasets: [{
+                        data: catValues.length ? catValues : [1],
+                        backgroundColor: catLabels.length ? palette : ['#e5e7eb']
+                    }]
+                },
+                options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } } }
+            });
+        }
+
+        function renderSaleItemOptions() {
+            const select = document.getElementById('saleItem');
+            const currentVal = select.value;
+            select.innerHTML = inventory
+                .slice()
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map(i => `<option value="${i.id}" data-price="${i.price}">${i.name} (Qty: ${i.qty})</option>`)
+                .join('');
+            if (currentVal) select.value = currentVal;
+            onSaleItemChange();
+        }
+
+        function onSaleItemChange() {
+            const select = document.getElementById('saleItem');
+            const opt = select.options[select.selectedIndex];
+            if (opt) document.getElementById('salePrice').value = opt.dataset.price;
+        }
+
+        function renderInventoryTable() {
+            const search = document.getElementById('invSearch').value.toLowerCase().trim();
+            const tbody = document.getElementById('inventoryTableBody');
+            const filtered = inventory
+                .filter(i => !search || i.name.toLowerCase().includes(search) || (i.category || '').toLowerCase().includes(search))
+                .sort((a, b) => a.name.localeCompare(b.name));
+
+            tbody.innerHTML = filtered.map(i => {
+                const margin = i.price > 0 ? (((i.price - i.cost) / i.price) * 100).toFixed(0) : '0';
+                const low = i.qty <= i.reorder;
+                const statusBadge = i.qty === 0
+                    ? '<span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">Out</span>'
+                    : low
+                        ? '<span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">Low</span>'
+                        : '<span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">OK</span>';
+
+                return `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                        <td class="px-4 py-3 font-medium">${i.name}</td>
+                        <td class="px-4 py-3 text-gray-500 dark:text-gray-400">${i.category}</td>
+                        <td class="px-4 py-3 text-right">${fmt(i.cost)}</td>
+                        <td class="px-4 py-3 text-right font-semibold text-purple-600 dark:text-purple-400">${fmt(i.price)}</td>
+                        <td class="px-4 py-3 text-right">${margin}%</td>
+                        <td class="px-4 py-3 text-right">${i.qty}</td>
+                        <td class="px-4 py-3 text-center">${statusBadge}</td>
+                        <td class="px-4 py-3 text-center whitespace-nowrap">
+                            <button onclick="openItemModal('${i.id}')" class="text-gray-400 hover:text-purple-600 mr-3"><i class="fas fa-pen"></i></button>
+                            <button onclick="deleteItem('${i.id}')" class="text-gray-400 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>`;
+            }).join('');
+        }
+
+        function renderSalesTable() {
+            const tbody = document.getElementById('salesTableBody');
+            const empty = document.getElementById('salesEmpty');
+            const sorted = sales.slice().sort((a, b) => (b.date + b.id).localeCompare(a.date + a.id));
+
+            if (!sorted.length) {
+                tbody.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+            tbody.innerHTML = sorted.map(s => `
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                    <td class="px-4 py-3 whitespace-nowrap">${s.date}</td>
+                    <td class="px-4 py-3">${s.itemName}</td>
+                    <td class="px-4 py-3 text-right">${s.qty}</td>
+                    <td class="px-4 py-3 text-right text-green-600 dark:text-green-400 font-medium">${fmt(s.revenue)}</td>
+                    <td class="px-4 py-3 text-right text-purple-600 dark:text-purple-400 font-medium">${fmt(s.profit)}</td>
+                    <td class="px-4 py-3 text-center">
+                        <button onclick="undoSale('${s.id}')" class="text-gray-400 hover:text-red-500"><i class="fas fa-rotate-left"></i></button>
+                    </td>
+                </tr>`).join('');
+        }
+
+        // ================= SALES =================
+        function recordSale(e) {
+            e.preventDefault();
+            const errEl = document.getElementById('saleError');
+            errEl.classList.add('hidden');
+
+            const itemId = document.getElementById('saleItem').value;
+            const qty = parseInt(document.getElementById('saleQty').value, 10);
+            const unitPrice = parseFloat(document.getElementById('salePrice').value);
+            const date = document.getElementById('saleDate').value;
+            const item = inventory.find(i => i.id === itemId);
+
+            if (!item) { errEl.textContent = 'Select an item.'; errEl.classList.remove('hidden'); return; }
+            if (!qty || qty < 1) { errEl.textContent = 'Quantity must be at least 1.'; errEl.classList.remove('hidden'); return; }
+            if (qty > item.qty) { errEl.textContent = `Only ${item.qty} in stock — reduce the quantity or restock first.`; errEl.classList.remove('hidden'); return; }
+
+            item.qty -= qty;
+            sales.push({
+                id: uid(),
+                itemId: item.id,
+                itemName: item.name,
+                category: item.category,
+                qty,
+                unitPrice,
+                unitCost: item.cost,
+                revenue: qty * unitPrice,
+                cost: qty * item.cost,
+                profit: qty * unitPrice - qty * item.cost,
+                date
+            });
+
+            saveInventory();
+            saveSales();
+            document.getElementById('saleQty').value = 1;
+            renderAll();
+        }
+
+        function undoSale(saleId) {
+            const sale = sales.find(s => s.id === saleId);
+            if (!sale) return;
+            if (!confirm(`Undo this sale of ${sale.qty} × ${sale.itemName}? Stock will be restored.`)) return;
+            const item = inventory.find(i => i.id === sale.itemId);
+            if (item) item.qty += sale.qty;
+            sales = sales.filter(s => s.id !== saleId);
+            saveInventory();
+            saveSales();
+            renderAll();
+        }
+
+        // ================= INVENTORY ITEM MODAL =================
+        function openItemModal(itemId) {
+            const modal = document.getElementById('itemModal');
+            document.getElementById('modalError').classList.add('hidden');
+            if (itemId) {
+                const item = inventory.find(i => i.id === itemId);
+                document.getElementById('modalTitle').textContent = 'Edit Item';
+                document.getElementById('modalItemId').value = item.id;
+                document.getElementById('modalName').value = item.name;
+                document.getElementById('modalCategory').value = item.category;
+                document.getElementById('modalDescription').value = item.description;
+                document.getElementById('modalCost').value = item.cost;
+                document.getElementById('modalPrice').value = item.price;
+                document.getElementById('modalQty').value = item.qty;
+                document.getElementById('modalReorder').value = item.reorder;
+            } else {
+                document.getElementById('modalTitle').textContent = 'Add Item';
+                document.getElementById('modalItemId').value = '';
+                ['modalName', 'modalCategory', 'modalDescription'].forEach(id => document.getElementById(id).value = '');
+                document.getElementById('modalCost').value = 0;
+                document.getElementById('modalPrice').value = 0;
+                document.getElementById('modalQty').value = 0;
+                document.getElementById('modalReorder').value = CONFIG.defaultReorderLevel;
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function closeItemModal() {
+            document.getElementById('itemModal').classList.add('hidden');
+        }
+
+        function saveItemModal() {
+            const errEl = document.getElementById('modalError');
+            const name = document.getElementById('modalName').value.trim();
+            const cost = parseFloat(document.getElementById('modalCost').value);
+            const price = parseFloat(document.getElementById('modalPrice').value);
+            const qty = parseInt(document.getElementById('modalQty').value, 10);
+            const reorder = parseInt(document.getElementById('modalReorder').value, 10);
+
+            if (!name) { errEl.textContent = 'Name is required.'; errEl.classList.remove('hidden'); return; }
+            if (isNaN(cost) || cost < 0 || isNaN(price) || price < 0) { errEl.textContent = 'Cost and price must be zero or more.'; errEl.classList.remove('hidden'); return; }
+            if (isNaN(qty) || qty < 0) { errEl.textContent = 'Quantity must be zero or more.'; errEl.classList.remove('hidden'); return; }
+
+            const id = document.getElementById('modalItemId').value;
+            const data = {
+                name,
+                category: document.getElementById('modalCategory').value.trim() || 'General',
+                description: document.getElementById('modalDescription').value.trim(),
+                cost, price, qty,
+                reorder: isNaN(reorder) ? CONFIG.defaultReorderLevel : reorder
+            };
+
+            if (id) {
+                const item = inventory.find(i => i.id === id);
+                Object.assign(item, data);
+            } else {
+                inventory.push({ id: uid(), ...data });
+            }
+            saveInventory();
+            closeItemModal();
+            renderAll();
+        }
+
+        function deleteItem(itemId) {
+            const item = inventory.find(i => i.id === itemId);
+            if (!item) return;
+            if (!confirm(`Delete "${item.name}" from inventory? Past sales of this item stay in your sales history.`)) return;
+            inventory = inventory.filter(i => i.id !== itemId);
+            saveInventory();
+            renderAll();
+        }
+
+        // ================= EXPORTS =================
+        function downloadFile(filename, content, mime) {
+            const blob = new Blob([content], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = filename;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Produces a file matching the public site's schema (name, category, description,
+        // stock, price) — download it and replace inventory_data.json in your repo to push
+        // your inventory changes live to index.html.
+        function exportInventoryJSON() {
+            const publicSchema = inventory.map(i => ({
+                name: i.name,
+                category: i.category,
+                description: i.description,
+                stock: i.qty > 0,
+                price: i.price
+            }));
+            downloadFile('inventory_data.json', JSON.stringify(publicSchema, null, 2), 'application/json');
+        }
+
+        function exportSalesCSV() {
+            const header = ['Date', 'Item', 'Category', 'Qty', 'Unit Price', 'Unit Cost', 'Revenue', 'Cost', 'Profit'];
+            const rows = sales.map(s => [s.date, s.itemName, s.category, s.qty, s.unitPrice, s.unitCost, s.revenue, s.cost, s.profit]);
+            const csv = [header, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+            downloadFile('sales_history.csv', csv, 'text/csv');
+        }
+
+        checkLock();
+    </script>
+</body>
+</html>
