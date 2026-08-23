@@ -78,6 +78,13 @@
         .subtab-btn.active { background:#714B67;color:white; }
         .subtab-btn:not(.active) { background:#f3f4f6;color:#4b5563; } .dark .subtab-btn:not(.active) { background:#374151;color:#d1d5db; }
     </style>
+    <!-- PWA Meta Tags -->
+<link rel="manifest" href="admin-manifest.json">
+<meta name="theme-color" content="#714B67">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Workshop Admin">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%23374151'/%3E%3Ctext x='96' y='128' font-size='100' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3EA%3C/text%3E%3C/svg%3E">
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
 <script>
@@ -679,6 +686,20 @@ function resetData() {
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeDeleteModal();closeQuickSaleModal();closeAddCustomerModal();closeRecordPaymentModal();closeAddPayableModal();closeReceiveStockModal();}if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();if(currentView==='inventory')document.getElementById('inv-search').focus();}if((e.ctrlKey||e.metaKey)&&e.key==='n'){e.preventDefault();openAddModal();}if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();autoSyncToGitHub();}});
 window.addEventListener('DOMContentLoaded', init); handleResize();
+</script>
+    <!-- Service Worker Registration -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then((registration) => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch((error) => {
+          console.log('Service Worker registration failed:', error);
+        });
+    });
+  }
 </script>
 </body>
 </html>
