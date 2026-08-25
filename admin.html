@@ -703,15 +703,15 @@ window.addEventListener('DOMContentLoaded', init); handleResize();
     });
   }
 </script>
-    <script>
+<script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
+      navigator.serviceWorker.register('/office-sw.js')
         .then(() => console.log('Office SW registered'))
         .catch((error) => console.log('SW registration failed:', error));
     });
   }
-    </script>
+</script>
 </body>
 </html>
 ```
